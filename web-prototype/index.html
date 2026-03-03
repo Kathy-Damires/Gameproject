@@ -1,0 +1,2249 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Evolvion - Prototype</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0e27;
+            color: #e0e0e0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        /* Top Bar */
+        .top-bar {
+            background: linear-gradient(135deg, #1a1f4e, #2a2f6e);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #4a4fae;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .game-title {
+            font-size: 18px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00d4ff, #7b2ffc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .era-badge {
+            background: #2a2f6e;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            border: 1px solid #4a4fae;
+        }
+
+        .aris-info {
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        /* Resources Bar */
+        .resources-bar {
+            display: flex;
+            gap: 8px;
+            padding: 8px 15px;
+            background: #0d1130;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .resource-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            background: #1a1f4e;
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .resource-icon { font-size: 16px; }
+        .resource-value { font-weight: bold; color: #fff; }
+        .resource-rate { font-size: 10px; color: #7b7; }
+
+        /* Navigation */
+        .nav-bar {
+            display: flex;
+            gap: 0;
+            background: #12163a;
+            border-bottom: 2px solid #2a2f6e;
+            position: sticky;
+            top: 48px;
+            z-index: 99;
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 10px 5px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+            border: none;
+            background: transparent;
+            color: #888;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-btn:hover { color: #fff; background: #1a1f4e; }
+        .nav-btn.active {
+            color: #00d4ff;
+            border-bottom-color: #00d4ff;
+            background: #1a1f4e;
+        }
+
+        .nav-icon { font-size: 18px; display: block; margin-bottom: 2px; }
+
+        /* Main Content */
+        .main-content {
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .panel { display: none; }
+        .panel.active { display: block; }
+
+        /* Planet Panel */
+        .planet-view {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .planet-sphere {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 15px auto;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .planet-porera {
+            background: radial-gradient(circle at 40% 40%, #4CAF50, #2E7D32, #1B5E20);
+            box-shadow: 0 0 40px rgba(76, 175, 80, 0.4), inset -20px -20px 40px rgba(0,0,0,0.3);
+        }
+
+        .planet-sphere::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            left: 15%;
+            width: 30%;
+            height: 20%;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            transform: rotate(-30deg);
+        }
+
+        .era-progress {
+            margin: 10px 0;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #1a1f4e;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 5px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #00d4ff, #7b2ffc);
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        .advance-era-btn {
+            margin-top: 12px;
+            padding: 10px 30px;
+            background: linear-gradient(135deg, #7b2ffc, #00d4ff);
+            border: none;
+            color: white;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .advance-era-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .advance-era-btn:not(:disabled):hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(123, 47, 252, 0.5);
+        }
+
+        /* Structure Cards */
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin: 15px 0 10px;
+            padding-left: 5px;
+            border-left: 3px solid #00d4ff;
+        }
+
+        .structure-card {
+            background: linear-gradient(135deg, #1a1f4e, #22276e);
+            border: 1px solid #3a3fae;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 10px;
+            transition: all 0.2s;
+        }
+
+        .structure-card:hover {
+            border-color: #00d4ff;
+            box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+        }
+
+        .structure-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .structure-name {
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .structure-level {
+            background: #2a2f6e;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-size: 11px;
+        }
+
+        .structure-production {
+            font-size: 12px;
+            color: #7b7;
+            margin-bottom: 8px;
+        }
+
+        .build-btn, .upgrade-btn {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .build-btn {
+            background: linear-gradient(135deg, #4CAF50, #2E7D32);
+            color: white;
+        }
+
+        .upgrade-btn {
+            background: linear-gradient(135deg, #FF9800, #F57C00);
+            color: white;
+        }
+
+        .build-btn:disabled, .upgrade-btn:disabled {
+            background: #333;
+            cursor: not-allowed;
+            opacity: 0.5;
+        }
+
+        .cost-text {
+            font-size: 11px;
+            color: #aaa;
+            margin-left: 8px;
+        }
+
+        /* Combat Panel */
+        .combat-arena {
+            background: linear-gradient(180deg, #1a0a2e, #0a0e27);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #4a2f8e;
+            margin-bottom: 15px;
+        }
+
+        .combatants {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .combatant {
+            text-align: center;
+            flex: 1;
+        }
+
+        .combatant-avatar {
+            font-size: 50px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        .combatant-name { font-weight: bold; font-size: 14px; }
+
+        .vs-text {
+            font-size: 24px;
+            font-weight: bold;
+            color: #f44;
+            text-shadow: 0 0 10px rgba(255, 68, 68, 0.5);
+        }
+
+        .hp-bar-container {
+            margin: 5px 0;
+        }
+
+        .hp-bar {
+            height: 12px;
+            background: #1a1a3a;
+            border-radius: 6px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .hp-fill-aris {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.3s;
+            border-radius: 6px;
+        }
+
+        .hp-fill-enemy {
+            height: 100%;
+            background: linear-gradient(90deg, #f44336, #FF5722);
+            transition: width 0.3s;
+            border-radius: 6px;
+        }
+
+        .hp-text { font-size: 11px; color: #aaa; text-align: center; }
+
+        .combat-log {
+            background: #0a0e27;
+            border-radius: 8px;
+            padding: 10px;
+            min-height: 80px;
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 12px;
+            margin-bottom: 12px;
+            border: 1px solid #2a2f6e;
+        }
+
+        .log-entry { padding: 2px 0; }
+        .log-damage-dealt { color: #4CAF50; }
+        .log-damage-received { color: #f44336; }
+        .log-info { color: #00d4ff; }
+        .log-reward { color: #FFD700; }
+
+        .combat-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .combat-btn.start { background: linear-gradient(135deg, #f44336, #E91E63); }
+        .combat-btn.end { background: linear-gradient(135deg, #607D8B, #455A64); }
+        .combat-btn:hover { transform: scale(1.02); }
+
+        .combat-stats {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            font-size: 12px;
+        }
+
+        .stat-badge {
+            background: #1a1f4e;
+            padding: 3px 8px;
+            border-radius: 6px;
+        }
+
+        /* Equipment Panel */
+        .equipped-slots {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .equip-slot {
+            background: #1a1f4e;
+            border: 1px solid #3a3fae;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .equip-slot:hover { border-color: #00d4ff; }
+        .equip-slot .slot-icon { font-size: 24px; }
+        .equip-slot .slot-name { font-size: 11px; color: #888; }
+        .equip-slot .slot-item { font-size: 12px; font-weight: bold; margin-top: 3px; }
+
+        .inventory-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .inv-item {
+            background: #1a1f4e;
+            border: 1px solid #3a3fae;
+            border-radius: 8px;
+            padding: 8px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s;
+        }
+
+        .inv-item:hover { border-color: #FFD700; transform: scale(1.05); }
+        .inv-item .item-icon { font-size: 24px; }
+
+        .rarity-common { border-color: #888; }
+        .rarity-clear { border-color: #00d4ff; }
+        .rarity-epic { border-color: #9C27B0; }
+        .rarity-legendary { border-color: #FFD700; box-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
+
+        .equip-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+        }
+
+        .action-btn.equip-action { background: #4CAF50; }
+        .action-btn.fuse-action { background: #9C27B0; }
+        .action-btn.recycle-action { background: #f44336; }
+        .action-btn:disabled { background: #333; cursor: not-allowed; }
+
+        /* Cards Panel */
+        .era-tabs {
+            display: flex;
+            gap: 5px;
+            margin-bottom: 12px;
+        }
+
+        .era-tab {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #3a3fae;
+            background: #1a1f4e;
+            color: #aaa;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .era-tab.active {
+            background: #2a2f6e;
+            color: #00d4ff;
+            border-color: #00d4ff;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .card-item {
+            background: linear-gradient(180deg, #1a1f4e, #12163a);
+            border: 2px solid #3a3fae;
+            border-radius: 10px;
+            padding: 10px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .card-item.owned {
+            border-color: #FFD700;
+            box-shadow: 0 0 10px rgba(255, 215, 0, 0.2);
+        }
+
+        .card-item.locked { opacity: 0.4; }
+
+        .card-icon { font-size: 28px; margin-bottom: 5px; }
+        .card-name { font-size: 10px; font-weight: bold; }
+
+        /* Prestige Panel */
+        .prestige-display {
+            text-align: center;
+            background: linear-gradient(135deg, #1a0a2e, #2a1a4e);
+            border-radius: 16px;
+            padding: 20px;
+            border: 1px solid #6a2fae;
+            margin-bottom: 15px;
+        }
+
+        .prestige-level {
+            font-size: 36px;
+            font-weight: bold;
+            background: linear-gradient(90deg, #FFD700, #FFA000);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .prestige-multiplier { color: #aaa; font-size: 14px; }
+
+        .prestige-resources {
+            font-size: 20px;
+            margin: 10px 0;
+            color: #00d4ff;
+        }
+
+        .prestige-production {
+            font-size: 14px;
+            color: #7b7;
+        }
+
+        .prestige-btn {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #FFD700, #FF6F00);
+            margin-top: 12px;
+            transition: all 0.3s;
+        }
+
+        .prestige-btn:disabled { background: #333; cursor: not-allowed; }
+        .prestige-btn:not(:disabled):hover { transform: scale(1.02); box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); }
+
+        .prestige-toggle {
+            padding: 10px 20px;
+            border: 2px solid #6a2fae;
+            background: transparent;
+            color: #aaa;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .prestige-toggle.active {
+            background: #6a2fae;
+            color: white;
+        }
+
+        /* Popup */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.7);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-overlay.show { display: flex; }
+
+        .popup-box {
+            background: linear-gradient(135deg, #1a1f4e, #2a2f6e);
+            border: 2px solid #FFD700;
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            max-width: 300px;
+            animation: popIn 0.3s ease;
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .popup-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FFD700;
+            margin-bottom: 8px;
+        }
+
+        .popup-message { font-size: 14px; margin-bottom: 15px; }
+
+        .popup-close {
+            padding: 8px 24px;
+            background: #4a4fae;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        /* Animations */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake { animation: shake 0.3s ease; }
+
+        .float-text {
+            position: fixed;
+            pointer-events: none;
+            font-weight: bold;
+            font-size: 16px;
+            z-index: 500;
+            animation: floatUp 1s ease forwards;
+        }
+
+        @keyframes floatUp {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-40px); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="game-title">Project Evolvion</div>
+        <div class="era-badge" id="eraBadge">Edad de Piedra</div>
+        <div class="aris-info" id="arisInfo">Aris Nv.1</div>
+    </div>
+
+    <!-- Resources -->
+    <div class="resources-bar" id="resourcesBar">
+        <div class="resource-item"><span class="resource-icon">🪨</span><span class="resource-value" id="res-stone">50</span><span class="resource-rate" id="rate-stone"></span></div>
+        <div class="resource-item"><span class="resource-icon">🪵</span><span class="resource-value" id="res-wood">50</span><span class="resource-rate" id="rate-wood"></span></div>
+        <div class="resource-item"><span class="resource-icon">🍖</span><span class="resource-value" id="res-food">30</span><span class="resource-rate" id="rate-food"></span></div>
+        <div class="resource-item"><span class="resource-icon">🥉</span><span class="resource-value" id="res-bronze">0</span><span class="resource-rate" id="rate-bronze"></span></div>
+        <div class="resource-item"><span class="resource-icon">⚡</span><span class="resource-value" id="res-energy">10</span><span class="resource-rate" id="rate-energy"></span></div>
+        <div class="resource-item"><span class="resource-icon">💎</span><span class="resource-value" id="res-diamonds">5</span><span class="resource-rate" id="rate-diamonds"></span></div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-bar">
+        <button class="nav-btn active" onclick="showPanel('planet')"><span class="nav-icon">🌍</span>Planeta</button>
+        <button class="nav-btn" onclick="showPanel('structures')"><span class="nav-icon">🏗️</span>Estructuras</button>
+        <button class="nav-btn" onclick="showPanel('combat')"><span class="nav-icon">⚔️</span>Combate</button>
+        <button class="nav-btn" onclick="showPanel('equipment')"><span class="nav-icon">🛡️</span>Equipo</button>
+        <button class="nav-btn" onclick="showPanel('cards')"><span class="nav-icon">🃏</span>Cartas</button>
+        <button class="nav-btn" onclick="showPanel('prestige')"><span class="nav-icon">✨</span>Prestigio</button>
+        <button class="nav-btn" onclick="showPanel('clan')"><span class="nav-icon">👥</span>Clan</button>
+        <button class="nav-btn" onclick="showPanel('shop')"><span class="nav-icon">🛒</span>Tienda</button>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Planet Panel -->
+        <div class="panel active" id="panel-planet">
+            <div class="planet-view">
+                <h2>Planeta Porera</h2>
+                <div class="planet-sphere planet-porera" id="planetSphere"></div>
+                <div class="era-progress">
+                    <span id="eraProgressText">Progreso de Era: 0%</span>
+                    <div class="progress-bar"><div class="progress-fill" id="eraProgressFill" style="width:0%"></div></div>
+                </div>
+                <button class="advance-era-btn" id="advanceEraBtn" disabled onclick="advanceEra()">Avanzar de Era</button>
+            </div>
+            <div class="section-title">Estructuras Activas</div>
+            <div id="planetStructuresSummary"></div>
+        </div>
+
+        <!-- Structures Panel -->
+        <div class="panel" id="panel-structures">
+            <div class="section-title">Construccion y Mejoras</div>
+            <div id="structuresList"></div>
+        </div>
+
+        <!-- Combat Panel -->
+        <div class="panel" id="panel-combat">
+            <div class="section-title">Combate de Aris</div>
+            <div class="combat-stats" id="combatStats"></div>
+            <div class="combat-arena">
+                <div class="combatants">
+                    <div class="combatant">
+                        <span class="combatant-avatar">🧑‍🚀</span>
+                        <div class="combatant-name">Aris</div>
+                        <div class="hp-bar-container">
+                            <div class="hp-bar"><div class="hp-fill-aris" id="arisHpFill" style="width:100%"></div></div>
+                            <div class="hp-text" id="arisHpText">100/100</div>
+                        </div>
+                    </div>
+                    <div class="vs-text" id="vsText">VS</div>
+                    <div class="combatant">
+                        <span class="combatant-avatar" id="enemyAvatar">❓</span>
+                        <div class="combatant-name" id="enemyName">---</div>
+                        <div class="hp-bar-container">
+                            <div class="hp-bar"><div class="hp-fill-enemy" id="enemyHpFill" style="width:100%"></div></div>
+                            <div class="hp-text" id="enemyHpText">---</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="combat-log" id="combatLog">
+                <div class="log-entry log-info">Listo para el combate. Presiona iniciar!</div>
+            </div>
+            <button class="combat-btn start" id="combatBtn" onclick="toggleCombat()">Iniciar Combate</button>
+        </div>
+
+        <!-- Equipment Panel -->
+        <div class="panel" id="panel-equipment">
+            <div class="section-title">Equipamiento de Aris</div>
+            <div class="equipped-slots" id="equippedSlots"></div>
+            <div class="section-title">Inventario</div>
+            <div class="inventory-grid" id="inventoryGrid"></div>
+            <div class="equip-actions" id="equipActions" style="display:none">
+                <button class="action-btn equip-action" onclick="equipSelected()">Equipar</button>
+                <button class="action-btn fuse-action" id="fuseBtn" onclick="fuseSelected()" disabled>Fusionar (3)</button>
+                <button class="action-btn recycle-action" onclick="recycleSelected()">Reciclar</button>
+            </div>
+        </div>
+
+        <!-- Cards Panel -->
+        <div class="panel" id="panel-cards">
+            <div class="section-title">Album de Cartas - Porera</div>
+            <div class="era-tabs">
+                <button class="era-tab active" onclick="selectCardEra(0)">Piedra</button>
+                <button class="era-tab" onclick="selectCardEra(1)">Tribal</button>
+                <button class="era-tab" onclick="selectCardEra(2)">Bronce</button>
+            </div>
+            <div class="era-progress" style="margin-bottom:12px">
+                <span id="cardProgressText">0/9 cartas</span>
+                <div class="progress-bar"><div class="progress-fill" id="cardProgressFill" style="width:0%"></div></div>
+            </div>
+            <div class="cards-grid" id="cardsGrid"></div>
+        </div>
+
+        <!-- Prestige Panel -->
+        <div class="panel" id="panel-prestige">
+            <div class="section-title">Minijuego Idle - Prestigio</div>
+            <button class="prestige-toggle" id="prestigeToggle" onclick="togglePrestige()">Iniciar Produccion</button>
+            <div class="prestige-display">
+                <div class="prestige-level" id="prestigeLevel">0</div>
+                <div>Nivel de Prestigio</div>
+                <div class="prestige-multiplier" id="prestigeMultiplier">Multiplicador: 1.0x</div>
+                <div class="prestige-resources" id="prestigeResources">0</div>
+                <div>Recursos acumulados</div>
+                <div class="prestige-production" id="prestigeProduction">+0.0/s</div>
+            </div>
+            <div style="text-align:center;margin:10px 0;color:#aaa;font-size:13px" id="prestigeGainPreview">
+                Prestigio al reiniciar: +0
+            </div>
+            <button class="prestige-btn" id="prestigeResetBtn" onclick="doPrestigeReset()" disabled>Reiniciar con Prestigio</button>
+        </div>
+    </div>
+
+        <!-- Clan Panel -->
+        <div class="panel" id="panel-clan">
+            <!-- No Clan View -->
+            <div id="noClanView">
+                <div class="prestige-display" style="border-color:#4CAF50">
+                    <div style="font-size:40px;margin-bottom:10px">👥</div>
+                    <div style="font-size:18px;font-weight:bold;margin-bottom:5px">Sistema de Clanes</div>
+                    <div style="color:#aaa;font-size:13px;margin-bottom:15px">Unite a un clan para cooperar con otros jugadores, participar en eventos y ganar recompensas exclusivas!</div>
+                    <input type="text" id="clanNameInput" placeholder="Nombre del clan..." style="width:100%;padding:10px;border:1px solid #3a3fae;background:#0a0e27;color:white;border-radius:8px;margin-bottom:10px;font-size:14px;text-align:center">
+                    <button class="advance-era-btn" onclick="createClan()" style="width:100%;background:linear-gradient(135deg,#4CAF50,#2E7D32)">Crear Clan</button>
+                    <button class="advance-era-btn" onclick="joinClan()" style="width:100%;margin-top:8px;background:linear-gradient(135deg,#2196F3,#1565C0)">Unirse a un Clan</button>
+                </div>
+            </div>
+
+            <!-- In Clan View -->
+            <div id="inClanView" style="display:none">
+                <div class="structure-card" style="border-color:#4CAF50;text-align:center">
+                    <div style="font-size:20px;font-weight:bold;color:#4CAF50" id="clanName">Mi Clan</div>
+                    <div style="display:flex;justify-content:center;gap:15px;margin:8px 0;font-size:13px">
+                        <span id="clanLevel">Nivel 1</span>
+                        <span id="clanMembers">1/30 miembros</span>
+                    </div>
+                    <div class="progress-bar" style="margin:5px 0"><div class="progress-fill" id="clanExpFill" style="width:0%;background:linear-gradient(90deg,#4CAF50,#8BC34A)"></div></div>
+                </div>
+
+                <!-- Donations -->
+                <div class="section-title">Donaciones</div>
+                <div class="structure-card">
+                    <div style="display:flex;justify-content:space-between;margin-bottom:8px">
+                        <span style="font-size:13px" id="donationsRemaining">5 donaciones restantes</span>
+                        <span style="font-size:12px;color:#FFD700" id="totalDonated">Total: 0</span>
+                    </div>
+                    <div style="display:flex;gap:6px">
+                        <button class="build-btn" style="flex:1;font-size:11px" onclick="donateClan('energy', 10)">⚡ 10 Energia</button>
+                        <button class="build-btn" style="flex:1;font-size:11px" onclick="donateClan('stone', 50)">🪨 50 Piedra</button>
+                        <button class="build-btn" style="flex:1;font-size:11px" onclick="donateClan('food', 50)">🍖 50 Alimento</button>
+                    </div>
+                    <div style="font-size:11px;color:#7b7;margin-top:6px;text-align:center">Cada donacion te da 💎 +1 diamante</div>
+                </div>
+
+                <!-- Clan Event -->
+                <div class="section-title">Evento Cooperativo</div>
+                <div id="clanEventArea"></div>
+
+                <!-- Members Ranking -->
+                <div class="section-title">Ranking de Miembros</div>
+                <div id="clanMembersList"></div>
+
+                <!-- Leave -->
+                <button class="advance-era-btn" onclick="leaveClan()" style="width:100%;margin-top:15px;background:#f44336;font-size:12px;padding:8px">Salir del Clan</button>
+            </div>
+        </div>
+
+        <!-- Shop Panel -->
+        <div class="panel" id="panel-shop">
+            <div class="section-title">Tienda</div>
+
+            <!-- Shop Tabs -->
+            <div class="era-tabs" style="margin-bottom:12px">
+                <button class="era-tab active" onclick="selectShopTab('packs')">Packs</button>
+                <button class="era-tab" onclick="selectShopTab('chests')">Cofres</button>
+                <button class="era-tab" onclick="selectShopTab('vip')">VIP</button>
+                <button class="era-tab" onclick="selectShopTab('battlepass')">Pase</button>
+            </div>
+
+            <!-- Ads Counter -->
+            <div style="text-align:center;margin-bottom:10px;font-size:12px;color:#aaa">
+                Anuncios disponibles hoy: <span id="adsRemaining" style="color:#4CAF50;font-weight:bold">10</span>/10
+                <span id="boostIndicator" style="color:#FFD700;display:none"> | Boost: <span id="boostMultText">1.0x</span></span>
+            </div>
+
+            <!-- Packs Sub-panel -->
+            <div id="shopSubPacks">
+                <div id="shopPacksList"></div>
+            </div>
+
+            <!-- Chests Sub-panel -->
+            <div id="shopSubChests" style="display:none">
+                <div id="shopChestsList"></div>
+            </div>
+
+            <!-- VIP Sub-panel -->
+            <div id="shopSubVip" style="display:none">
+                <div class="prestige-display" style="border-color:#FFD700">
+                    <div style="font-size:24px;color:#FFD700;font-weight:bold" id="vipStatus">VIP INACTIVO</div>
+                    <div id="vipTimer" style="color:#aaa;font-size:13px;margin:5px 0"></div>
+                    <div style="text-align:left;font-size:13px;margin:12px 0;line-height:1.8">
+                        <div>⭐ +20% produccion global</div>
+                        <div>💎 5 diamantes diarios</div>
+                        <div>⚡ 20 energia diaria</div>
+                        <div>🪨 Recursos diarios segun era</div>
+                        <div>💎 25 diamantes semanales</div>
+                        <div>⚡ 100 energia semanal</div>
+                    </div>
+                    <button class="advance-era-btn" id="vipBuyBtn" onclick="buyVIP()" style="background:linear-gradient(135deg,#FFD700,#FF6F00);width:100%">
+                        Activar VIP - 500 💎
+                    </button>
+                    <div style="display:flex;gap:8px;margin-top:10px">
+                        <button class="build-btn" id="vipDailyBtn" onclick="claimVIPDaily()" disabled style="flex:1">Diario</button>
+                        <button class="build-btn" id="vipWeeklyBtn" onclick="claimVIPWeekly()" disabled style="flex:1">Semanal</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Battle Pass Sub-panel -->
+            <div id="shopSubBattlepass" style="display:none">
+                <div class="prestige-display" style="border-color:#9C27B0">
+                    <div style="font-size:14px;color:#aaa">Nivel del Pase</div>
+                    <div class="prestige-level" id="bpLevel" style="background:linear-gradient(90deg,#9C27B0,#E040FB);-webkit-background-clip:text">0</div>
+                    <div class="era-progress" style="margin:10px 0">
+                        <span id="bpExpText" style="font-size:12px">0/100 EXP</span>
+                        <div class="progress-bar"><div class="progress-fill" id="bpExpFill" style="width:0%;background:linear-gradient(90deg,#9C27B0,#E040FB)"></div></div>
+                    </div>
+                    <div id="bpPremiumStatus" style="font-size:13px;color:#aaa;margin:8px 0">Pase Gratuito</div>
+                    <button class="advance-era-btn" id="bpBuyBtn" onclick="buyBattlePass()" style="background:linear-gradient(135deg,#9C27B0,#E040FB);width:100%">
+                        Activar Premium - 800 💎
+                    </button>
+                </div>
+                <div class="section-title" style="margin-top:12px">Recompensas</div>
+                <div id="bpRewardsList"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup -->
+    <div class="popup-overlay" id="popupOverlay" onclick="closePopup()">
+        <div class="popup-box" onclick="event.stopPropagation()">
+            <div class="popup-title" id="popupTitle">Logro!</div>
+            <div class="popup-message" id="popupMessage">Has desbloqueado algo nuevo</div>
+            <button class="popup-close" onclick="closePopup()">OK</button>
+        </div>
+    </div>
+
+    <script>
+    // ============ GAME STATE ============
+    const state = {
+        resources: { stone: 50, wood: 50, food: 30, bronze: 0, energy: 10, diamonds: 5 },
+        currentEra: 0, // 0=Stone, 1=Tribal, 2=Bronze
+        aris: { level: 1, exp: 0, expNext: 100, baseHP: 100, baseAtk: 10, baseDef: 5 },
+        structures: {},
+        equipment: { helmet: null, weapon: null, armor: null, gadget: null },
+        inventory: [],
+        cards: { 0: [], 1: [], 2: [] },
+        prestige: { level: 0, multiplier: 1.0, current: 0, accumulated: 0, active: false, production: 1.0 },
+        stats: { enemiesDefeated: 0, structuresBuilt: 0, totalResources: 0 },
+        shop: {
+            isVIP: false, vipExpires: 0, vipDailyClaimed: false, vipWeeklyClaimed: false,
+            hasPremiumPass: false, bpLevel: 0, bpExp: 0, bpExpNext: 100,
+            bpClaimedFree: [], bpClaimedPremium: [],
+            adsToday: 0, maxAds: 10,
+            boosts: [], totalPurchases: 0
+        },
+        achievements: [],
+        clan: {
+            isInClan: false, name: '', level: 1, exp: 0, expNext: 500,
+            members: [], totalDonated: 0, donationsToday: 0, maxDonations: 5,
+            event: null, achievements: [], globalScore: 0
+        }
+    };
+
+    // ============ DATA ============
+    const ERA_NAMES = ['Edad de Piedra', 'Edad Tribal', 'Edad del Bronce'];
+    const ERA_EMOJIS = ['🪨', '🏕️', '⚔️'];
+
+    const STRUCTURES = {
+        0: [ // Stone Age
+            { id: 'quarry', name: 'Cantera', resource: 'stone', baseProd: 1.0, cost: { stone: 20 }, icon: '⛏️' },
+            { id: 'camp', name: 'Campamento', resource: 'food', baseProd: 0.8, cost: { wood: 15 }, icon: '🏕️' },
+            { id: 'workshop', name: 'Taller de Silex', resource: 'wood', baseProd: 0.6, cost: { stone: 25, food: 10 }, icon: '🔨' }
+        ],
+        1: [ // Tribal
+            { id: 'village', name: 'Aldea', resource: 'food', baseProd: 2.5, cost: { stone: 100, wood: 80 }, icon: '🏘️' },
+            { id: 'mine', name: 'Mina Primitiva', resource: 'stone', baseProd: 3.0, cost: { wood: 120, food: 60 }, icon: '⛰️' },
+            { id: 'totem', name: 'Totem', resource: 'energy', baseProd: 0.5, cost: { stone: 150, wood: 100 }, icon: '🗿' }
+        ],
+        2: [ // Bronze
+            { id: 'foundry', name: 'Fundicion', resource: 'bronze', baseProd: 1.5, cost: { stone: 500, energy: 20 }, icon: '🏭' },
+            { id: 'farm', name: 'Granja', resource: 'food', baseProd: 5.0, cost: { wood: 300, bronze: 10 }, icon: '🌾' },
+            { id: 'forge', name: 'Forja', resource: 'energy', baseProd: 2.0, cost: { bronze: 30, stone: 400 }, icon: '🔥' }
+        ]
+    };
+
+    const ENEMIES = {
+        0: [
+            { name: 'Lobo', emoji: '🐺', hp: 50, atk: 5, def: 2, exp: 15, speed: 1.5 },
+            { name: 'Oso', emoji: '🐻', hp: 80, atk: 8, def: 5, exp: 25, speed: 2.0 },
+            { name: 'Mamut', emoji: '🦣', hp: 150, atk: 12, def: 10, exp: 50, speed: 2.5 }
+        ],
+        1: [
+            { name: 'Guerrero Tribal', emoji: '🧔', hp: 100, atk: 12, def: 8, exp: 30, speed: 1.3 },
+            { name: 'Bestia Salvaje', emoji: '🦁', hp: 130, atk: 15, def: 6, exp: 40, speed: 1.0 },
+            { name: 'Chaman', emoji: '🧙', hp: 90, atk: 18, def: 4, exp: 55, speed: 1.8 }
+        ],
+        2: [
+            { name: 'Soldado de Bronce', emoji: '🛡️', hp: 160, atk: 18, def: 15, exp: 50, speed: 1.4 },
+            { name: 'Grifo', emoji: '🦅', hp: 200, atk: 22, def: 10, exp: 70, speed: 1.0 },
+            { name: 'Minotauro', emoji: '👹', hp: 300, atk: 28, def: 20, exp: 100, speed: 2.0 }
+        ]
+    };
+
+    const EQUIPMENT = {
+        0: {
+            helmet: [
+                { id: 'stone_helmet_c', name: 'Casco Simple', slot: 'helmet', rarity: 0, atk: 0, def: 2, hp: 5, era: 0 },
+                { id: 'stone_helmet_r', name: 'Casco Reforzado', slot: 'helmet', rarity: 1, atk: 0, def: 5, hp: 12, era: 0 },
+                { id: 'stone_helmet_e', name: 'Casco Cavernario', slot: 'helmet', rarity: 2, atk: 1, def: 10, hp: 25, era: 0 },
+                { id: 'stone_helmet_l', name: 'Corona Primitiva', slot: 'helmet', rarity: 3, atk: 3, def: 18, hp: 50, era: 0 }
+            ],
+            weapon: [
+                { id: 'stone_weapon_c', name: 'Garrote', slot: 'weapon', rarity: 0, atk: 3, def: 0, hp: 0, era: 0 },
+                { id: 'stone_weapon_r', name: 'Maza de Piedra', slot: 'weapon', rarity: 1, atk: 7, def: 0, hp: 0, era: 0 },
+                { id: 'stone_weapon_e', name: 'Hacha de Silex', slot: 'weapon', rarity: 2, atk: 15, def: 1, hp: 0, era: 0 },
+                { id: 'stone_weapon_l', name: 'Destructor Primordial', slot: 'weapon', rarity: 3, atk: 30, def: 3, hp: 10, era: 0 }
+            ],
+            armor: [
+                { id: 'stone_armor_c', name: 'Piel de Animal', slot: 'armor', rarity: 0, atk: 0, def: 3, hp: 10, era: 0 },
+                { id: 'stone_armor_r', name: 'Piel Curtida', slot: 'armor', rarity: 1, atk: 0, def: 7, hp: 20, era: 0 },
+                { id: 'stone_armor_e', name: 'Armadura de Hueso', slot: 'armor', rarity: 2, atk: 2, def: 15, hp: 40, era: 0 },
+                { id: 'stone_armor_l', name: 'Coraza del Mamut', slot: 'armor', rarity: 3, atk: 5, def: 28, hp: 80, era: 0 }
+            ],
+            gadget: [
+                { id: 'stone_gadget_c', name: 'Amuleto de Hueso', slot: 'gadget', rarity: 0, atk: 1, def: 1, hp: 5, era: 0 },
+                { id: 'stone_gadget_r', name: 'Collar Tallado', slot: 'gadget', rarity: 1, atk: 3, def: 2, hp: 10, era: 0 },
+                { id: 'stone_gadget_e', name: 'Talisman Antiguo', slot: 'gadget', rarity: 2, atk: 6, def: 5, hp: 20, era: 0 },
+                { id: 'stone_gadget_l', name: 'Reliquia Ancestral', slot: 'gadget', rarity: 3, atk: 12, def: 10, hp: 40, era: 0 }
+            ]
+        },
+        1: {
+            helmet: [{ id: 'tribal_helmet_c', name: 'Casco Tribal', slot: 'helmet', rarity: 0, atk: 1, def: 5, hp: 10, era: 1 }],
+            weapon: [{ id: 'tribal_weapon_c', name: 'Lanza Tribal', slot: 'weapon', rarity: 0, atk: 8, def: 0, hp: 0, era: 1 }],
+            armor: [{ id: 'tribal_armor_c', name: 'Armadura Tribal', slot: 'armor', rarity: 0, atk: 0, def: 8, hp: 20, era: 1 }],
+            gadget: [{ id: 'tribal_gadget_c', name: 'Collar Chamanico', slot: 'gadget', rarity: 0, atk: 4, def: 3, hp: 10, era: 1 }]
+        },
+        2: {
+            helmet: [{ id: 'bronze_helmet_c', name: 'Casco de Bronce', slot: 'helmet', rarity: 0, atk: 2, def: 10, hp: 20, era: 2 }],
+            weapon: [{ id: 'bronze_weapon_c', name: 'Espada de Bronce', slot: 'weapon', rarity: 0, atk: 15, def: 2, hp: 0, era: 2 }],
+            armor: [{ id: 'bronze_armor_c', name: 'Armadura de Bronce', slot: 'armor', rarity: 0, atk: 0, def: 15, hp: 40, era: 2 }],
+            gadget: [{ id: 'bronze_gadget_c', name: 'Escudo de Bronce', slot: 'gadget', rarity: 0, atk: 3, def: 8, hp: 15, era: 2 }]
+        }
+    };
+
+    const RARITY_NAMES = ['Comun', 'Claro', 'Epico', 'Legendario'];
+    const RARITY_COLORS = ['#888', '#00d4ff', '#9C27B0', '#FFD700'];
+    const RARITY_CLASSES = ['rarity-common', 'rarity-clear', 'rarity-epic', 'rarity-legendary'];
+
+    const CARD_SETS = {
+        0: ['Descubrimiento del Fuego','Primera Herramienta','Caza del Mamut','Refugio de Piedra','Pintura Rupestre','Talla en Hueso','Primer Ritual','Domesticacion del Lobo','Eclipse Primitivo'],
+        1: ['Union de Tribus','Danza Ritual','Domesticacion','Arte Tribal','Musica Ancestral','Ley del Clan','Gran Caceria','Chaman Legendario','Festival de la Luna'],
+        2: ['Fundicion del Metal','Ruta Comercial','Muralla de Bronce','Escritura Antigua','Navegacion','Arado de Bronce','Templo Sagrado','Ejercito de Bronce','Edad Dorada']
+    };
+
+    // ============ COMBAT STATE ============
+    let combatActive = false;
+    let combatEnemyIndex = 0;
+    let currentEnemy = null;
+    let enemyHP = 0;
+    let arisHP = 0;
+    let arisMaxHP = 0;
+    let atkTimer = 0;
+    let enemyAtkTimer = 0;
+    let selectedInvIndex = -1;
+    let selectedCardEra = 0;
+
+    // ============ HELPERS ============
+    function formatNum(n) {
+        if (n >= 1e9) return (n/1e9).toFixed(1)+'B';
+        if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+        if (n >= 1e3) return (n/1e3).toFixed(1)+'K';
+        return Math.floor(n).toString();
+    }
+
+    function canAfford(costs) {
+        for (const [res, amt] of Object.entries(costs)) {
+            if ((state.resources[res] || 0) < amt) return false;
+        }
+        return true;
+    }
+
+    function spendCosts(costs) {
+        for (const [res, amt] of Object.entries(costs)) {
+            state.resources[res] -= amt;
+        }
+    }
+
+    function getScaledCost(baseCost, level) {
+        const scaled = {};
+        for (const [res, amt] of Object.entries(baseCost)) {
+            scaled[res] = Math.floor(amt * Math.pow(1.5, level));
+        }
+        return scaled;
+    }
+
+    function getArisStats() {
+        let atk = state.aris.baseAtk;
+        let def = state.aris.baseDef;
+        let hp = state.aris.baseHP;
+        for (const slot of ['helmet','weapon','armor','gadget']) {
+            const eq = state.equipment[slot];
+            if (eq) { atk += eq.atk; def += eq.def; hp += eq.hp; }
+        }
+        return { atk, def, hp };
+    }
+
+    // ============ PANELS ============
+    function showPanel(name) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.getElementById('panel-'+name).classList.add('active');
+        document.querySelectorAll('.nav-btn').forEach((b,i) => {
+            b.classList.toggle('active', b.textContent.toLowerCase().includes(name.substring(0,4)));
+        });
+        // Reset nav active properly
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const names = ['planet','structures','combat','equipment','cards','prestige','clan','shop'];
+        navBtns.forEach((b,i) => b.classList.toggle('active', names[i]===name));
+
+        if (name === 'structures') renderStructures();
+        if (name === 'combat') renderCombatIdle();
+        if (name === 'equipment') renderEquipment();
+        if (name === 'cards') renderCards();
+        if (name === 'prestige') renderPrestige();
+        if (name === 'shop') renderShop();
+        if (name === 'clan') renderClan();
+    }
+
+    // ============ STRUCTURES ============
+    function renderStructures() {
+        let html = '';
+        for (let era = 0; era <= state.currentEra; era++) {
+            html += `<div class="section-title" style="margin-top:12px">${ERA_EMOJIS[era]} ${ERA_NAMES[era]}</div>`;
+            for (const s of STRUCTURES[era]) {
+                const st = state.structures[s.id] || { level: 0, built: false };
+                const isBuilt = st.built;
+                const level = st.level || 0;
+                const cost = isBuilt ? getScaledCost(s.cost, level) : s.cost;
+                const costStr = Object.entries(cost).map(([r,a]) => `${formatNum(a)} ${r}`).join(', ');
+                const prod = isBuilt ? (s.baseProd * level * Math.pow(1.15, level-1)).toFixed(1) : s.baseProd.toFixed(1);
+                const affordable = canAfford(cost);
+
+                html += `<div class="structure-card">
+                    <div class="structure-header">
+                        <span class="structure-name">${s.icon} ${s.name}</span>
+                        <span class="structure-level">${isBuilt ? 'Nv.'+level : 'Sin construir'}</span>
+                    </div>
+                    <div class="structure-production">+${prod} ${s.resource}/s</div>
+                    <div>
+                        <button class="${isBuilt ? 'upgrade-btn' : 'build-btn'}" ${affordable ? '' : 'disabled'}
+                            onclick="${isBuilt ? `upgradeStructure('${s.id}')` : `buildStructure('${s.id}',${era})`}">
+                            ${isBuilt ? 'Mejorar' : 'Construir'}
+                        </button>
+                        <span class="cost-text">${costStr}</span>
+                    </div>
+                </div>`;
+            }
+        }
+        document.getElementById('structuresList').innerHTML = html;
+    }
+
+    function buildStructure(id, era) {
+        const data = STRUCTURES[era].find(s => s.id === id);
+        if (!data || !canAfford(data.cost)) return;
+        spendCosts(data.cost);
+        state.structures[id] = { level: 1, built: true, resource: data.resource, baseProd: data.baseProd };
+        state.stats.structuresBuilt++;
+        renderStructures();
+        showPopup('Estructura Construida!', `${data.icon} ${data.name} esta produciendo recursos.`);
+        checkAchievements();
+    }
+
+    function upgradeStructure(id) {
+        const st = state.structures[id];
+        if (!st || !st.built) return;
+        // find data
+        let data;
+        for (let e = 0; e <= 2; e++) {
+            data = STRUCTURES[e].find(s => s.id === id);
+            if (data) break;
+        }
+        if (!data) return;
+        const cost = getScaledCost(data.cost, st.level);
+        if (!canAfford(cost)) return;
+        spendCosts(cost);
+        st.level++;
+        renderStructures();
+    }
+
+    function tickStructures(dt) {
+        const rates = {};
+        for (const [id, st] of Object.entries(state.structures)) {
+            if (!st.built) continue;
+            const prod = st.baseProd * st.level * Math.pow(1.15, st.level - 1) * dt;
+            state.resources[st.resource] = (state.resources[st.resource] || 0) + prod;
+            state.stats.totalResources += prod;
+            rates[st.resource] = (rates[st.resource] || 0) + st.baseProd * st.level * Math.pow(1.15, st.level - 1);
+        }
+        // Update rate display
+        for (const res of ['stone','wood','food','bronze','energy','diamonds']) {
+            const rateEl = document.getElementById('rate-'+res);
+            if (rateEl) {
+                const r = rates[res] || 0;
+                rateEl.textContent = r > 0 ? ` +${r.toFixed(1)}/s` : '';
+            }
+        }
+    }
+
+    // ============ ERA PROGRESSION ============
+    function getEraProgress() {
+        const eraStructures = STRUCTURES[state.currentEra] || [];
+        if (eraStructures.length === 0) return 1;
+        let total = eraStructures.length * 5;
+        let progress = 0;
+        for (const s of eraStructures) {
+            const st = state.structures[s.id];
+            if (st && st.built) progress += Math.min(st.level, 5);
+        }
+        return Math.min(1, progress / total);
+    }
+
+    function canAdvanceEra() {
+        if (state.currentEra >= 2) return false;
+        return getEraProgress() >= 1;
+    }
+
+    function advanceEra() {
+        if (!canAdvanceEra()) return;
+        state.currentEra++;
+        document.getElementById('eraBadge').textContent = ERA_NAMES[state.currentEra];
+        showPopup('Nueva Era!', `Has avanzado a la ${ERA_NAMES[state.currentEra]}!`);
+        checkAchievements();
+    }
+
+    function updateEraUI() {
+        const prog = getEraProgress();
+        document.getElementById('eraProgressFill').style.width = (prog*100)+'%';
+        document.getElementById('eraProgressText').textContent = `Progreso de Era: ${Math.floor(prog*100)}%`;
+        document.getElementById('advanceEraBtn').disabled = !canAdvanceEra();
+        document.getElementById('advanceEraBtn').textContent = state.currentEra >= 2 ? 'Era maxima alcanzada' : 'Avanzar de Era';
+
+        // Planet structures summary
+        let html = '';
+        for (const [id, st] of Object.entries(state.structures)) {
+            if (!st.built) continue;
+            const prod = (st.baseProd * st.level * Math.pow(1.15, st.level - 1)).toFixed(1);
+            html += `<div class="structure-card" style="padding:8px">
+                <span class="structure-name">Nv.${st.level}</span>
+                <span class="structure-production" style="margin:0"> +${prod} ${st.resource}/s</span>
+            </div>`;
+        }
+        document.getElementById('planetStructuresSummary').innerHTML = html || '<p style="color:#666;font-size:13px;padding:10px">Aun no tienes estructuras. Ve a la pestana de Estructuras para construir!</p>';
+    }
+
+    // ============ COMBAT ============
+    function renderCombatIdle() {
+        const stats = getArisStats();
+        document.getElementById('combatStats').innerHTML = `
+            <span class="stat-badge">ATK: ${stats.atk}</span>
+            <span class="stat-badge">DEF: ${stats.def}</span>
+            <span class="stat-badge">HP: ${stats.hp}</span>
+            <span class="stat-badge">Nv.${state.aris.level}</span>
+        `;
+    }
+
+    function toggleCombat() {
+        if (combatActive) {
+            endCombat();
+        } else {
+            startCombat();
+        }
+    }
+
+    function startCombat() {
+        const enemies = ENEMIES[state.currentEra];
+        if (!enemies || enemies.length === 0) return;
+        combatActive = true;
+        combatEnemyIndex = 0;
+        document.getElementById('combatBtn').textContent = 'Abandonar';
+        document.getElementById('combatBtn').className = 'combat-btn end';
+        document.getElementById('combatLog').innerHTML = '';
+        startFight(enemies[0]);
+    }
+
+    function startFight(enemy) {
+        currentEnemy = enemy;
+        enemyHP = enemy.hp;
+        const stats = getArisStats();
+        arisMaxHP = stats.hp;
+        arisHP = arisMaxHP;
+        atkTimer = 0;
+        enemyAtkTimer = 0;
+
+        document.getElementById('enemyAvatar').textContent = enemy.emoji;
+        document.getElementById('enemyName').textContent = enemy.name;
+        addCombatLog(`${enemy.emoji} ${enemy.name} aparece! (HP:${enemy.hp} ATK:${enemy.atk})`, 'info');
+        updateCombatBars();
+    }
+
+    function tickCombat(dt) {
+        if (!combatActive || !currentEnemy) return;
+
+        atkTimer += dt;
+        enemyAtkTimer += dt;
+
+        if (atkTimer >= 1.0) {
+            atkTimer = 0;
+            const stats = getArisStats();
+            let dmg = Math.max(1, stats.atk - Math.floor(currentEnemy.def / 2));
+            dmg = Math.round(dmg * (0.85 + Math.random() * 0.3));
+            enemyHP -= dmg;
+            addCombatLog(`Aris ataca! -${dmg} HP`, 'damage-dealt');
+
+            if (enemyHP <= 0) {
+                onEnemyDefeated();
+                return;
+            }
+        }
+
+        if (enemyAtkTimer >= currentEnemy.speed) {
+            enemyAtkTimer = 0;
+            const stats = getArisStats();
+            let dmg = Math.max(1, currentEnemy.atk - Math.floor(stats.def / 2));
+            dmg = Math.round(dmg * (0.85 + Math.random() * 0.3));
+            arisHP -= dmg;
+            addCombatLog(`${currentEnemy.emoji} ataca! -${dmg} HP`, 'damage-received');
+            document.querySelector('.combatant:first-child').classList.add('shake');
+            setTimeout(() => document.querySelector('.combatant:first-child').classList.remove('shake'), 300);
+
+            if (arisHP <= 0) {
+                onArisDefeated();
+                return;
+            }
+        }
+
+        updateCombatBars();
+    }
+
+    function updateCombatBars() {
+        if (!currentEnemy) return;
+        const arisPercent = Math.max(0, arisHP / arisMaxHP * 100);
+        const enemyPercent = Math.max(0, enemyHP / currentEnemy.hp * 100);
+        document.getElementById('arisHpFill').style.width = arisPercent + '%';
+        document.getElementById('arisHpText').textContent = `${Math.max(0,Math.floor(arisHP))}/${arisMaxHP}`;
+        document.getElementById('enemyHpFill').style.width = enemyPercent + '%';
+        document.getElementById('enemyHpText').textContent = `${Math.max(0,Math.floor(enemyHP))}/${currentEnemy.hp}`;
+    }
+
+    function onEnemyDefeated() {
+        state.stats.enemiesDefeated++;
+        state.aris.exp += currentEnemy.exp;
+        addCombatLog(`Victoria! +${currentEnemy.exp} EXP`, 'info');
+
+        // Level up check
+        while (state.aris.exp >= state.aris.expNext) {
+            state.aris.exp -= state.aris.expNext;
+            state.aris.level++;
+            state.aris.expNext = Math.floor(state.aris.expNext * 1.2);
+            state.aris.baseHP += 5;
+            state.aris.baseAtk += 2;
+            state.aris.baseDef += 1;
+            addCombatLog(`Aris sube a Nv.${state.aris.level}!`, 'info');
+        }
+
+        // Resource rewards
+        const resTypes = ['stone','wood','food'];
+        if (state.currentEra >= 2) resTypes.push('bronze');
+        const resType = resTypes[Math.floor(Math.random()*resTypes.length)];
+        const amount = Math.floor(10 + Math.random() * 20 * (state.currentEra+1));
+        state.resources[resType] += amount;
+        addCombatLog(`+${amount} ${resType}`, 'reward');
+
+        // Card drop (20% chance)
+        if (Math.random() < 0.20) tryDropCard();
+
+        // Equipment drop (15% chance)
+        if (Math.random() < 0.15) tryDropEquipment();
+
+        checkAchievements();
+
+        // Next enemy
+        const enemies = ENEMIES[state.currentEra];
+        combatEnemyIndex++;
+        if (combatEnemyIndex < enemies.length) {
+            setTimeout(() => startFight(enemies[combatEnemyIndex]), 1000);
+        } else {
+            addCombatLog('Todos los enemigos derrotados! Victoria total!', 'info');
+            setTimeout(() => endCombat(), 1500);
+        }
+    }
+
+    function onArisDefeated() {
+        addCombatLog('Aris ha caido! Mejora tu equipamiento.', 'damage-received');
+        setTimeout(() => endCombat(), 1500);
+    }
+
+    function endCombat() {
+        combatActive = false;
+        currentEnemy = null;
+        document.getElementById('combatBtn').textContent = 'Iniciar Combate';
+        document.getElementById('combatBtn').className = 'combat-btn start';
+        document.getElementById('enemyAvatar').textContent = '❓';
+        document.getElementById('enemyName').textContent = '---';
+        document.getElementById('enemyHpText').textContent = '---';
+        document.getElementById('enemyHpFill').style.width = '100%';
+        document.getElementById('arisHpFill').style.width = '100%';
+        const stats = getArisStats();
+        document.getElementById('arisHpText').textContent = `${stats.hp}/${stats.hp}`;
+        renderCombatIdle();
+    }
+
+    function addCombatLog(text, type) {
+        const log = document.getElementById('combatLog');
+        log.innerHTML += `<div class="log-entry log-${type}">${text}</div>`;
+        log.scrollTop = log.scrollHeight;
+    }
+
+    function tryDropCard() {
+        const era = state.currentEra;
+        const available = [];
+        for (let i = 0; i < CARD_SETS[era].length; i++) {
+            if (!state.cards[era].includes(i)) available.push(i);
+        }
+        if (available.length === 0) return;
+        const cardIdx = available[Math.floor(Math.random() * available.length)];
+        state.cards[era].push(cardIdx);
+        addCombatLog(`Carta obtenida: ${CARD_SETS[era][cardIdx]}!`, 'reward');
+        showPopup('Nueva Carta!', `${CARD_SETS[era][cardIdx]}`);
+
+        // Check set completion
+        if (state.cards[era].length >= 9) {
+            showPopup('Set Completado!', `Completaste el set de ${ERA_NAMES[era]}!`);
+            state.resources.diamonds += 10;
+            state.resources.energy += 50;
+        }
+    }
+
+    function tryDropEquipment() {
+        const era = state.currentEra;
+        const slots = ['helmet','weapon','armor','gadget'];
+        const slot = slots[Math.floor(Math.random()*slots.length)];
+
+        // Rarity roll
+        const roll = Math.random();
+        let rarity = 0;
+        if (roll > 0.98) rarity = 3;
+        else if (roll > 0.90) rarity = 2;
+        else if (roll > 0.70) rarity = 1;
+
+        const eqList = EQUIPMENT[era]?.[slot] || [];
+        const eq = eqList.find(e => e.rarity === rarity) || eqList[0];
+        if (!eq) return;
+
+        state.inventory.push({...eq, instanceId: Date.now() + '_' + Math.random()});
+        addCombatLog(`Equipamiento: ${eq.name} [${RARITY_NAMES[eq.rarity]}]!`, 'reward');
+    }
+
+    // ============ EQUIPMENT ============
+    function renderEquipment() {
+        // Equipped slots
+        const slots = [
+            { key: 'helmet', name: 'Casco', icon: '🪖' },
+            { key: 'weapon', name: 'Arma', icon: '⚔️' },
+            { key: 'armor', name: 'Armadura', icon: '🛡️' },
+            { key: 'gadget', name: 'Gadget', icon: '💍' }
+        ];
+
+        let slotsHtml = '';
+        for (const s of slots) {
+            const eq = state.equipment[s.key];
+            const rarityClass = eq ? RARITY_CLASSES[eq.rarity] : '';
+            slotsHtml += `<div class="equip-slot ${rarityClass}">
+                <div class="slot-icon">${s.icon}</div>
+                <div class="slot-name">${s.name}</div>
+                <div class="slot-item" style="color:${eq ? RARITY_COLORS[eq.rarity] : '#666'}">${eq ? eq.name : 'Vacio'}</div>
+                ${eq ? `<div style="font-size:10px;color:#aaa">ATK+${eq.atk} DEF+${eq.def} HP+${eq.hp}</div>` : ''}
+            </div>`;
+        }
+        document.getElementById('equippedSlots').innerHTML = slotsHtml;
+
+        // Inventory
+        let invHtml = '';
+        state.inventory.forEach((eq, i) => {
+            invHtml += `<div class="inv-item ${RARITY_CLASSES[eq.rarity]} ${selectedInvIndex===i?'selected':''}"
+                onclick="selectInvItem(${i})" style="${selectedInvIndex===i?'border-width:2px;transform:scale(1.05)':''}">
+                <div class="item-icon">${slots.find(s=>s.key===eq.slot)?.icon || '?'}</div>
+                <div style="color:${RARITY_COLORS[eq.rarity]}">${eq.name}</div>
+                <div style="font-size:9px;color:#aaa">ATK+${eq.atk} DEF+${eq.def}</div>
+            </div>`;
+        });
+        document.getElementById('inventoryGrid').innerHTML = invHtml || '<p style="color:#666;font-size:13px;grid-column:1/-1;text-align:center">Sin equipamiento. Pelea en combate para obtener!</p>';
+        document.getElementById('equipActions').style.display = selectedInvIndex >= 0 ? 'flex' : 'none';
+
+        // Fusion check
+        if (selectedInvIndex >= 0) {
+            const sel = state.inventory[selectedInvIndex];
+            const sameCount = state.inventory.filter(e => e.id === sel.id).length;
+            const fuseBtn = document.getElementById('fuseBtn');
+            fuseBtn.disabled = sameCount < 3 || sel.rarity >= 3;
+            fuseBtn.textContent = `Fusionar (${sameCount}/3)`;
+        }
+    }
+
+    function selectInvItem(index) {
+        selectedInvIndex = selectedInvIndex === index ? -1 : index;
+        renderEquipment();
+    }
+
+    function equipSelected() {
+        if (selectedInvIndex < 0) return;
+        const eq = state.inventory[selectedInvIndex];
+        state.equipment[eq.slot] = eq;
+        selectedInvIndex = -1;
+        renderEquipment();
+    }
+
+    function fuseSelected() {
+        if (selectedInvIndex < 0) return;
+        const sel = state.inventory[selectedInvIndex];
+        const same = state.inventory.filter(e => e.id === sel.id);
+        if (same.length < 3 || sel.rarity >= 3) return;
+
+        // Remove 3 items
+        let removed = 0;
+        for (let i = state.inventory.length - 1; i >= 0 && removed < 3; i--) {
+            if (state.inventory[i].id === sel.id) {
+                // Unequip if equipped
+                for (const slot of ['helmet','weapon','armor','gadget']) {
+                    if (state.equipment[slot]?.instanceId === state.inventory[i].instanceId)
+                        state.equipment[slot] = null;
+                }
+                state.inventory.splice(i, 1);
+                removed++;
+            }
+        }
+
+        // Find next rarity
+        const era = sel.era;
+        const nextRarity = sel.rarity + 1;
+        const eqList = EQUIPMENT[era]?.[sel.slot] || [];
+        const nextEq = eqList.find(e => e.rarity === nextRarity);
+        if (nextEq) {
+            state.inventory.push({...nextEq, instanceId: Date.now() + '_' + Math.random()});
+            showPopup('Fusion Exitosa!', `${nextEq.name} [${RARITY_NAMES[nextEq.rarity]}]`);
+        }
+
+        selectedInvIndex = -1;
+        renderEquipment();
+    }
+
+    function recycleSelected() {
+        if (selectedInvIndex < 0) return;
+        const eq = state.inventory[selectedInvIndex];
+        // Unequip
+        for (const slot of ['helmet','weapon','armor','gadget']) {
+            if (state.equipment[slot]?.instanceId === eq.instanceId)
+                state.equipment[slot] = null;
+        }
+        state.inventory.splice(selectedInvIndex, 1);
+        const reward = (eq.rarity + 1) * 10;
+        state.resources.stone += reward;
+        state.resources.energy += Math.floor(reward / 5);
+        selectedInvIndex = -1;
+        renderEquipment();
+    }
+
+    // ============ CARDS ============
+    function selectCardEra(era) {
+        selectedCardEra = era;
+        document.querySelectorAll('.era-tab').forEach((t,i) => t.classList.toggle('active', i===era));
+        renderCards();
+    }
+
+    function renderCards() {
+        const era = selectedCardEra;
+        const owned = state.cards[era] || [];
+        const total = CARD_SETS[era].length;
+
+        document.getElementById('cardProgressText').textContent = `${owned.length}/${total} cartas`;
+        document.getElementById('cardProgressFill').style.width = (owned.length/total*100)+'%';
+
+        let html = '';
+        CARD_SETS[era].forEach((name, i) => {
+            const isOwned = owned.includes(i);
+            const icons = ['🔥','🪓','🦣','🏠','🎨','🦴','🌙','🐺','🌑','🤝','💃','🐎','🎭','🎵','📜','🦌','🧙','🌕','⚒️','🛤️','🏰','📝','⛵','🌾','🏛️','⚔️','👑'];
+            html += `<div class="card-item ${isOwned ? 'owned' : 'locked'}">
+                <div class="card-icon">${isOwned ? (icons[era*9+i] || '🃏') : '❓'}</div>
+                <div class="card-name">${isOwned ? name : '???'}</div>
+            </div>`;
+        });
+        document.getElementById('cardsGrid').innerHTML = html;
+    }
+
+    // ============ PRESTIGE ============
+    function togglePrestige() {
+        state.prestige.active = !state.prestige.active;
+        const btn = document.getElementById('prestigeToggle');
+        btn.textContent = state.prestige.active ? 'Detener Produccion' : 'Iniciar Produccion';
+        btn.classList.toggle('active', state.prestige.active);
+    }
+
+    function tickPrestige(dt) {
+        if (!state.prestige.active) return;
+        const prod = state.prestige.production * state.prestige.multiplier;
+        const generated = prod * dt;
+        state.prestige.current += generated;
+        state.prestige.accumulated += generated;
+    }
+
+    function renderPrestige() {
+        const p = state.prestige;
+        document.getElementById('prestigeLevel').textContent = p.level;
+        document.getElementById('prestigeMultiplier').textContent = `Multiplicador: ${p.multiplier.toFixed(1)}x`;
+        document.getElementById('prestigeResources').textContent = formatNum(p.current);
+        const prod = p.production * p.multiplier;
+        document.getElementById('prestigeProduction').textContent = `+${prod.toFixed(1)}/s`;
+
+        const gain = Math.floor(Math.sqrt(p.current / 1000));
+        document.getElementById('prestigeGainPreview').textContent = `Prestigio al reiniciar: +${gain}`;
+        document.getElementById('prestigeResetBtn').disabled = gain < 1;
+    }
+
+    function doPrestigeReset() {
+        const gain = Math.floor(Math.sqrt(state.prestige.current / 1000));
+        if (gain < 1) return;
+
+        state.prestige.level += gain;
+        state.prestige.multiplier = 1.0 + (state.prestige.level * 0.1);
+        state.prestige.current = 0;
+        state.prestige.production += 0.5;
+
+        // Bonus to main game
+        state.resources.energy += gain * 5;
+        state.resources.diamonds += Math.floor(gain / 2);
+
+        showPopup('Prestigio!', `+${gain} niveles de prestigio\nMultiplicador: ${state.prestige.multiplier.toFixed(1)}x\n+${gain*5} energia`);
+        renderPrestige();
+        checkAchievements();
+    }
+
+    // ============ ACHIEVEMENTS ============
+    const ACHIEVEMENTS = [
+        { id: 'build_1', name: 'Primer Constructor', check: () => state.stats.structuresBuilt >= 1 },
+        { id: 'build_5', name: 'Arquitecto', check: () => state.stats.structuresBuilt >= 5 },
+        { id: 'kill_1', name: 'Primer Combate', check: () => state.stats.enemiesDefeated >= 1 },
+        { id: 'kill_10', name: 'Guerrero', check: () => state.stats.enemiesDefeated >= 10 },
+        { id: 'kill_50', name: 'Campeon', check: () => state.stats.enemiesDefeated >= 50 },
+        { id: 'era_tribal', name: 'Evolucion Tribal', check: () => state.currentEra >= 1 },
+        { id: 'era_bronze', name: 'Era del Bronce', check: () => state.currentEra >= 2 },
+        { id: 'card_1', name: 'Coleccionista', check: () => state.cards[0].length + state.cards[1].length + state.cards[2].length >= 1 },
+        { id: 'prestige_1', name: 'Renacimiento', check: () => state.prestige.level >= 1 },
+        { id: 'aris_5', name: 'Aris Nv.5', check: () => state.aris.level >= 5 },
+    ];
+
+    function checkAchievements() {
+        for (const a of ACHIEVEMENTS) {
+            if (state.achievements.includes(a.id)) continue;
+            if (a.check()) {
+                state.achievements.push(a.id);
+                showPopup('Logro Desbloqueado!', a.name);
+            }
+        }
+    }
+
+    // ============ POPUP ============
+    const popupQueue = [];
+    let popupShowing = false;
+
+    function showPopup(title, message) {
+        popupQueue.push({ title, message });
+        if (!popupShowing) showNextPopup();
+    }
+
+    function showNextPopup() {
+        if (popupQueue.length === 0) { popupShowing = false; return; }
+        popupShowing = true;
+        const { title, message } = popupQueue.shift();
+        document.getElementById('popupTitle').textContent = title;
+        document.getElementById('popupMessage').textContent = message;
+        document.getElementById('popupOverlay').classList.add('show');
+        setTimeout(closePopup, 2500);
+    }
+
+    function closePopup() {
+        document.getElementById('popupOverlay').classList.remove('show');
+        popupShowing = false;
+        setTimeout(showNextPopup, 200);
+    }
+
+    // ============ UI UPDATE ============
+    function updateResourceUI() {
+        for (const res of ['stone','wood','food','bronze','energy','diamonds']) {
+            const el = document.getElementById('res-'+res);
+            if (el) el.textContent = formatNum(state.resources[res] || 0);
+        }
+        document.getElementById('arisInfo').textContent = `Aris Nv.${state.aris.level} | EXP:${state.aris.exp}/${state.aris.expNext}`;
+    }
+
+    // ============ GAME LOOP ============
+    let lastTime = performance.now();
+
+    function gameLoop(now) {
+        const dt = Math.min((now - lastTime) / 1000, 0.1);
+        lastTime = now;
+
+        tickStructures(dt);
+        tickCombat(dt);
+        tickPrestige(dt);
+
+        updateResourceUI();
+        updateEraUI();
+
+        // Update prestige display if visible
+        if (document.getElementById('panel-prestige').classList.contains('active'))
+            renderPrestige();
+
+        requestAnimationFrame(gameLoop);
+    }
+
+    // ============ CLANS ============
+    const CLAN_EVENTS = [
+        { id: 'evt_resources', name: 'Gran Recoleccion', type: 'resources', target: 500, desc: 'Recolecta 500 recursos entre todo el clan', reward: { stone: 200, diamonds: 5 } },
+        { id: 'evt_enemies', name: 'Caza Cooperativa', type: 'enemies', target: 10, desc: 'Derrota 10 enemigos entre todo el clan', reward: { energy: 50, diamonds: 8 } },
+        { id: 'evt_donate', name: 'Donacion Masiva', type: 'donate', target: 200, desc: 'Dona 200 recursos entre todo el clan', reward: { diamonds: 15, energy: 100 } },
+    ];
+
+    const NPC_NAMES = ['Luna','Zephyr','Nova','Atlas','Kai','Sage','Ember','Orion'];
+
+    function createClan() {
+        const nameInput = document.getElementById('clanNameInput');
+        const name = nameInput.value.trim() || 'Clan Evolvion';
+        state.clan.isInClan = true;
+        state.clan.name = name;
+        state.clan.level = 1;
+        state.clan.members = [{ name: 'Tu', rank: 'Lider', level: state.aris.level, donated: 0 }];
+        // Add NPC members
+        const count = 3 + Math.floor(Math.random()*4);
+        for (let i = 0; i < count; i++) {
+            state.clan.members.push({
+                name: NPC_NAMES[i], rank: i === 0 ? 'Anciano' : 'Miembro',
+                level: 1 + Math.floor(Math.random()*10), donated: Math.floor(Math.random()*200)
+            });
+        }
+        showPopup('Clan Creado!', `"${name}" esta listo. Invita miembros y coopera!`);
+        renderClan();
+    }
+
+    function joinClan() {
+        state.clan.isInClan = true;
+        state.clan.name = 'Los Evolucionados';
+        state.clan.level = 3;
+        state.clan.members = [{ name: 'Tu', rank: 'Miembro', level: state.aris.level, donated: 0 }];
+        for (let i = 0; i < 5; i++) {
+            state.clan.members.push({
+                name: NPC_NAMES[i], rank: i === 0 ? 'Lider' : (i === 1 ? 'Anciano' : 'Miembro'),
+                level: 3 + Math.floor(Math.random()*12), donated: 50 + Math.floor(Math.random()*400)
+            });
+        }
+        showPopup('Te uniste!', `Bienvenido a "${state.clan.name}"!`);
+        renderClan();
+    }
+
+    function leaveClan() {
+        state.clan.isInClan = false;
+        state.clan.name = '';
+        state.clan.members = [];
+        state.clan.event = null;
+        renderClan();
+    }
+
+    function renderClan() {
+        document.getElementById('noClanView').style.display = state.clan.isInClan ? 'none' : 'block';
+        document.getElementById('inClanView').style.display = state.clan.isInClan ? 'block' : 'none';
+        if (!state.clan.isInClan) return;
+
+        document.getElementById('clanName').textContent = state.clan.name;
+        document.getElementById('clanLevel').textContent = `Nivel ${state.clan.level}`;
+        document.getElementById('clanMembers').textContent = `${state.clan.members.length}/30 miembros`;
+        document.getElementById('clanExpFill').style.width = (state.clan.exp / state.clan.expNext * 100) + '%';
+        document.getElementById('donationsRemaining').textContent = `${state.clan.maxDonations - state.clan.donationsToday} donaciones restantes`;
+        document.getElementById('totalDonated').textContent = `Total: ${formatNum(state.clan.totalDonated)}`;
+
+        // Event
+        renderClanEvent();
+
+        // Members ranking
+        const sorted = [...state.clan.members].sort((a,b) => b.donated - a.donated);
+        const medals = ['🥇','🥈','🥉'];
+        let membersHtml = '';
+        sorted.forEach((m, i) => {
+            const medal = i < 3 ? medals[i] : `#${i+1}`;
+            const rankColor = m.rank === 'Lider' ? '#FFD700' : (m.rank === 'Anciano' ? '#9C27B0' : '#aaa');
+            membersHtml += `<div class="structure-card" style="padding:8px;display:flex;justify-content:space-between;align-items:center">
+                <div>
+                    <span style="font-size:14px">${medal}</span>
+                    <span style="font-weight:bold">${m.name}</span>
+                    <span style="font-size:11px;color:${rankColor}"> [${m.rank}]</span>
+                </div>
+                <div style="text-align:right;font-size:12px">
+                    <div>Nv.${m.level}</div>
+                    <div style="color:#7b7">Donado: ${formatNum(m.donated)}</div>
+                </div>
+            </div>`;
+        });
+        document.getElementById('clanMembersList').innerHTML = membersHtml;
+    }
+
+    function renderClanEvent() {
+        const evt = state.clan.event;
+        let html = '';
+        if (!evt) {
+            html = `<div class="structure-card" style="text-align:center">
+                <div style="color:#aaa;margin-bottom:8px">No hay evento activo</div>
+                <button class="advance-era-btn" onclick="startClanEvent()" style="background:linear-gradient(135deg,#FF9800,#F57C00)">Iniciar Evento</button>
+            </div>`;
+        } else {
+            const prog = Math.min(1, evt.progress / evt.target);
+            const completed = prog >= 1;
+            html = `<div class="structure-card" style="border-color:${completed ? '#4CAF50' : '#FF9800'}">
+                <div class="structure-header">
+                    <span class="structure-name">${evt.name}</span>
+                    <span style="font-size:11px;color:${completed ? '#4CAF50' : '#FF9800'}">${completed ? 'COMPLETADO!' : 'En progreso'}</span>
+                </div>
+                <div style="font-size:12px;color:#aaa;margin-bottom:6px">${evt.desc}</div>
+                <div class="progress-bar"><div class="progress-fill" style="width:${prog*100}%;background:${completed ? 'linear-gradient(90deg,#4CAF50,#8BC34A)' : 'linear-gradient(90deg,#FF9800,#F57C00)'}"></div></div>
+                <div style="font-size:12px;text-align:center;margin-top:4px">${Math.floor(evt.progress)}/${evt.target}</div>
+                ${completed && !evt.claimed ? `<button class="build-btn" style="width:100%;margin-top:8px" onclick="claimClanEventReward()">Reclamar Recompensas!</button>` : ''}
+            </div>`;
+        }
+        document.getElementById('clanEventArea').innerHTML = html;
+    }
+
+    function donateClan(resource, amount) {
+        if (!state.clan.isInClan) return;
+        if (state.clan.donationsToday >= state.clan.maxDonations) return;
+        if ((state.resources[resource] || 0) < amount) return;
+
+        state.resources[resource] -= amount;
+        state.clan.totalDonated += amount;
+        state.clan.donationsToday++;
+        state.clan.members[0].donated += amount;
+        state.resources.diamonds += 1; // reward
+
+        // Clan EXP
+        state.clan.exp += amount * 0.3;
+        while (state.clan.exp >= state.clan.expNext) {
+            state.clan.exp -= state.clan.expNext;
+            state.clan.level++;
+            state.clan.expNext *= 1.3;
+        }
+
+        // Update event
+        if (state.clan.event && state.clan.event.type === 'donate') {
+            state.clan.event.progress += amount;
+            // Simulate other members
+            state.clan.event.progress += amount * 0.3 * (state.clan.members.length - 1);
+        }
+
+        // Simulate NPC donations
+        for (let i = 1; i < state.clan.members.length; i++) {
+            if (Math.random() < 0.3) state.clan.members[i].donated += Math.floor(Math.random() * 20);
+        }
+
+        addBattlePassExp(5);
+        renderClan();
+    }
+
+    function startClanEvent() {
+        const evt = CLAN_EVENTS[Math.floor(Math.random() * CLAN_EVENTS.length)];
+        state.clan.event = { ...evt, progress: 0, claimed: false };
+        showPopup('Evento Iniciado!', `${evt.name}: ${evt.desc}`);
+        renderClan();
+    }
+
+    function claimClanEventReward() {
+        const evt = state.clan.event;
+        if (!evt || evt.progress < evt.target || evt.claimed) return;
+        evt.claimed = true;
+
+        for (const [res, amt] of Object.entries(evt.reward)) {
+            state.resources[res] = (state.resources[res] || 0) + amt;
+        }
+
+        addBattlePassExp(30);
+        let rewardStr = Object.entries(evt.reward).map(([k,v]) => `+${v} ${k}`).join(', ');
+        showPopup('Recompensa del Clan!', rewardStr);
+        renderClan();
+    }
+
+    // Track combat/structures for clan events
+    const origCheckAchievements = checkAchievements;
+    checkAchievements = function() {
+        origCheckAchievements();
+        if (state.clan.isInClan && state.clan.event) {
+            const evt = state.clan.event;
+            if (evt.type === 'enemies') {
+                evt.progress = state.stats.enemiesDefeated;
+                evt.progress += Math.floor(state.stats.enemiesDefeated * 0.3 * (state.clan.members.length - 1));
+            }
+            if (evt.type === 'resources') {
+                // Tracked incrementally via structures
+            }
+        }
+    };
+
+    // ============ SHOP & MONETIZATION ============
+    const SHOP_PACKS = [
+        { id: 'ad_resources', name: 'Recursos Gratis', desc: 'Ver anuncio para recursos', type: 'ad', icon: '📺',
+          rewards: { stone: 50, wood: 50, food: 30 }, bpExp: 10 },
+        { id: 'ad_energy', name: 'Energia Gratis', desc: 'Ver anuncio para energia', type: 'ad', icon: '⚡',
+          rewards: { energy: 10 }, bpExp: 10 },
+        { id: 'ad_boost', name: 'Boost x2 (5min)', desc: 'Ver anuncio para boost de produccion', type: 'ad', icon: '🚀',
+          boost: { mult: 2, duration: 300 }, bpExp: 10 },
+        { id: 'pack_starter', name: 'Pack Iniciante', desc: '200 piedra, 200 madera, 100 alimento', price: 50, currency: 'diamonds', icon: '📦',
+          rewards: { stone: 200, wood: 200, food: 100 }, featured: true },
+        { id: 'pack_resources', name: 'Pack de Recursos', desc: '500 de cada recurso basico', price: 150, currency: 'diamonds', icon: '🎁',
+          rewards: { stone: 500, wood: 500, food: 500 } },
+        { id: 'pack_energy', name: 'Pack de Energia', desc: '100 energia + 10 diamantes', price: 200, currency: 'diamonds', icon: '⚡',
+          rewards: { energy: 100, diamonds: 10 } },
+        { id: 'pack_diamond_small', name: '100 Diamantes', desc: 'Paquete pequeno de diamantes', price: 0.99, currency: 'real', icon: '💎',
+          rewards: { diamonds: 100 } },
+        { id: 'pack_diamond_large', name: '500 Diamantes', desc: 'Paquete grande + 50 bonus', price: 4.99, currency: 'real', icon: '💎',
+          rewards: { diamonds: 550 }, featured: true },
+    ];
+
+    const SHOP_CHESTS = [
+        { id: 'chest_common', name: 'Cofre Comun', desc: '1-2 items, mayoria comun', price: 30, currency: 'diamonds', icon: '📦',
+          items: { min: 1, max: 2, epicChance: 0.05, legendaryChance: 0.01 } },
+        { id: 'chest_rare', name: 'Cofre Raro', desc: '2-3 items, chance de epico', price: 80, currency: 'diamonds', icon: '🎁',
+          items: { min: 2, max: 3, epicChance: 0.15, legendaryChance: 0.03 }, featured: true },
+        { id: 'chest_epic', name: 'Cofre Epico', desc: '3 items, alto chance de epico/legendario', price: 200, currency: 'diamonds', icon: '👑',
+          items: { min: 3, max: 3, epicChance: 0.35, legendaryChance: 0.10 } },
+        { id: 'chest_ad', name: 'Cofre Gratis', desc: 'Ver anuncio para 1 item aleatorio', type: 'ad', icon: '📺',
+          items: { min: 1, max: 1, epicChance: 0.05, legendaryChance: 0.01 } },
+    ];
+
+    const BP_REWARDS = [
+        { level: 1, free: { stone: 100, wood: 100 }, premium: { diamonds: 10 } },
+        { level: 2, free: { food: 150 }, premium: { energy: 30 } },
+        { level: 3, free: { energy: 20 }, premium: { equip: true } },
+        { level: 5, free: { diamonds: 5 }, premium: { diamonds: 20 } },
+        { level: 7, free: { stone: 300 }, premium: { equip: true } },
+        { level: 10, free: { diamonds: 10 }, premium: { diamonds: 50, equip: true } },
+    ];
+
+    let currentShopTab = 'packs';
+
+    function selectShopTab(tab) {
+        currentShopTab = tab;
+        document.querySelectorAll('#panel-shop .era-tab').forEach((t, i) => {
+            const tabs = ['packs','chests','vip','battlepass'];
+            t.classList.toggle('active', tabs[i] === tab);
+        });
+        ['Packs','Chests','Vip','Battlepass'].forEach(t => {
+            const el = document.getElementById('shopSub'+t);
+            if (el) el.style.display = t.toLowerCase() === tab ? 'block' : 'none';
+        });
+        renderShop();
+    }
+
+    function renderShop() {
+        renderShopPacks();
+        renderShopChests();
+        renderShopVIP();
+        renderBattlePass();
+        document.getElementById('adsRemaining').textContent = state.shop.maxAds - state.shop.adsToday;
+
+        // Boost indicator
+        const boostMult = getBoostMultiplier();
+        const boostInd = document.getElementById('boostIndicator');
+        if (boostMult > 1) {
+            boostInd.style.display = 'inline';
+            document.getElementById('boostMultText').textContent = boostMult.toFixed(1) + 'x';
+        } else {
+            boostInd.style.display = 'none';
+        }
+    }
+
+    function renderShopPacks() {
+        let html = '';
+        for (const pack of SHOP_PACKS) {
+            const isAd = pack.type === 'ad';
+            const canBuy = isAd ? state.shop.adsToday < state.shop.maxAds :
+                (pack.currency === 'diamonds' ? state.resources.diamonds >= pack.price :
+                 pack.currency === 'real');
+            const priceStr = isAd ? 'Ver Anuncio' :
+                (pack.currency === 'diamonds' ? `${pack.price} 💎` : `$${pack.price} USD`);
+
+            html += `<div class="structure-card" style="${pack.featured ? 'border-color:#FFD700;' : ''}">
+                <div class="structure-header">
+                    <span class="structure-name">${pack.icon} ${pack.name}</span>
+                    ${pack.featured ? '<span style="color:#FFD700;font-size:11px">DESTACADO</span>' : ''}
+                </div>
+                <div class="structure-production">${pack.desc}</div>
+                <button class="${isAd ? 'build-btn' : 'upgrade-btn'}" ${canBuy ? '' : 'disabled'}
+                    onclick="buyPack('${pack.id}')">${priceStr}</button>
+            </div>`;
+        }
+        document.getElementById('shopPacksList').innerHTML = html;
+    }
+
+    function renderShopChests() {
+        let html = '';
+        for (const chest of SHOP_CHESTS) {
+            const isAd = chest.type === 'ad';
+            const canBuy = isAd ? state.shop.adsToday < state.shop.maxAds :
+                state.resources.diamonds >= chest.price;
+            const priceStr = isAd ? 'Ver Anuncio' : `${chest.price} 💎`;
+
+            html += `<div class="structure-card" style="${chest.featured ? 'border-color:#9C27B0;' : ''}">
+                <div class="structure-header">
+                    <span class="structure-name">${chest.icon} ${chest.name}</span>
+                </div>
+                <div class="structure-production">${chest.desc}</div>
+                <button class="upgrade-btn" ${canBuy ? '' : 'disabled'}
+                    onclick="openChest('${chest.id}')" style="${chest.featured ? 'background:linear-gradient(135deg,#9C27B0,#E040FB)' : ''}">${priceStr}</button>
+            </div>`;
+        }
+        document.getElementById('shopChestsList').innerHTML = html;
+    }
+
+    function renderShopVIP() {
+        const isActive = state.shop.isVIP && Date.now() < state.shop.vipExpires;
+        document.getElementById('vipStatus').textContent = isActive ? 'VIP ACTIVO ⭐' : 'VIP INACTIVO';
+        document.getElementById('vipStatus').style.color = isActive ? '#FFD700' : '#888';
+
+        if (isActive) {
+            const daysLeft = Math.ceil((state.shop.vipExpires - Date.now()) / 86400000);
+            document.getElementById('vipTimer').textContent = `Expira en: ${daysLeft} dias`;
+        } else {
+            document.getElementById('vipTimer').textContent = '';
+        }
+
+        document.getElementById('vipBuyBtn').style.display = isActive ? 'none' : 'block';
+        document.getElementById('vipDailyBtn').disabled = !isActive || state.shop.vipDailyClaimed;
+        document.getElementById('vipWeeklyBtn').disabled = !isActive || state.shop.vipWeeklyClaimed;
+
+        document.getElementById('vipDailyBtn').textContent = state.shop.vipDailyClaimed ? 'Reclamado' : 'Recoger Diario';
+        document.getElementById('vipWeeklyBtn').textContent = state.shop.vipWeeklyClaimed ? 'Reclamado' : 'Recoger Semanal';
+    }
+
+    function renderBattlePass() {
+        const bp = state.shop;
+        document.getElementById('bpLevel').textContent = bp.bpLevel;
+        document.getElementById('bpExpText').textContent = `${bp.bpExp}/${bp.bpExpNext} EXP`;
+        document.getElementById('bpExpFill').style.width = (bp.bpExp / bp.bpExpNext * 100) + '%';
+        document.getElementById('bpPremiumStatus').textContent = bp.hasPremiumPass ? '⭐ PREMIUM ACTIVO' : 'Pase Gratuito';
+        document.getElementById('bpPremiumStatus').style.color = bp.hasPremiumPass ? '#E040FB' : '#aaa';
+        document.getElementById('bpBuyBtn').style.display = bp.hasPremiumPass ? 'none' : 'block';
+
+        let html = '';
+        for (const r of BP_REWARDS) {
+            const unlocked = bp.bpLevel >= r.level;
+            const freeClaimed = bp.bpClaimedFree.includes(r.level);
+            const premClaimed = bp.bpClaimedPremium.includes(r.level);
+
+            const freeRewardStr = Object.entries(r.free).map(([k,v]) => k === 'equip' ? 'Equipamiento' : `${v} ${k}`).join(', ');
+            const premRewardStr = Object.entries(r.premium).map(([k,v]) => k === 'equip' ? 'Equipamiento Epico' : `${v} ${k}`).join(', ');
+
+            html += `<div class="structure-card" style="padding:10px">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+                    <span style="font-weight:bold;font-size:13px">Nivel ${r.level}</span>
+                    <span style="font-size:11px;color:${unlocked ? '#4CAF50' : '#666'}">${unlocked ? 'Desbloqueado' : 'Bloqueado'}</span>
+                </div>
+                <div style="display:flex;gap:6px">
+                    <button class="build-btn" style="flex:1;font-size:11px;padding:5px"
+                        ${unlocked && !freeClaimed ? '' : 'disabled'}
+                        onclick="claimBPReward(${r.level}, false)">
+                        ${freeClaimed ? 'Reclamado' : freeRewardStr}
+                    </button>
+                    <button class="upgrade-btn" style="flex:1;font-size:11px;padding:5px;${bp.hasPremiumPass ? 'background:linear-gradient(135deg,#9C27B0,#E040FB)' : ''}"
+                        ${unlocked && !premClaimed && bp.hasPremiumPass ? '' : 'disabled'}
+                        onclick="claimBPReward(${r.level}, true)">
+                        ${premClaimed ? 'Reclamado' : '⭐ ' + premRewardStr}
+                    </button>
+                </div>
+            </div>`;
+        }
+        document.getElementById('bpRewardsList').innerHTML = html;
+    }
+
+    function buyPack(packId) {
+        const pack = SHOP_PACKS.find(p => p.id === packId);
+        if (!pack) return;
+
+        if (pack.type === 'ad') {
+            if (state.shop.adsToday >= state.shop.maxAds) return;
+            state.shop.adsToday++;
+            addBattlePassExp(pack.bpExp || 10);
+        } else if (pack.currency === 'diamonds') {
+            if (state.resources.diamonds < pack.price) return;
+            state.resources.diamonds -= pack.price;
+            state.shop.totalPurchases++;
+            addBattlePassExp(15);
+        } else if (pack.currency === 'real') {
+            // Simulated IAP
+            state.shop.totalPurchases++;
+            addBattlePassExp(20);
+        }
+
+        // Deliver rewards
+        if (pack.rewards) {
+            for (const [res, amt] of Object.entries(pack.rewards))
+                state.resources[res] = (state.resources[res] || 0) + amt;
+        }
+
+        // Boost
+        if (pack.boost) {
+            state.shop.boosts.push({
+                mult: pack.boost.mult,
+                expires: Date.now() + pack.boost.duration * 1000
+            });
+        }
+
+        showPopup('Compra Exitosa!', `${pack.name} recibido!`);
+        checkAchievements();
+        renderShop();
+    }
+
+    function openChest(chestId) {
+        const chest = SHOP_CHESTS.find(c => c.id === chestId);
+        if (!chest) return;
+
+        if (chest.type === 'ad') {
+            if (state.shop.adsToday >= state.shop.maxAds) return;
+            state.shop.adsToday++;
+        } else {
+            if (state.resources.diamonds < chest.price) return;
+            state.resources.diamonds -= chest.price;
+        }
+
+        const numItems = Math.floor(Math.random() * (chest.items.max - chest.items.min + 1)) + chest.items.min;
+        let rewardText = '';
+
+        for (let i = 0; i < numItems; i++) {
+            const roll = Math.random();
+            if (roll < chest.items.legendaryChance) {
+                // Legendary equipment
+                tryDropEquipment();
+                rewardText += 'Equipamiento Legendario!\n';
+            } else if (roll < chest.items.epicChance) {
+                // Epic equipment
+                tryDropEquipment();
+                rewardText += 'Equipamiento!\n';
+            } else if (roll < 0.4) {
+                // Card
+                tryDropCard();
+                rewardText += 'Carta!\n';
+            } else {
+                // Resources
+                const amt = Math.floor(50 + Math.random() * 150 * (state.currentEra + 1));
+                const types = ['stone','wood','food'];
+                const t = types[Math.floor(Math.random()*types.length)];
+                state.resources[t] += amt;
+                rewardText += `+${amt} ${t}\n`;
+            }
+        }
+
+        addBattlePassExp(10);
+        showPopup(`${chest.icon} ${chest.name}`, rewardText || 'Recompensas recibidas!');
+        renderShop();
+    }
+
+    function buyVIP() {
+        if (state.resources.diamonds < 500) {
+            showPopup('Diamantes Insuficientes', 'Necesitas 500 diamantes para VIP');
+            return;
+        }
+        state.resources.diamonds -= 500;
+        state.shop.isVIP = true;
+        state.shop.vipExpires = Date.now() + 30 * 86400000; // 30 days
+        state.shop.vipDailyClaimed = false;
+        state.shop.vipWeeklyClaimed = false;
+        showPopup('VIP Activado!', 'Disfrutá de beneficios exclusivos por 30 dias!');
+        renderShop();
+    }
+
+    function claimVIPDaily() {
+        if (state.shop.vipDailyClaimed) return;
+        state.shop.vipDailyClaimed = true;
+        const era = state.currentEra + 1;
+        state.resources.diamonds += 5;
+        state.resources.energy += 20;
+        state.resources.stone += 100 * era;
+        state.resources.food += 80 * era;
+        addBattlePassExp(20);
+        showPopup('Recompensa Diaria VIP', `+5 💎, +20 ⚡, +${100*era} piedra, +${80*era} alimento`);
+        renderShop();
+    }
+
+    function claimVIPWeekly() {
+        if (state.shop.vipWeeklyClaimed) return;
+        state.shop.vipWeeklyClaimed = true;
+        state.resources.diamonds += 25;
+        state.resources.energy += 100;
+        showPopup('Recompensa Semanal VIP', '+25 💎, +100 ⚡');
+        renderShop();
+    }
+
+    function buyBattlePass() {
+        if (state.resources.diamonds < 800) {
+            showPopup('Diamantes Insuficientes', 'Necesitas 800 diamantes para el Pase Premium');
+            return;
+        }
+        state.resources.diamonds -= 800;
+        state.shop.hasPremiumPass = true;
+        showPopup('Pase Premium Activado!', 'Ahora podés reclamar recompensas premium!');
+        renderShop();
+    }
+
+    function addBattlePassExp(amount) {
+        state.shop.bpExp += amount;
+        while (state.shop.bpExp >= state.shop.bpExpNext) {
+            state.shop.bpExp -= state.shop.bpExpNext;
+            state.shop.bpLevel++;
+            state.shop.bpExpNext = Math.floor(state.shop.bpExpNext * 1.1);
+        }
+    }
+
+    function claimBPReward(level, premium) {
+        const reward = BP_REWARDS.find(r => r.level === level);
+        if (!reward) return;
+
+        if (premium) {
+            if (!state.shop.hasPremiumPass || state.shop.bpClaimedPremium.includes(level)) return;
+            state.shop.bpClaimedPremium.push(level);
+            deliverBPReward(reward.premium);
+        } else {
+            if (state.shop.bpClaimedFree.includes(level)) return;
+            state.shop.bpClaimedFree.push(level);
+            deliverBPReward(reward.free);
+        }
+        renderBattlePass();
+    }
+
+    function deliverBPReward(rewards) {
+        let text = '';
+        for (const [key, val] of Object.entries(rewards)) {
+            if (key === 'equip') {
+                tryDropEquipment();
+                text += 'Equipamiento!\n';
+            } else {
+                state.resources[key] = (state.resources[key] || 0) + val;
+                text += `+${val} ${key}\n`;
+            }
+        }
+        showPopup('Recompensa del Pase!', text);
+    }
+
+    function getBoostMultiplier() {
+        let mult = 1;
+        const now = Date.now();
+        state.shop.boosts = state.shop.boosts.filter(b => now < b.expires);
+        for (const b of state.shop.boosts) mult *= b.mult;
+        if (state.shop.isVIP && now < state.shop.vipExpires) mult *= 1.2;
+        return mult;
+    }
+
+    // Apply boost to structure production
+    const origTickStructures = tickStructures;
+    tickStructures = function(dt) {
+        const boostMult = getBoostMultiplier();
+        origTickStructures(dt * boostMult);
+    };
+
+    // Combat gives battle pass EXP
+    const origOnEnemyDefeated = onEnemyDefeated;
+    onEnemyDefeated = function() {
+        origOnEnemyDefeated();
+        addBattlePassExp(5);
+    };
+
+    // Start
+    requestAnimationFrame(gameLoop);
+    </script>
+</body>
+</html>
