@@ -1,0 +1,23 @@
+# Unity
+[Ll]ibrary/
+[Tt]emp/
+[Oo]bj/
+[Bb]uild/
+[Bb]uilds/
+[Ll]ogs/
+[Uu]serSettings/
+[Mm]emoryCaptures/
+
+# IDE
+.vs/
+.vscode/
+*.csproj
+*.sln
+*.slnx
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Unity meta files for ignored folders
+# (these are auto-generated)

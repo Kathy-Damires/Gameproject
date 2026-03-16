@@ -1,0 +1,47 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ced4e6c5d614b11a5e8a2f3872d807, type: 3}
+  m_Name: era_stone
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.EraData
+  eraId: era_stone
+  eraName: Edad de Piedra
+  eraType: 0
+  description: La Edad de Piedra de la civilizacion
+  icon: {fileID: 0}
+  structures:
+  - {fileID: 11400000, guid: f82ea918d05cb4911b8673de724c6419, type: 2}
+  - {fileID: 11400000, guid: 3b4106cee552d4bd0890be73a062a80b, type: 2}
+  - {fileID: 11400000, guid: d5195edf3b6a44e95bb714d5c053c719, type: 2}
+  enemies:
+  - {fileID: 11400000, guid: 8e5554b4f145240e1a235f57167913c8, type: 2}
+  - {fileID: 11400000, guid: b6684a96ae7524aa7862cdd32986f1ef, type: 2}
+  cards:
+  - {fileID: 11400000, guid: f780da4dc9c174df0900b23e605cbeea, type: 2}
+  - {fileID: 11400000, guid: f0661bdb3b992457a84243e411e4de34, type: 2}
+  - {fileID: 11400000, guid: cbe1e4a5f16274f8c9d1ee0398aae824, type: 2}
+  - {fileID: 11400000, guid: 38ccc32774cf7422798df28f57c352db, type: 2}
+  - {fileID: 11400000, guid: 0a2ecf1880bea4ae1ae6201127a1dfcd, type: 2}
+  - {fileID: 11400000, guid: 27dbe1b7fae964f28b3ec29ed69bcbc8, type: 2}
+  - {fileID: 11400000, guid: db013661f5b204af291b502cb928a454, type: 2}
+  - {fileID: 11400000, guid: 0c5026293b3034ba3ac5977c08abc6fd, type: 2}
+  - {fileID: 11400000, guid: 156a0f999524648d3ab26e7af58e93e2, type: 2}
+  availableEquipment:
+  - {fileID: 11400000, guid: 0e6c8b0797ca74718929687bffb2d424, type: 2}
+  - {fileID: 11400000, guid: d17fa1d5efce54cea944e3a2c0d7b906, type: 2}
+  - {fileID: 11400000, guid: 397ceef7684944ba0a9ec43a82830fc6, type: 2}
+  - {fileID: 11400000, guid: bed3823bb7c514b5ba185eaad538b037, type: 2}
+  tools:
+  - {fileID: 11400000, guid: c1bab7b6933cb43e5b4e855ad1c549c6, type: 2}
+  - {fileID: 11400000, guid: 376d57643ab194b4cb8d00f25a22950b, type: 2}
+  - {fileID: 11400000, guid: 2d5a25b48ec904773b5e9eab084cd972, type: 2}
+  previousEra: 0
+  unlockCost: []

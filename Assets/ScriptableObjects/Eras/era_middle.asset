@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36ced4e6c5d614b11a5e8a2f3872d807, type: 3}
+  m_Name: era_middle
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.EraData
+  eraId: era_middle
+  eraName: Edad Media
+  eraType: 4
+  description: La Edad Media de la civilizacion
+  icon: {fileID: 0}
+  structures:
+  - {fileID: 11400000, guid: a1fbed2afaf29424188c145a918910e5, type: 2}
+  - {fileID: 11400000, guid: e2c75b3a5a60748989010d9e8ecf142e, type: 2}
+  enemies:
+  - {fileID: 11400000, guid: ca03e2d3549e044eaaaa966a7e43f0b7, type: 2}
+  - {fileID: 11400000, guid: 42a04a794e0054235a77c6c90bb6bd40, type: 2}
+  cards: []
+  availableEquipment:
+  - {fileID: 11400000, guid: 015bde5cf845841b5be4d9903f0ff649, type: 2}
+  - {fileID: 11400000, guid: 503d0ee79e2a14d118c120130fe7bd06, type: 2}
+  tools:
+  - {fileID: 11400000, guid: 0ff068511da2e4f1bbe33613ee5ff204, type: 2}
+  previousEra: 3
+  unlockCost:
+  - resourceType: 0
+    amount: 8000
