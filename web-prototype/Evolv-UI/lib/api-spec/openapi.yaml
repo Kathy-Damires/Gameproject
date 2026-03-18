@@ -1,0 +1,394 @@
+openapi: 3.1.0
+info:
+  title: Api
+  version: 0.1.0
+  description: Project Evolvion API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+    description: Health operations
+  - name: planets
+    description: Planet operations
+  - name: eras
+    description: Era operations
+  - name: characters
+    description: Character operations
+  - name: cards
+    description: Collection card operations
+  - name: achievements
+    description: Achievement operations
+  - name: clans
+    description: Clan operations
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /planets:
+    get:
+      operationId: getPlanets
+      tags: [planets]
+      summary: Get all planets
+      responses:
+        "200":
+          description: List of planets
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Planet"
+
+  /planets/{id}:
+    get:
+      operationId: getPlanet
+      tags: [planets]
+      summary: Get a planet by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Planet details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Planet"
+
+  /eras:
+    get:
+      operationId: getEras
+      tags: [eras]
+      summary: Get all eras
+      responses:
+        "200":
+          description: List of eras
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Era"
+
+  /cards:
+    get:
+      operationId: getCards
+      tags: [cards]
+      summary: Get all collectible cards
+      responses:
+        "200":
+          description: List of cards
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Card"
+
+  /achievements:
+    get:
+      operationId: getAchievements
+      tags: [achievements]
+      summary: Get all achievements
+      responses:
+        "200":
+          description: List of achievements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Achievement"
+
+  /clans:
+    get:
+      operationId: getClans
+      tags: [clans]
+      summary: Get all clans
+      responses:
+        "200":
+          description: List of clans
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Clan"
+
+  /character:
+    get:
+      operationId: getCharacter
+      tags: [characters]
+      summary: Get Aris character info
+      responses:
+        "200":
+          description: Character info
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Character"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      properties:
+        status:
+          type: string
+      required:
+        - status
+
+    Planet:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        currentEra:
+          type: integer
+        totalEras:
+          type: integer
+        color:
+          type: string
+        icon:
+          type: string
+        resources:
+          type: integer
+        population:
+          type: integer
+        isUnlocked:
+          type: boolean
+      required:
+        - id
+        - name
+        - description
+        - currentEra
+        - totalEras
+        - color
+        - icon
+        - resources
+        - population
+        - isUnlocked
+
+    Era:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        planetId:
+          type: integer
+        order:
+          type: integer
+        isUnlocked:
+          type: boolean
+        enemies:
+          type: array
+          items:
+            type: string
+        structures:
+          type: array
+          items:
+            type: string
+        equipmentSet:
+          type: string
+      required:
+        - id
+        - name
+        - description
+        - planetId
+        - order
+        - isUnlocked
+        - enemies
+        - structures
+        - equipmentSet
+
+    Card:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        planetId:
+          type: integer
+        eraId:
+          type: integer
+        rarity:
+          type: string
+          enum: [common, clear, epic, legendary]
+        isOwned:
+          type: boolean
+        imageUrl:
+          type: string
+        description:
+          type: string
+      required:
+        - id
+        - name
+        - planetId
+        - eraId
+        - rarity
+        - isOwned
+        - description
+
+    Achievement:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        category:
+          type: string
+          enum: [planet, combat, clan, collection, purchase, ads]
+        isUnlocked:
+          type: boolean
+        rewardType:
+          type: string
+        rewardAmount:
+          type: integer
+        iconEmoji:
+          type: string
+      required:
+        - id
+        - name
+        - description
+        - category
+        - isUnlocked
+        - rewardType
+        - rewardAmount
+        - iconEmoji
+
+    Clan:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        description:
+          type: string
+        memberCount:
+          type: integer
+        maxMembers:
+          type: integer
+        level:
+          type: integer
+        totalPoints:
+          type: integer
+        emblem:
+          type: string
+        isJoined:
+          type: boolean
+      required:
+        - id
+        - name
+        - description
+        - memberCount
+        - maxMembers
+        - level
+        - totalPoints
+        - emblem
+        - isJoined
+
+    Character:
+      type: object
+      properties:
+        name:
+          type: string
+        level:
+          type: integer
+        currentEra:
+          type: string
+        health:
+          type: integer
+        maxHealth:
+          type: integer
+        attack:
+          type: integer
+        defense:
+          type: integer
+        equipment:
+          $ref: "#/components/schemas/Equipment"
+        currentSkin:
+          type: string
+        experience:
+          type: integer
+        maxExperience:
+          type: integer
+      required:
+        - name
+        - level
+        - currentEra
+        - health
+        - maxHealth
+        - attack
+        - defense
+        - equipment
+        - currentSkin
+        - experience
+        - maxExperience
+
+    Equipment:
+      type: object
+      properties:
+        helmet:
+          $ref: "#/components/schemas/EquipmentItem"
+        weapon:
+          $ref: "#/components/schemas/EquipmentItem"
+        armor:
+          $ref: "#/components/schemas/EquipmentItem"
+        gadget:
+          $ref: "#/components/schemas/EquipmentItem"
+      required:
+        - helmet
+        - weapon
+        - armor
+        - gadget
+
+    EquipmentItem:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        rarity:
+          type: string
+          enum: [common, clear, epic, legendary]
+        era:
+          type: string
+        statBonus:
+          type: integer
+        emoji:
+          type: string
+      required:
+        - id
+        - name
+        - rarity
+        - era
+        - statBonus
+        - emoji

@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&family=Nunito:wght@400;600;700;800;900&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+@plugin "@tailwindcss/typography";
+
+@theme inline {
+  --font-display: 'Russo One', sans-serif;
+  --font-sans: 'Nunito', sans-serif;
+
+  --color-background: hsl(260 50% 5%);
+  --color-foreground: hsl(0 0% 100%);
+  
+  --color-primary: hsl(190 90% 55%);
+  --color-primary-dark: hsl(190 90% 40%);
+  --color-primary-foreground: hsl(260 50% 10%);
+  
+  --color-secondary: hsl(320 90% 60%);
+  --color-secondary-dark: hsl(320 90% 45%);
+  --color-secondary-foreground: hsl(0 0% 100%);
+  
+  --color-accent: hsl(45 100% 55%);
+  --color-accent-dark: hsl(45 100% 40%);
+  --color-accent-foreground: hsl(260 50% 10%);
+
+  --color-card: hsl(260 40% 12%);
+  --color-card-border: hsl(260 40% 25%);
+  --color-card-foreground: hsl(0 0% 100%);
+  
+  --color-muted: hsl(260 20% 20%);
+  --color-muted-foreground: hsl(260 20% 70%);
+
+  --color-border: hsl(260 40% 25%);
+  --color-input: hsl(260 40% 15%);
+  --color-ring: hsl(190 90% 55%);
+
+  --color-popover: hsl(260 40% 12%);
+  --color-popover-foreground: hsl(0 0% 100%);
+
+  --color-destructive: hsl(0 75% 55%);
+  --color-destructive-foreground: hsl(0 0% 100%);
+
+  --color-sidebar: hsl(260 50% 5%);
+  --color-sidebar-foreground: hsl(0 0% 100%);
+  --color-sidebar-border: hsl(260 40% 25%);
+  --color-sidebar-primary: hsl(190 90% 55%);
+  --color-sidebar-primary-foreground: hsl(260 50% 10%);
+  --color-sidebar-accent: hsl(320 90% 60%);
+  --color-sidebar-accent-foreground: hsl(0 0% 100%);
+  --color-sidebar-ring: hsl(190 90% 55%);
+
+  /* Game Rarity Colors — from Unity CardSystem */
+  --color-rarity-common: hsl(210 20% 60%);
+  --color-rarity-clear: hsl(193 100% 50%);
+  --color-rarity-epic: hsl(280 90% 65%);
+  --color-rarity-legendary: hsl(45 100% 55%);
+
+  /* Planet Colors — from Unity PlanetData */
+  --color-planet-porera: hsl(120 60% 45%);   /* GREEN: Stone/Tribal/Bronze eras */
+  --color-planet-doresa: hsl(185 80% 45%);    /* TEAL: Classical/Medieval/Industrial */
+  --color-planet-aitherium: hsl(265 85% 60%); /* PURPLE: Robot/Space/Singularity */
+
+  --radius: 0.75rem;
+  --font-mono: 'Courier New', monospace;
+}
+
+@layer base {
+  * { @apply border-border; }
+
+  body {
+    @apply bg-background text-foreground antialiased font-sans overflow-x-hidden;
+    background-image:
+      radial-gradient(ellipse at 20% 0%, hsl(270 60% 20%) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 10%, hsl(200 80% 15%) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, hsl(260 70% 8%) 0%, transparent 100%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    @apply tracking-wide;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+  }
+}
+
+@layer utilities {
+  .font-display { font-family: var(--font-display); }
+
+  .text-glow { text-shadow: 0 0 12px currentColor; }
+  .box-glow { box-shadow: 0 0 15px currentColor; }
+
+  .glass-panel {
+    background: rgba(20, 10, 45, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.06);
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-b from-white to-gray-400;
+  }
+
+  .text-gradient-primary {
+    @apply bg-clip-text text-transparent;
+    background-image: linear-gradient(135deg, hsl(190 90% 75%), hsl(190 90% 55%), hsl(210 100% 70%));
+  }
+
+  /* Rarity borders + glows */
+  .rarity-common  { border-color: hsl(210 20% 60%); }
+  .rarity-clear   { border-color: hsl(193 100% 50%); box-shadow: 0 0 10px hsla(193,100%,50%,0.3); }
+  .rarity-epic    { border-color: hsl(280 90% 65%); box-shadow: 0 0 12px hsla(280,90%,65%,0.4); }
+  .rarity-legendary { border-color: hsl(45 100% 55%); box-shadow: 0 0 16px hsla(45,100%,55%,0.5); }
+
+  /* Planet sphere CSS */
+  .planet-porera {
+    background: radial-gradient(circle at 38% 35%, #81C784, #4CAF50, #2E7D32, #1B5E20);
+    box-shadow: 0 0 40px rgba(76,175,80,0.5), inset -12px -12px 30px rgba(0,0,0,0.4);
+  }
+  .planet-doresa {
+    background: radial-gradient(circle at 38% 35%, #80DEEA, #00BCD4, #0097A7, #006064);
+    box-shadow: 0 0 40px rgba(0,188,212,0.5), inset -12px -12px 30px rgba(0,0,0,0.4);
+  }
+  .planet-aitherium {
+    background: radial-gradient(circle at 38% 35%, #CE93D8, #9C27B0, #6A1B9A, #4A148C);
+    box-shadow: 0 0 40px rgba(123,47,252,0.6), inset -12px -12px 30px rgba(0,0,0,0.4);
+  }
+
+  /* Custom scrollbar */
+  .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+  .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+  .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(150,100,255,0.4); border-radius: 2px; }
+
+  input[type="search"]::-webkit-search-cancel-button { @apply hidden; }
+}

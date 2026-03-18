@@ -1,0 +1,25 @@
+packages:
+  "framer-motion": "For bouncy, game-like animations and page transitions"
+  "clsx": "Utility for constructing className strings conditionally"
+  "tailwind-merge": "Utility for merging tailwind classes safely"
+
+images:
+  - path: "artifacts/evolvion-ui/public/images/bg-space.png"
+    description: "Deep dark cosmic space background with glowing purple and blue nebulas, bright twinkling stars, and a subtle grid overlay, high quality 2d game asset"
+    aspect_ratio: "16:9"
+  - path: "artifacts/evolvion-ui/public/images/planet-porera.png"
+    description: "A glowing warm orange and red fiery planet with primitive cracked surface, 3d cartoon style, isolated on transparent background"
+    aspect_ratio: "1:1"
+  - path: "artifacts/evolvion-ui/public/images/planet-doresa.png"
+    description: "A lush teal and emerald green earth-like planet with swirling stylized clouds, 3d cartoon style, isolated on transparent background"
+    aspect_ratio: "1:1"
+  - path: "artifacts/evolvion-ui/public/images/planet-aitherium.png"
+    description: "An electric blue and cyan futuristic mechanical planet with glowing neon circuits and metallic plates, 3d cartoon style, isolated on transparent background"
+    aspect_ratio: "1:1"
+  - path: "artifacts/evolvion-ui/public/images/hero-aris.png"
+    description: "Charismatic adventurous young hero character portrait named Aris, cartoon 3d gaming style, confident smirk, spiky hair, wearing futuristic sci-fi armor with neon blue accents"
+    aspect_ratio: "1:1"
+
+notes:
+  - Using generated hooks from @workspace/api-client-react for data fetching.
+  - Simulating mutations locally since OpenAPI spec only provided GET endpoints for this read-heavy dashboard.
