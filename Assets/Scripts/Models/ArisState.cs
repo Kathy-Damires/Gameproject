@@ -15,6 +15,10 @@ namespace ProjectEvolvion
         public int baseAttack = 10;
         public int baseDefense = 5;
 
+        // Skins
+        public string currentSkin = "Default";
+        public List<string> unlockedSkins = new List<string> { "Default" };
+
         // Equipped items (by slot)
         public string equippedHelmetId;
         public string equippedWeaponId;

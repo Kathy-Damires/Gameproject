@@ -12,5 +12,14 @@ namespace ProjectEvolvion
         public Sprite icon;
         public EraData[] eras;
         public int cardsPerEra = 9;
+
+        [Header("Visual")]
+        public Color planetColor = Color.white;
+        public string iconEmoji;
+        public Sprite planetImage;
+
+        [Header("Stats")]
+        public int population;
+        public bool startsUnlocked = false;
     }
 }

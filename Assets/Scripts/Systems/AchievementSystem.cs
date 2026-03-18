@@ -28,124 +28,192 @@ namespace ProjectEvolvion
 
         private void RegisterDefaultAchievements()
         {
-            // Construction achievements
+            // === PLANET ===
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "build_first_structure",
-                name = "Primer Constructor",
-                description = "Construye tu primera estructura",
-                Check = () => _state.totalStructuresBuilt >= 1
+                achievementId = "first_steps",
+                name = "Primeros Pasos",
+                description = "Comienza tu viaje en Porera",
+                category = AchievementCategory.Planet,
+                rewardType = AchievementRewardType.Resources, rewardAmount = 1000, iconEmoji = "globe",
+                Check = () => _state.GetActivePlanet() != null
             });
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "build_10_structures",
-                name = "Arquitecto",
+                achievementId = "era_explorer",
+                name = "Explorador de Eras",
+                description = "Desbloquea 3 eras diferentes",
+                category = AchievementCategory.Planet,
+                rewardType = AchievementRewardType.Resources, rewardAmount = 5000, iconEmoji = "map",
+                Check = () =>
+                {
+                    var planet = _state.GetActivePlanet();
+                    return planet != null && (int)planet.currentEra >= 2;
+                }
+            });
+            _achievements.Add(new AchievementDefinition
+            {
+                achievementId = "planet_master",
+                name = "Maestro Planetario",
+                description = "Completa las 9 eras en un planeta",
+                category = AchievementCategory.Planet,
+                rewardType = AchievementRewardType.LegendaryCard, rewardAmount = 1, iconEmoji = "trophy",
+                Check = () =>
+                {
+                    foreach (var planet in _state.planets)
+                        if (planet.currentEra >= EraType.SingularityAge) return true;
+                    return false;
+                }
+            });
+            _achievements.Add(new AchievementDefinition
+            {
+                achievementId = "builder",
+                name = "Constructor",
                 description = "Construye 10 estructuras",
+                category = AchievementCategory.Planet,
+                rewardType = AchievementRewardType.Resources, rewardAmount = 2500, iconEmoji = "building",
                 Check = () => _state.totalStructuresBuilt >= 10
             });
 
-            // Combat achievements
+            // === COMBAT ===
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "defeat_first_enemy",
-                name = "Primer Combate",
-                description = "Derrota a tu primer enemigo",
+                achievementId = "first_blood",
+                name = "Primera Sangre",
+                description = "Gana tu primer combate",
+                category = AchievementCategory.Combat,
+                rewardType = AchievementRewardType.Resources, rewardAmount = 500, iconEmoji = "swords",
                 Check = () => _state.totalEnemiesDefeated >= 1
             });
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "defeat_50_enemies",
+                achievementId = "warrior",
                 name = "Guerrero",
-                description = "Derrota a 50 enemigos",
+                description = "Gana 50 combates",
+                category = AchievementCategory.Combat,
+                rewardType = AchievementRewardType.EpicCard, rewardAmount = 1, iconEmoji = "dagger",
                 Check = () => _state.totalEnemiesDefeated >= 50
             });
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "defeat_100_enemies",
-                name = "Campeon",
-                description = "Derrota a 100 enemigos",
-                Check = () => _state.totalEnemiesDefeated >= 100
-            });
-
-            // Resource achievements
-            _achievements.Add(new AchievementDefinition
-            {
-                achievementId = "collect_1000_resources",
-                name = "Recolector",
-                description = "Recolecta 1000 recursos en total",
-                Check = () => _state.totalResourcesCollected >= 1000
-            });
-            _achievements.Add(new AchievementDefinition
-            {
-                achievementId = "collect_100000_resources",
-                name = "Magnate",
-                description = "Recolecta 100,000 recursos en total",
-                Check = () => _state.totalResourcesCollected >= 100000
-            });
-
-            // Era achievements
-            _achievements.Add(new AchievementDefinition
-            {
-                achievementId = "reach_tribal_age",
-                name = "Evolucion Tribal",
-                description = "Alcanza la Edad Tribal",
+                achievementId = "legendary_fighter",
+                name = "Luchador Legendario",
+                description = "Equipa un set legendario completo",
+                category = AchievementCategory.Combat,
+                rewardType = AchievementRewardType.Skin, rewardAmount = 1, iconEmoji = "crown",
                 Check = () =>
                 {
-                    var planet = _state.GetActivePlanet();
-                    return planet != null && planet.currentEra >= EraType.TribalAge;
+                    // Check all 4 slots have legendary equipment
+                    var aris = _state.aris;
+                    var db = GameManager.Instance?.database;
+                    if (db == null) return false;
+                    var slots = new[] { aris.equippedHelmetId, aris.equippedWeaponId, aris.equippedArmorId, aris.equippedGadgetId };
+                    foreach (var id in slots)
+                    {
+                        if (string.IsNullOrEmpty(id)) return false;
+                        var data = db.GetEquipment(id);
+                        if (data == null || data.rarity != Rarity.Legendary) return false;
+                    }
+                    return true;
                 }
             });
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "reach_bronze_age",
-                name = "Era del Bronce",
-                description = "Alcanza la Edad del Bronce",
-                Check = () =>
-                {
-                    var planet = _state.GetActivePlanet();
-                    return planet != null && planet.currentEra >= EraType.BronzeAge;
-                }
+                achievementId = "boss_slayer",
+                name = "Cazador de Jefes",
+                description = "Derrota al jefe final de la Singularidad",
+                category = AchievementCategory.Combat,
+                rewardType = AchievementRewardType.LegendaryCard, rewardAmount = 3, iconEmoji = "skull",
+                Check = () => _state.totalEnemiesDefeated >= 100 // Simplified check
             });
 
-            // Card achievements
+            // === COLLECTION ===
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "collect_first_card",
-                name = "Coleccionista Novato",
-                description = "Obtiene tu primera carta",
-                Check = () => _state.cardCollection.ownedCardIds.Count >= 1
+                achievementId = "collector",
+                name = "Coleccionista",
+                description = "Colecciona 10 cartas",
+                category = AchievementCategory.Collection,
+                rewardType = AchievementRewardType.Resources, rewardAmount = 1000, iconEmoji = "cards",
+                Check = () => _state.cardCollection.ownedCardIds.Count >= 10
             });
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "complete_first_set",
-                name = "Set Completo",
-                description = "Completa tu primer set de cartas",
+                achievementId = "album_completer",
+                name = "Album Completo",
+                description = "Completa un album de era completo",
+                category = AchievementCategory.Collection,
+                rewardType = AchievementRewardType.EpicCard, rewardAmount = 2, iconEmoji = "book",
                 Check = () => _state.cardCollection.completedSetKeys.Count >= 1
             });
-
-            // Prestige achievements
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "first_prestige",
-                name = "Renacimiento",
-                description = "Realiza tu primer prestige",
-                Check = () => _state.prestige.totalResets >= 1
+                achievementId = "planet_collector",
+                name = "Coleccionista Planetario",
+                description = "Completa todas las cartas de un planeta",
+                category = AchievementCategory.Collection,
+                rewardType = AchievementRewardType.LegendaryCard, rewardAmount = 1, iconEmoji = "galaxy",
+                Check = () => _state.cardCollection.completedSetKeys.Count >= 4 // 4 eras on one planet
             });
 
-            // Aris level achievements
+            // === CLAN ===
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "aris_level_5",
-                name = "Aris en Crecimiento",
-                description = "Lleva a Aris al nivel 5",
-                Check = () => _state.aris.level >= 5
+                achievementId = "clan_founder",
+                name = "Fundador de Clan",
+                description = "Unete o crea un clan",
+                category = AchievementCategory.Clan,
+                rewardType = AchievementRewardType.Resources, rewardAmount = 2000, iconEmoji = "shield",
+                Check = () => _state.clan != null && _state.clan.isInClan
             });
             _achievements.Add(new AchievementDefinition
             {
-                achievementId = "aris_level_10",
-                name = "Aris Veterano",
-                description = "Lleva a Aris al nivel 10",
-                Check = () => _state.aris.level >= 10
+                achievementId = "generous_soul",
+                name = "Alma Generosa",
+                description = "Dona 10,000 recursos al clan",
+                category = AchievementCategory.Clan,
+                rewardType = AchievementRewardType.Resources, rewardAmount = 5000, iconEmoji = "handshake",
+                Check = () => _state.clan != null && _state.clan.totalResourcesDonated >= 10000
+            });
+            _achievements.Add(new AchievementDefinition
+            {
+                achievementId = "clan_champion",
+                name = "Campeon del Clan",
+                description = "Gana un evento cooperativo del clan",
+                category = AchievementCategory.Clan,
+                rewardType = AchievementRewardType.EpicCard, rewardAmount = 1, iconEmoji = "medal",
+                Check = () => _state.clan != null && _state.clan.activeEvent != null && _state.clan.activeEvent.isCompleted
+            });
+
+            // === ADS ===
+            _achievements.Add(new AchievementDefinition
+            {
+                achievementId = "ad_watcher",
+                name = "Espectador de Anuncios",
+                description = "Mira 5 anuncios para obtener bonificaciones",
+                category = AchievementCategory.Ads,
+                rewardType = AchievementRewardType.Resources, rewardAmount = 1000, iconEmoji = "tv",
+                Check = () => _state.shop != null && _state.shop.adsWatchedToday >= 5
+            });
+
+            // === PURCHASE ===
+            _achievements.Add(new AchievementDefinition
+            {
+                achievementId = "supporter",
+                name = "Patrocinador",
+                description = "Realiza tu primera compra",
+                category = AchievementCategory.Purchase,
+                rewardType = AchievementRewardType.LegendaryCard, rewardAmount = 1, iconEmoji = "gem",
+                Check = () => _state.shop != null && _state.shop.totalPurchaseCount >= 1
+            });
+            _achievements.Add(new AchievementDefinition
+            {
+                achievementId = "vip_member",
+                name = "Miembro VIP",
+                description = "Suscribete al VIP",
+                category = AchievementCategory.Purchase,
+                rewardType = AchievementRewardType.Skin, rewardAmount = 3, iconEmoji = "star",
+                Check = () => _state.shop != null && _state.shop.IsVIPActive()
             });
         }
 
@@ -179,6 +247,10 @@ namespace ProjectEvolvion
         public string achievementId;
         public string name;
         public string description;
+        public AchievementCategory category;
+        public AchievementRewardType rewardType;
+        public int rewardAmount;
+        public string iconEmoji;
         public System.Func<bool> Check;
     }
 }

@@ -61,4 +61,22 @@ namespace ProjectEvolvion
         Clan,
         Popup
     }
+
+    public enum AchievementCategory
+    {
+        Planet,
+        Combat,
+        Collection,
+        Clan,
+        Purchase,
+        Ads
+    }
+
+    public enum AchievementRewardType
+    {
+        Resources,
+        EpicCard,
+        LegendaryCard,
+        Skin
+    }
 }

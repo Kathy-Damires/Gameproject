@@ -92,14 +92,25 @@ namespace ProjectEvolvion
             state.SetResource(ResourceType.Energy, 10);
             state.SetResource(ResourceType.Diamonds, 5);
 
-            // Initialize Porera planet
-            var porera = new PlanetState
+            // Initialize planets
+            state.planets.Add(new PlanetState
             {
                 planetId = "planet_porera",
                 currentEra = EraType.StoneAge,
                 isUnlocked = true
-            };
-            state.planets.Add(porera);
+            });
+            state.planets.Add(new PlanetState
+            {
+                planetId = "planet_doresa",
+                currentEra = EraType.StoneAge,
+                isUnlocked = false
+            });
+            state.planets.Add(new PlanetState
+            {
+                planetId = "planet_aitherium",
+                currentEra = EraType.StoneAge,
+                isUnlocked = false
+            });
             state.activePlanetId = "planet_porera";
 
             return state;

@@ -15,6 +15,12 @@ namespace ProjectEvolvion
         public Button stoneAgeTab;
         public Button tribalAgeTab;
         public Button bronzeAgeTab;
+        public Button classicalAgeTab;
+        public Button middleAgeTab;
+        public Button industrialAgeTab;
+        public Button robotAgeTab;
+        public Button spaceAgeTab;
+        public Button singularityAgeTab;
 
         [Header("Card Grid")]
         public Transform cardGridContainer;
@@ -40,6 +46,12 @@ namespace ProjectEvolvion
             if (stoneAgeTab) stoneAgeTab.onClick.AddListener(() => SelectEra(EraType.StoneAge));
             if (tribalAgeTab) tribalAgeTab.onClick.AddListener(() => SelectEra(EraType.TribalAge));
             if (bronzeAgeTab) bronzeAgeTab.onClick.AddListener(() => SelectEra(EraType.BronzeAge));
+            if (classicalAgeTab) classicalAgeTab.onClick.AddListener(() => SelectEra(EraType.ClassicalAge));
+            if (middleAgeTab) middleAgeTab.onClick.AddListener(() => SelectEra(EraType.MiddleAge));
+            if (industrialAgeTab) industrialAgeTab.onClick.AddListener(() => SelectEra(EraType.IndustrialAge));
+            if (robotAgeTab) robotAgeTab.onClick.AddListener(() => SelectEra(EraType.RobotAge));
+            if (spaceAgeTab) spaceAgeTab.onClick.AddListener(() => SelectEra(EraType.SpaceAge));
+            if (singularityAgeTab) singularityAgeTab.onClick.AddListener(() => SelectEra(EraType.SingularityAge));
 
             GameEvents.OnCardObtained += OnCardObtained;
         }
@@ -126,6 +138,12 @@ namespace ProjectEvolvion
                 EraType.StoneAge => "Edad de Piedra",
                 EraType.TribalAge => "Edad Tribal",
                 EraType.BronzeAge => "Edad del Bronce",
+                EraType.ClassicalAge => "Edad Clasica",
+                EraType.MiddleAge => "Edad Media",
+                EraType.IndustrialAge => "Edad Industrial",
+                EraType.RobotAge => "Edad Robot",
+                EraType.SpaceAge => "Edad Espacial",
+                EraType.SingularityAge => "Singularidad",
                 _ => _selectedEra.ToString()
             };
             if (albumTitleText) albumTitleText.text = $"Album: {eraName}";

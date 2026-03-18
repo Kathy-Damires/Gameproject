@@ -121,26 +121,42 @@ namespace ProjectEvolvion.Editor
 
             var structDefs = new[]
             {
-                ("struct_quarry", "Cantera", EraType.StoneAge, ResourceType.Stone, 1.0, 10.0, "tool_stone_pick"),
-                ("struct_woodcamp", "Campamento Madero", EraType.StoneAge, ResourceType.Wood, 0.8, 8.0, ""),
-                ("struct_huntcamp", "Campamento de Caza", EraType.StoneAge, ResourceType.Food, 0.6, 12.0, ""),
-                ("struct_tribal_farm", "Granja Tribal", EraType.TribalAge, ResourceType.Food, 2.0, 50.0, "tool_tribal_axe"),
-                ("struct_tribal_mine", "Mina Tribal", EraType.TribalAge, ResourceType.Stone, 2.5, 60.0, ""),
-                ("struct_tribal_lumber", "Aserradero Tribal", EraType.TribalAge, ResourceType.Wood, 2.2, 55.0, ""),
-                ("struct_bronze_forge", "Forja de Bronce", EraType.BronzeAge, ResourceType.Bronze, 3.0, 200.0, "tool_bronze_hammer"),
-                ("struct_bronze_quarry", "Gran Cantera", EraType.BronzeAge, ResourceType.Stone, 5.0, 180.0, ""),
-                ("struct_bronze_farm", "Granja Avanzada", EraType.BronzeAge, ResourceType.Food, 4.0, 150.0, ""),
-                ("struct_classical_temple", "Templo", EraType.ClassicalAge, ResourceType.Stone, 8.0, 500.0, "tool_classical_chisel"),
-                ("struct_classical_market", "Mercado", EraType.ClassicalAge, ResourceType.Food, 7.0, 450.0, ""),
-                ("struct_middle_castle", "Castillo", EraType.MiddleAge, ResourceType.Stone, 15.0, 2000.0, "tool_middle_forge"),
-                ("struct_middle_mill", "Molino", EraType.MiddleAge, ResourceType.Food, 12.0, 1500.0, ""),
-                ("struct_industrial_factory", "Fabrica", EraType.IndustrialAge, ResourceType.Bronze, 25.0, 8000.0, "tool_industrial_drill"),
-                ("struct_industrial_powerplant", "Planta Electrica", EraType.IndustrialAge, ResourceType.Energy, 5.0, 10000.0, ""),
-                ("struct_robot_assembler", "Ensamblador", EraType.RobotAge, ResourceType.Bronze, 50.0, 30000.0, "tool_robot_laser"),
-                ("struct_robot_reactor", "Reactor", EraType.RobotAge, ResourceType.Energy, 15.0, 35000.0, ""),
+                // StoneAge - Choza de Piedra, Fogata, Mina de Roca
+                ("struct_stone_hut", "Choza de Piedra", EraType.StoneAge, ResourceType.Stone, 1.0, 10.0, "tool_stone_pick"),
+                ("struct_campfire", "Fogata", EraType.StoneAge, ResourceType.Food, 0.6, 8.0, ""),
+                ("struct_rock_mine", "Mina de Roca", EraType.StoneAge, ResourceType.Wood, 0.8, 12.0, ""),
+                // TribalAge - Cabana Tribal, Totem, Zona de Caza
+                ("struct_tribal_lodge", "Cabana Tribal", EraType.TribalAge, ResourceType.Wood, 2.2, 55.0, "tool_tribal_axe"),
+                ("struct_totem_pole", "Totem", EraType.TribalAge, ResourceType.Stone, 2.5, 60.0, ""),
+                ("struct_hunting_ground", "Zona de Caza", EraType.TribalAge, ResourceType.Food, 2.0, 50.0, ""),
+                // BronzeAge - Forja, Mina de Bronce, Puesto Comercial
+                ("struct_bronze_forge", "Forja", EraType.BronzeAge, ResourceType.Bronze, 3.0, 200.0, "tool_bronze_hammer"),
+                ("struct_bronze_mine", "Mina de Bronce", EraType.BronzeAge, ResourceType.Stone, 5.0, 180.0, ""),
+                ("struct_trading_post", "Puesto Comercial", EraType.BronzeAge, ResourceType.Food, 4.0, 150.0, ""),
+                // ClassicalAge - Coliseo, Biblioteca, Puerto
+                ("struct_colosseum", "Coliseo", EraType.ClassicalAge, ResourceType.Stone, 8.0, 500.0, "tool_classical_chisel"),
+                ("struct_library", "Biblioteca", EraType.ClassicalAge, ResourceType.Wood, 6.0, 400.0, ""),
+                ("struct_harbor", "Puerto", EraType.ClassicalAge, ResourceType.Food, 7.0, 450.0, ""),
+                // MiddleAge - Castillo, Catedral, Molino
+                ("struct_castle", "Castillo", EraType.MiddleAge, ResourceType.Stone, 15.0, 2000.0, "tool_middle_forge"),
+                ("struct_cathedral", "Catedral", EraType.MiddleAge, ResourceType.Wood, 12.0, 1800.0, ""),
+                ("struct_mill", "Molino", EraType.MiddleAge, ResourceType.Food, 12.0, 1500.0, ""),
+                // IndustrialAge - Fabrica, Motor de Vapor, Planta Electrica
+                ("struct_factory", "Fabrica", EraType.IndustrialAge, ResourceType.Bronze, 25.0, 8000.0, "tool_industrial_drill"),
+                ("struct_steam_engine", "Motor de Vapor", EraType.IndustrialAge, ResourceType.Stone, 20.0, 7000.0, ""),
+                ("struct_powerplant", "Planta Electrica", EraType.IndustrialAge, ResourceType.Energy, 5.0, 10000.0, ""),
+                // RobotAge - Fabrica de Robots, Centro de Datos, Red Energetica
+                ("struct_robot_factory", "Fabrica de Robots", EraType.RobotAge, ResourceType.Bronze, 50.0, 30000.0, "tool_robot_laser"),
+                ("struct_data_center", "Centro de Datos", EraType.RobotAge, ResourceType.Energy, 15.0, 35000.0, ""),
+                ("struct_energy_grid", "Red Energetica", EraType.RobotAge, ResourceType.Energy, 20.0, 32000.0, ""),
+                // SpaceAge - Estacion Espacial, Plataforma de Lanzamiento, Panel Solar
                 ("struct_space_station", "Estacion Espacial", EraType.SpaceAge, ResourceType.Energy, 30.0, 100000.0, "tool_space_plasma"),
-                ("struct_space_colony", "Colonia", EraType.SpaceAge, ResourceType.Food, 80.0, 90000.0, ""),
-                ("struct_singularity_nexus", "Nexo Cuantico", EraType.SingularityAge, ResourceType.Energy, 100.0, 500000.0, "tool_singularity_quantum"),
+                ("struct_launch_pad", "Plataforma de Lanzamiento", EraType.SpaceAge, ResourceType.Bronze, 60.0, 90000.0, ""),
+                ("struct_solar_array", "Panel Solar", EraType.SpaceAge, ResourceType.Energy, 40.0, 85000.0, ""),
+                // SingularityAge - Nucleo Singular, Centro Nexo, Puerta Omega
+                ("struct_singularity_core", "Nucleo Singular", EraType.SingularityAge, ResourceType.Energy, 100.0, 500000.0, "tool_singularity_quantum"),
+                ("struct_nexus_hub", "Centro Nexo", EraType.SingularityAge, ResourceType.Energy, 80.0, 400000.0, ""),
+                ("struct_omega_gate", "Puerta Omega", EraType.SingularityAge, ResourceType.Energy, 120.0, 600000.0, ""),
             };
 
             foreach (var (id, name, era, resource, prod, cost, toolId) in structDefs)
@@ -193,20 +209,42 @@ namespace ProjectEvolvion.Editor
 
             var enemyDefs = new[]
             {
-                ("enemy_wolf", "Lobo Salvaje", EraType.StoneAge, 50, 8, 3, 1.2f, 10),
+                // StoneAge (Porera)
+                ("enemy_sabertooth", "Tigre Dientes de Sable", EraType.StoneAge, 50, 8, 3, 1.2f, 10),
                 ("enemy_bear", "Oso Cavernario", EraType.StoneAge, 80, 12, 5, 0.8f, 20),
-                ("enemy_shaman", "Chaman Hostil", EraType.TribalAge, 70, 15, 8, 1.0f, 25),
-                ("enemy_raider", "Saqueador Tribal", EraType.TribalAge, 90, 18, 10, 1.1f, 30),
-                ("enemy_bronze_warrior", "Guerrero de Bronce", EraType.BronzeAge, 120, 22, 15, 0.9f, 45),
-                ("enemy_bronze_archer", "Arquero de Bronce", EraType.BronzeAge, 80, 28, 8, 1.3f, 40),
-                ("enemy_gladiator", "Gladiador", EraType.ClassicalAge, 150, 30, 20, 0.8f, 60),
-                ("enemy_centurion", "Centurion", EraType.ClassicalAge, 200, 35, 25, 0.7f, 80),
-                ("enemy_knight", "Caballero Oscuro", EraType.MiddleAge, 250, 40, 30, 0.6f, 100),
-                ("enemy_dragon", "Dragon Joven", EraType.MiddleAge, 400, 50, 20, 0.5f, 150),
-                ("enemy_automaton", "Automaton", EraType.IndustrialAge, 300, 45, 40, 1.0f, 120),
-                ("enemy_mech", "Mech de Guerra", EraType.RobotAge, 500, 60, 50, 0.8f, 200),
-                ("enemy_alien", "Alienigena", EraType.SpaceAge, 600, 70, 45, 1.2f, 300),
-                ("enemy_void", "Entidad del Vacio", EraType.SingularityAge, 1000, 100, 60, 1.0f, 500),
+                ("enemy_scorpion", "Escorpion Gigante", EraType.StoneAge, 60, 10, 8, 1.0f, 15),
+                // TribalAge (Porera)
+                ("enemy_tribesman", "Rival Tribal", EraType.TribalAge, 70, 15, 8, 1.0f, 25),
+                ("enemy_direwolf", "Lobo Terrible", EraType.TribalAge, 90, 18, 10, 1.1f, 30),
+                ("enemy_shaman", "Chaman Tribal", EraType.TribalAge, 85, 20, 6, 0.9f, 35),
+                // BronzeAge (Porera)
+                ("enemy_bronze_soldier", "Soldado de Bronce", EraType.BronzeAge, 120, 22, 15, 0.9f, 45),
+                ("enemy_wild_boar", "Manada de Jabalies", EraType.BronzeAge, 80, 28, 8, 1.3f, 40),
+                ("enemy_mercenary", "Mercenario", EraType.BronzeAge, 100, 25, 12, 1.0f, 50),
+                // ClassicalAge (Porera)
+                ("enemy_minotaur", "Minotauro", EraType.ClassicalAge, 180, 32, 20, 0.7f, 70),
+                ("enemy_harpy", "Arpia", EraType.ClassicalAge, 120, 38, 10, 1.4f, 60),
+                ("enemy_gladiator", "Gladiador", EraType.ClassicalAge, 200, 35, 25, 0.8f, 80),
+                // MiddleAge (Doresa)
+                ("enemy_bandit", "Capitan Bandido", EraType.MiddleAge, 250, 40, 30, 0.6f, 100),
+                ("enemy_knight", "Caballero Oscuro", EraType.MiddleAge, 300, 45, 35, 0.5f, 120),
+                ("enemy_dragon", "Cria de Dragon", EraType.MiddleAge, 400, 50, 20, 0.5f, 150),
+                // IndustrialAge (Doresa)
+                ("enemy_steam_golem", "Golem de Vapor", EraType.IndustrialAge, 350, 45, 40, 0.8f, 130),
+                ("enemy_factory_bot", "Bot de Fabrica", EraType.IndustrialAge, 280, 50, 30, 1.0f, 120),
+                ("enemy_rogue_machine", "Maquina Rebelde", EraType.IndustrialAge, 400, 55, 35, 0.9f, 160),
+                // RobotAge (Aitherium)
+                ("enemy_advanced_droid", "Droide Avanzado", EraType.RobotAge, 450, 55, 45, 1.0f, 180),
+                ("enemy_combat_mech", "Mech de Combate", EraType.RobotAge, 550, 65, 50, 0.7f, 220),
+                ("enemy_ai_guardian", "Guardian IA", EraType.RobotAge, 500, 60, 55, 0.8f, 200),
+                // SpaceAge (Aitherium)
+                ("enemy_space_kraken", "Kraken Espacial", EraType.SpaceAge, 700, 75, 40, 0.6f, 300),
+                ("enemy_alien_soldier", "Soldado Alienigena", EraType.SpaceAge, 600, 70, 50, 1.0f, 280),
+                ("enemy_void_beast", "Bestia del Vacio", EraType.SpaceAge, 650, 80, 35, 1.2f, 320),
+                // SingularityAge (Aitherium)
+                ("enemy_singularity_entity", "Entidad Singular", EraType.SingularityAge, 900, 90, 60, 0.8f, 450),
+                ("enemy_quantum_wraith", "Espectro Cuantico", EraType.SingularityAge, 800, 100, 40, 1.1f, 400),
+                ("enemy_final_boss", "Jefe Final", EraType.SingularityAge, 1500, 120, 70, 0.6f, 1000),
             };
 
             foreach (var (id, name, era, hp, atk, def, spd, xp) in enemyDefs)
@@ -296,35 +334,65 @@ namespace ProjectEvolvion.Editor
         {
             EnsureFolder("Assets/ScriptableObjects/Cards");
 
-            var eraNames = new Dictionary<EraType, string[]>
+            // 9 eras x 9 cards = 81 total cards from web prototype
+            var eraCardData = new (EraType era, string planetId, string[] names)[]
             {
-                { EraType.StoneAge, new[] { "Piedra Angular", "Fuego Primordial", "Cueva Sagrada", "Mamut Lanudo", "Rio Antiguo", "Cielo Nocturno", "Primer Amanecer", "Hueso Tallado", "Pintura Rupestre" } },
-                { EraType.TribalAge, new[] { "Danza Ritual", "Totem Ancestral", "Chaman Sabio", "Hoguera Tribal", "Caza Mayor", "Luna Llena", "Tambor de Guerra", "Espiritu Animal", "Vision Mistica" } },
-                { EraType.BronzeAge, new[] { "Lingote de Bronce", "Rueda Inventada", "Escritura Antigua", "Comercio Maritimo", "Templo Dorado", "Armada Naval", "Codigo de Leyes", "Irrigacion", "Astronomia" } },
+                (EraType.StoneAge, "planet_porera", new[] {
+                    "Lanza de Pedernal", "Pintura Rupestre", "Circulo de Piedra", "Llama Antigua",
+                    "Primer Cazador", "Refugio de Roca", "Mamut Salvaje", "Mano Pintada", "Ritual del Amanecer"
+                }),
+                (EraType.TribalAge, "planet_porera", new[] {
+                    "Bestia Totem", "Mascara Tribal", "Danza del Espiritu", "Tambor de Guerra",
+                    "Baston de Chaman", "Estandarte de Clan", "Collar de Hueso", "Bosque Sagrado", "Juramento de Sangre"
+                }),
+                (EraType.BronzeAge, "planet_porera", new[] {
+                    "Espada de Bronce", "Horno de Hierro", "Escudo de Cobre", "Trabajador del Metal",
+                    "Caravana Comercial", "Idolo de Bronce", "Carro de Guerra", "Gremio Mercante", "Yelmo de Metal"
+                }),
+                (EraType.ClassicalAge, "planet_porera", new[] {
+                    "Olimpico", "Serpiente Marina", "Vellocino de Oro", "Vision del Oraculo",
+                    "Escudo Espartano", "Aguila Romana", "Centurion", "Huevo de Fenix", "Mapa Antiguo"
+                }),
+                (EraType.MiddleAge, "planet_doresa", new[] {
+                    "Cazador de Dragones", "Santo Grial", "Caballero Negro", "Puerta del Castillo",
+                    "Bufon de la Corte", "Decreto Real", "Maquina de Asedio", "Cazador de Brujas", "Reliquia Sagrada"
+                }),
+                (EraType.IndustrialAge, "planet_doresa", new[] {
+                    "Titan de Vapor", "Corazon de Engranaje", "Golem de Carbon", "Humo de Fabrica",
+                    "Caballo de Hierro", "Cable de Telegrafo", "Laboratorio del Inventor", "Huelga Obrera", "Dios Maquina"
+                }),
+                (EraType.RobotAge, "planet_aitherium", new[] {
+                    "Centinela Cromado", "Red Neural", "Tanque Flotante", "Nucleo Logico",
+                    "Alma Sintetica", "Rebelion Bot", "Mente Circuito", "Enjambre de Drones", "Armadura Mech"
+                }),
+                (EraType.SpaceAge, "planet_aitherium", new[] {
+                    "Crucero Estelar", "Diplomata Alienigena", "Fisura del Vacio", "Espiritu de Nebulosa",
+                    "Rayo Cosmico", "Gravedad Cero", "Semilla Planetaria", "Mapa Estelar", "Puerta Cuantica"
+                }),
+                (EraType.SingularityAge, "planet_aitherium", new[] {
+                    "Mente Singular", "Bucle Infinito", "Eden Digital", "Pulso Omega",
+                    "Corazon del Nexo", "Codigo Eterno", "Ojo Omnisciente", "Cristal del Tiempo", "Nucleo Genesis"
+                }),
             };
 
-            int cardIndex = 0;
-            foreach (var kvp in eraNames)
+            foreach (var (era, planetId, names) in eraCardData)
             {
-                var era = kvp.Key;
-                var names = kvp.Value;
                 for (int i = 0; i < names.Length; i++)
                 {
                     string id = $"card_{era.ToString().ToLower()}_{i}";
                     var card = CreateOrLoad<CardData>($"Assets/ScriptableObjects/Cards/{id}.asset");
                     card.cardId = id;
                     card.cardName = names[i];
-                    card.description = $"Carta coleccionable: {names[i]}";
+                    card.description = $"Carta coleccionable de la era {era}: {names[i]}";
                     card.era = era;
-                    card.planetId = "planet_porera";
-                    card.rarity = i < 5 ? Rarity.Common : (i < 7 ? Rarity.Clear : (i < 8 ? Rarity.Epic : Rarity.Legendary));
+                    card.planetId = planetId;
+                    card.rarity = i < 4 ? Rarity.Common : (i < 7 ? Rarity.Clear : (i < 8 ? Rarity.Epic : Rarity.Legendary));
                     card.setIndex = i;
                     card.setCompletionReward = new ResourceCost[]
                     {
-                        new ResourceCost { resourceType = ResourceType.Diamonds, amount = 10 }
+                        new ResourceCost { resourceType = ResourceType.Diamonds, amount = 10 + (int)era * 5 }
                     };
                     EditorUtility.SetDirty(card);
-                    cardIndex++;
                 }
             }
         }
@@ -416,17 +484,47 @@ namespace ProjectEvolvion.Editor
         {
             EnsureFolder("Assets/ScriptableObjects/Planets");
 
-            var planet = CreateOrLoad<PlanetData>("Assets/ScriptableObjects/Planets/planet_porera.asset");
-            planet.planetId = "planet_porera";
-            planet.planetName = "Porera";
-            planet.description = "El planeta natal. Aqui comienza tu viaje a traves de las eras.";
-            planet.cardsPerEra = 9;
-
             var allEras = FindAllAssets<EraData>("Assets/ScriptableObjects/Eras");
             System.Array.Sort(allEras, (a, b) => a.eraType.CompareTo(b.eraType));
-            planet.eras = allEras;
 
-            EditorUtility.SetDirty(planet);
+            // Porera - eras 1-4 (Stone, Tribal, Bronze, Classical)
+            var porera = CreateOrLoad<PlanetData>("Assets/ScriptableObjects/Planets/planet_porera.asset");
+            porera.planetId = "planet_porera";
+            porera.planetName = "Porera";
+            porera.description = "Mundo verde primordial. Aqui comienza tu viaje desde herramientas de piedra hasta el descubrimiento de los metales.";
+            porera.cardsPerEra = 9;
+            porera.planetColor = new Color(0.47f, 0.69f, 0.28f); // green
+            porera.iconEmoji = "volcano";
+            porera.population = 85000;
+            porera.startsUnlocked = true;
+            porera.eras = allEras;
+            EditorUtility.SetDirty(porera);
+
+            // Doresa - eras 5-6 (Medieval, Industrial)
+            var doresa = CreateOrLoad<PlanetData>("Assets/ScriptableObjects/Planets/planet_doresa.asset");
+            doresa.planetId = "planet_doresa";
+            doresa.planetName = "Doresa";
+            doresa.description = "Mundo oceanico de cultura y comercio. Desde imperios clasicos hasta la revolucion industrial, este mundo impulsa el progreso.";
+            doresa.cardsPerEra = 9;
+            doresa.planetColor = new Color(0.18f, 0.80f, 0.44f); // teal-green
+            doresa.iconEmoji = "seedling";
+            doresa.population = 210000;
+            doresa.startsUnlocked = false;
+            doresa.eras = allEras;
+            EditorUtility.SetDirty(doresa);
+
+            // Aitherium - eras 7-9 (Robot, Space, Singularity)
+            var aitherium = CreateOrLoad<PlanetData>("Assets/ScriptableObjects/Planets/planet_aitherium.asset");
+            aitherium.planetId = "planet_aitherium";
+            aitherium.planetName = "Aitherium";
+            aitherium.description = "La frontera tecnologica. Robotica, exploracion espacial y la singularidad definitiva aguardan a quienes desbloqueen este mundo.";
+            aitherium.cardsPerEra = 9;
+            aitherium.planetColor = new Color(0.0f, 0.83f, 1.0f); // cyan
+            aitherium.iconEmoji = "zap";
+            aitherium.population = 5000;
+            aitherium.startsUnlocked = false;
+            aitherium.eras = allEras;
+            EditorUtility.SetDirty(aitherium);
         }
 
         // ============================================================
