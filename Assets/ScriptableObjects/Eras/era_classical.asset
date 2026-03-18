@@ -20,10 +20,24 @@ MonoBehaviour:
   structures:
   - {fileID: 11400000, guid: df5efcdaa3dfe40d7822e05a30397b92, type: 2}
   - {fileID: 11400000, guid: 0ae4952e33b034652a3e624a0737691a, type: 2}
+  - {fileID: 11400000, guid: 3ccb04662d44d427dab1a4494a496ba7, type: 2}
+  - {fileID: 11400000, guid: 6567b0a536f6f496196d011b66ff433c, type: 2}
+  - {fileID: 11400000, guid: 92af5f2915af8462f906c6446d0699e5, type: 2}
   enemies:
   - {fileID: 11400000, guid: fa32c1a7dbfa5475eb152d47d56cb437, type: 2}
   - {fileID: 11400000, guid: 428013737f8444fb08fe6d0a3dddbc17, type: 2}
-  cards: []
+  - {fileID: 11400000, guid: 49b42212cf9a64d6189bbea2900c9de6, type: 2}
+  - {fileID: 11400000, guid: b09a9bcc61fff4697b7ccfda20939c35, type: 2}
+  cards:
+  - {fileID: 11400000, guid: facadb7c07eb1463e9f86f9a2c273101, type: 2}
+  - {fileID: 11400000, guid: 4dfe3482c812f43769fb314bcfa5639c, type: 2}
+  - {fileID: 11400000, guid: 1bce99cb10ed94e4dbaa9132dd949917, type: 2}
+  - {fileID: 11400000, guid: 5870aca7819e14d5fa5658417049a8d9, type: 2}
+  - {fileID: 11400000, guid: 30a4fdfe807024a988d04933939a02d5, type: 2}
+  - {fileID: 11400000, guid: 7a842be8ac8de4cb59e9ed544f781d43, type: 2}
+  - {fileID: 11400000, guid: 4a6669c903a5344bebb47a9672eccb54, type: 2}
+  - {fileID: 11400000, guid: 815fa7ebd751f4af58002c4a711fd82e, type: 2}
+  - {fileID: 11400000, guid: 8d5b7651d36bb4f10b7e503450173c42, type: 2}
   availableEquipment: []
   tools:
   - {fileID: 11400000, guid: 7f7533c080e224446b52ce9b809b9eed, type: 2}

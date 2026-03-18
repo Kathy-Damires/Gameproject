@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_stoneage_6
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_stoneage_6
-  cardName: Primer Amanecer
-  description: 'Carta coleccionable: Primer Amanecer'
+  cardName: Mamut Salvaje
+  description: 'Carta coleccionable de la era StoneAge: Mamut Salvaje'
   artwork: {fileID: 0}
   era: 0
   planetId: planet_porera

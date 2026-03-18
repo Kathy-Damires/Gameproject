@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_tribalage_8
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_tribalage_8
-  cardName: Vision Mistica
-  description: 'Carta coleccionable: Vision Mistica'
+  cardName: Juramento de Sangre
+  description: 'Carta coleccionable de la era TribalAge: Juramento de Sangre'
   artwork: {fileID: 0}
   era: 1
   planetId: planet_porera
@@ -22,4 +22,4 @@ MonoBehaviour:
   setIndex: 8
   setCompletionReward:
   - resourceType: 5
-    amount: 10
+    amount: 15

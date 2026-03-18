@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_bronzeage_7
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_bronzeage_7
-  cardName: Irrigacion
-  description: 'Carta coleccionable: Irrigacion'
+  cardName: Gremio Mercante
+  description: 'Carta coleccionable de la era BronzeAge: Gremio Mercante'
   artwork: {fileID: 0}
   era: 2
   planetId: planet_porera
@@ -22,4 +22,4 @@ MonoBehaviour:
   setIndex: 7
   setCompletionReward:
   - resourceType: 5
-    amount: 10
+    amount: 20

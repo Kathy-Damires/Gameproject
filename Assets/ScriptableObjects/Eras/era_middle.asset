@@ -18,12 +18,25 @@ MonoBehaviour:
   description: La Edad Media de la civilizacion
   icon: {fileID: 0}
   structures:
+  - {fileID: 11400000, guid: 6b3d9ded2cdd741a091e36b4e17d7e63, type: 2}
+  - {fileID: 11400000, guid: 9ee41b55a488a4e2d83d36ba387496fe, type: 2}
   - {fileID: 11400000, guid: a1fbed2afaf29424188c145a918910e5, type: 2}
   - {fileID: 11400000, guid: e2c75b3a5a60748989010d9e8ecf142e, type: 2}
+  - {fileID: 11400000, guid: b21cd2a0adb204f12a94c68226401d6c, type: 2}
   enemies:
+  - {fileID: 11400000, guid: 4b60f24180e494afaa7530d80d56c0d3, type: 2}
   - {fileID: 11400000, guid: ca03e2d3549e044eaaaa966a7e43f0b7, type: 2}
   - {fileID: 11400000, guid: 42a04a794e0054235a77c6c90bb6bd40, type: 2}
-  cards: []
+  cards:
+  - {fileID: 11400000, guid: 4b52b0b98ad6c4650845f3f468bc5132, type: 2}
+  - {fileID: 11400000, guid: f0e27dc6fb23c420aa49ad307915073b, type: 2}
+  - {fileID: 11400000, guid: 7d0fd9b1109ce4705a8812bfdbe08972, type: 2}
+  - {fileID: 11400000, guid: db26e5e2399ff431186b09a4bf16ec86, type: 2}
+  - {fileID: 11400000, guid: f312b17997e2b4f7e88069a3dfa82429, type: 2}
+  - {fileID: 11400000, guid: b0251e3764c3e492fbd2107586c87eaf, type: 2}
+  - {fileID: 11400000, guid: 4994978effbf44a3d83f199e5c5377de, type: 2}
+  - {fileID: 11400000, guid: 0563b6bb9a9ca4bcb88b0ba9ce4f4966, type: 2}
+  - {fileID: 11400000, guid: 6668470809fa6437692eecfe3fb96f7d, type: 2}
   availableEquipment:
   - {fileID: 11400000, guid: 015bde5cf845841b5be4d9903f0ff649, type: 2}
   - {fileID: 11400000, guid: 503d0ee79e2a14d118c120130fe7bd06, type: 2}

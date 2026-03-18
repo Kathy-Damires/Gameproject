@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_stoneage_3
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_stoneage_3
-  cardName: Mamut Lanudo
-  description: 'Carta coleccionable: Mamut Lanudo'
+  cardName: Llama Antigua
+  description: 'Carta coleccionable de la era StoneAge: Llama Antigua'
   artwork: {fileID: 0}
   era: 0
   planetId: planet_porera

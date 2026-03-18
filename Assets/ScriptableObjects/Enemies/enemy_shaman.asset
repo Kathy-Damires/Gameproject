@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: enemy_shaman
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.EnemyData
   enemyId: enemy_shaman
-  enemyName: Chaman Hostil
+  enemyName: Chaman Tribal
   description: Enemigo de la TribalAge
   icon: {fileID: 0}
   era: 1
-  maxHP: 70
-  attack: 15
-  defense: 8
-  attackSpeed: 1
+  maxHP: 85
+  attack: 20
+  defense: 6
+  attackSpeed: 0.9
   resourceRewards:
   - resourceType: 1
-    minAmount: 12.5
-    maxAmount: 50
+    minAmount: 17.5
+    maxAmount: 70
   cardDropChance: 0.1
   equipmentDropChance: 0.05
-  experienceReward: 25
+  experienceReward: 35

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_bronzeage_5
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_bronzeage_5
-  cardName: Armada Naval
-  description: 'Carta coleccionable: Armada Naval'
+  cardName: Idolo de Bronce
+  description: 'Carta coleccionable de la era BronzeAge: Idolo de Bronce'
   artwork: {fileID: 0}
   era: 2
   planetId: planet_porera
@@ -22,4 +22,4 @@ MonoBehaviour:
   setIndex: 5
   setCompletionReward:
   - resourceType: 5
-    amount: 10
+    amount: 20

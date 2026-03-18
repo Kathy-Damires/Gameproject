@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: enemy_dragon
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.EnemyData
   enemyId: enemy_dragon
-  enemyName: Dragon Joven
+  enemyName: Cria de Dragon
   description: Enemigo de la MiddleAge
   icon: {fileID: 0}
   era: 4

@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_stoneage_8
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_stoneage_8
-  cardName: Pintura Rupestre
-  description: 'Carta coleccionable: Pintura Rupestre'
+  cardName: Ritual del Amanecer
+  description: 'Carta coleccionable de la era StoneAge: Ritual del Amanecer'
   artwork: {fileID: 0}
   era: 0
   planetId: planet_porera

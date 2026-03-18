@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5bad9826cb3f9409bba17035810dc484, type: 3}
+  m_Name: struct_steam_engine
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.StructureData
+  structureId: struct_steam_engine
+  structureName: Motor de Vapor
+  description: Estructura de la IndustrialAge
+  icon: {fileID: 0}
+  era: 5
+  producedResource: 0
+  baseProductionPerSecond: 20
+  productionMultiplierPerLevel: 1.15
+  buildCost:
+  - resourceType: 3
+    amount: 7000
+  upgradeCostMultiplier: 1.5
+  maxLevel: 100
+  associatedTool: {fileID: 0}

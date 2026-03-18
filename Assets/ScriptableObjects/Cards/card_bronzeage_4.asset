@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: card_bronzeage_4
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_bronzeage_4
-  cardName: Templo Dorado
-  description: 'Carta coleccionable: Templo Dorado'
+  cardName: Caravana Comercial
+  description: 'Carta coleccionable de la era BronzeAge: Caravana Comercial'
   artwork: {fileID: 0}
   era: 2
   planetId: planet_porera
-  rarity: 0
+  rarity: 1
   setIndex: 4
   setCompletionReward:
   - resourceType: 5
-    amount: 10
+    amount: 20

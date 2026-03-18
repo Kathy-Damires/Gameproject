@@ -18,10 +18,25 @@ MonoBehaviour:
   description: La Singularidad de la civilizacion
   icon: {fileID: 0}
   structures:
+  - {fileID: 11400000, guid: bb2a1df5220d54015874541541994d9f, type: 2}
+  - {fileID: 11400000, guid: 5e3c0c7f3e33641e1b9394374b538dad, type: 2}
+  - {fileID: 11400000, guid: 3fb4859e1983e4a89b1d59661ba42578, type: 2}
   - {fileID: 11400000, guid: 7e3fff6eb4e8d4939a39a5746a8bc758, type: 2}
   enemies:
+  - {fileID: 11400000, guid: 2e82fbc8ce76b49a28475d3e8506438c, type: 2}
+  - {fileID: 11400000, guid: b5347ef50a06b4419a9192c407f224a5, type: 2}
+  - {fileID: 11400000, guid: 56dae1b31fa5c4afb8b210c0b4497b95, type: 2}
   - {fileID: 11400000, guid: 2600ef84945b0463b9e25bfcd631074b, type: 2}
-  cards: []
+  cards:
+  - {fileID: 11400000, guid: 725447683b1df4cfea7f83782f5158dc, type: 2}
+  - {fileID: 11400000, guid: 9d50b4fcd478748cdb76188f1bbde53e, type: 2}
+  - {fileID: 11400000, guid: 667471ad5141342ecaa2eab3ac0b537b, type: 2}
+  - {fileID: 11400000, guid: e2e74753723ad48d6a079cc39f614bd2, type: 2}
+  - {fileID: 11400000, guid: df4295523c41e45708d29aa4ca4e43bc, type: 2}
+  - {fileID: 11400000, guid: 7032a797079e94ee5af970a4fd8c5a30, type: 2}
+  - {fileID: 11400000, guid: 2ed1dfb6b9f674d7082dba2445e6755a, type: 2}
+  - {fileID: 11400000, guid: bc20c39cf72b043e38b164b6ae395709, type: 2}
+  - {fileID: 11400000, guid: 21e34329d50de458ea91576d258eaf0b, type: 2}
   availableEquipment:
   - {fileID: 11400000, guid: 93686c37509d0400b99222333c9f2025, type: 2}
   tools:

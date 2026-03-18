@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_tribalage_0
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_tribalage_0
-  cardName: Danza Ritual
-  description: 'Carta coleccionable: Danza Ritual'
+  cardName: Bestia Totem
+  description: 'Carta coleccionable de la era TribalAge: Bestia Totem'
   artwork: {fileID: 0}
   era: 1
   planetId: planet_porera
@@ -22,4 +22,4 @@ MonoBehaviour:
   setIndex: 0
   setCompletionReward:
   - resourceType: 5
-    amount: 10
+    amount: 15

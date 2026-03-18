@@ -18,11 +18,26 @@ MonoBehaviour:
   description: La Edad Industrial de la civilizacion
   icon: {fileID: 0}
   structures:
+  - {fileID: 11400000, guid: b7408443ba8594da5b2a450b796f5ba2, type: 2}
   - {fileID: 11400000, guid: 7d5e29c00188b42a8a979bee7e74545e, type: 2}
   - {fileID: 11400000, guid: 4650b2ca7af7648559a5865b68789d89, type: 2}
+  - {fileID: 11400000, guid: b94a69d39baec4e6eaeceb87ce5bdc1c, type: 2}
+  - {fileID: 11400000, guid: 040eb767c5fd1412192471315b7a4e1f, type: 2}
   enemies:
   - {fileID: 11400000, guid: 67685f165a7954b71971eec4e1e53277, type: 2}
-  cards: []
+  - {fileID: 11400000, guid: 96cbdf5740b8d4759b971f4b140e7a80, type: 2}
+  - {fileID: 11400000, guid: 29f74bb4b8336401caf3165609fc1b83, type: 2}
+  - {fileID: 11400000, guid: f9bdf3fa2a1dd4427b55f8f2391caaa2, type: 2}
+  cards:
+  - {fileID: 11400000, guid: b5b44e7f6a1fe4539b731dae93ae5413, type: 2}
+  - {fileID: 11400000, guid: 760622f2f682147108d2988c6db072a1, type: 2}
+  - {fileID: 11400000, guid: 21d580ee5c195486e977c02d1290d5da, type: 2}
+  - {fileID: 11400000, guid: e827fd6d1c9a44475ac31acc496b6daa, type: 2}
+  - {fileID: 11400000, guid: 9f0de845bed8a4b5a92bc597892c7a24, type: 2}
+  - {fileID: 11400000, guid: ce63015eefefc47fe9592862ad543ef8, type: 2}
+  - {fileID: 11400000, guid: 4522ca96700b348f289d4d66d6c25ffb, type: 2}
+  - {fileID: 11400000, guid: 6489125de8d7e4da5b671a9fc02f5c69, type: 2}
+  - {fileID: 11400000, guid: 757ce1e13ad5549fcaf32156b401e0b3, type: 2}
   availableEquipment: []
   tools:
   - {fileID: 11400000, guid: 37f911412f2dc42269b252bcbd57d639, type: 2}

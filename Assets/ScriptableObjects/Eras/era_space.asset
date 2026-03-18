@@ -18,11 +18,25 @@ MonoBehaviour:
   description: La Edad Espacial de la civilizacion
   icon: {fileID: 0}
   structures:
+  - {fileID: 11400000, guid: 4d2c4a3ccdd99453fb0277c51abbe81f, type: 2}
+  - {fileID: 11400000, guid: 9e798ca881e8547089b670ac05d620d3, type: 2}
   - {fileID: 11400000, guid: 1dbb1aa18306a4a219ec17d53f9b81a0, type: 2}
   - {fileID: 11400000, guid: d26b7a28b3efd4b6397dbef5b58f6541, type: 2}
   enemies:
   - {fileID: 11400000, guid: b01f1404923fe4f04abd6e7eca478404, type: 2}
-  cards: []
+  - {fileID: 11400000, guid: 3673de70d578744fd9e7365e9477fd6e, type: 2}
+  - {fileID: 11400000, guid: ccad35e3924634e53be8c0e3e3b88fb2, type: 2}
+  - {fileID: 11400000, guid: 1e762a78b65434f128b383fe82d0413b, type: 2}
+  cards:
+  - {fileID: 11400000, guid: 94c46bc0cc0014531926684df5e08843, type: 2}
+  - {fileID: 11400000, guid: 1b44e59c25afd44dab4661439b0a2931, type: 2}
+  - {fileID: 11400000, guid: 7c98ec333fdce46b89f00291d19dada7, type: 2}
+  - {fileID: 11400000, guid: d06c46496e8f443a3be62cfabe5b579f, type: 2}
+  - {fileID: 11400000, guid: 3ad2802c345494c29a2ca368510ad87d, type: 2}
+  - {fileID: 11400000, guid: 941e71a45d2404c7fbe0e451b014104f, type: 2}
+  - {fileID: 11400000, guid: 1cb6d3639e81542e8bad2e077fd302b2, type: 2}
+  - {fileID: 11400000, guid: 7c9c42cc3767645ad8a8599c858ccfe0, type: 2}
+  - {fileID: 11400000, guid: 4ab61b3b974a6416899d201b81245027, type: 2}
   availableEquipment: []
   tools:
   - {fileID: 11400000, guid: 20854571b8b294d0bb87754424633782, type: 2}

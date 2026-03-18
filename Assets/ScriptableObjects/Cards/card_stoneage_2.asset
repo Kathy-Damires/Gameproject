@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_stoneage_2
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_stoneage_2
-  cardName: Cueva Sagrada
-  description: 'Carta coleccionable: Cueva Sagrada'
+  cardName: Circulo de Piedra
+  description: 'Carta coleccionable de la era StoneAge: Circulo de Piedra'
   artwork: {fileID: 0}
   era: 0
   planetId: planet_porera

@@ -13,13 +13,13 @@ MonoBehaviour:
   m_Name: card_tribalage_4
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_tribalage_4
-  cardName: Caza Mayor
-  description: 'Carta coleccionable: Caza Mayor'
+  cardName: Baston de Chaman
+  description: 'Carta coleccionable de la era TribalAge: Baston de Chaman'
   artwork: {fileID: 0}
   era: 1
   planetId: planet_porera
-  rarity: 0
+  rarity: 1
   setIndex: 4
   setCompletionReward:
   - resourceType: 5
-    amount: 10
+    amount: 15

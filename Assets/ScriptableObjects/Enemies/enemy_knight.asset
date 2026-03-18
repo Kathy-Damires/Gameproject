@@ -17,14 +17,14 @@ MonoBehaviour:
   description: Enemigo de la MiddleAge
   icon: {fileID: 0}
   era: 4
-  maxHP: 250
-  attack: 40
-  defense: 30
-  attackSpeed: 0.6
+  maxHP: 300
+  attack: 45
+  defense: 35
+  attackSpeed: 0.5
   resourceRewards:
   - resourceType: 1
-    minAmount: 50
-    maxAmount: 200
+    minAmount: 60
+    maxAmount: 240
   cardDropChance: 0.1
   equipmentDropChance: 0.05
-  experienceReward: 100
+  experienceReward: 120

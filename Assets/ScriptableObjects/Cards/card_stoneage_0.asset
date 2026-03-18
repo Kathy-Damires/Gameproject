@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_stoneage_0
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_stoneage_0
-  cardName: Piedra Angular
-  description: 'Carta coleccionable: Piedra Angular'
+  cardName: Lanza de Pedernal
+  description: 'Carta coleccionable de la era StoneAge: Lanza de Pedernal'
   artwork: {fileID: 0}
   era: 0
   planetId: planet_porera

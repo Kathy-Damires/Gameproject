@@ -17,14 +17,14 @@ MonoBehaviour:
   description: Enemigo de la ClassicalAge
   icon: {fileID: 0}
   era: 3
-  maxHP: 150
-  attack: 30
-  defense: 20
+  maxHP: 200
+  attack: 35
+  defense: 25
   attackSpeed: 0.8
   resourceRewards:
   - resourceType: 0
-    minAmount: 30
-    maxAmount: 120
+    minAmount: 40
+    maxAmount: 160
   cardDropChance: 0.1
   equipmentDropChance: 0.05
-  experienceReward: 60
+  experienceReward: 80

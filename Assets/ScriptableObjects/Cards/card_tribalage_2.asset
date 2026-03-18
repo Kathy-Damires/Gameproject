@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_tribalage_2
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_tribalage_2
-  cardName: Chaman Sabio
-  description: 'Carta coleccionable: Chaman Sabio'
+  cardName: Danza del Espiritu
+  description: 'Carta coleccionable de la era TribalAge: Danza del Espiritu'
   artwork: {fileID: 0}
   era: 1
   planetId: planet_porera
@@ -22,4 +22,4 @@ MonoBehaviour:
   setIndex: 2
   setCompletionReward:
   - resourceType: 5
-    amount: 10
+    amount: 15

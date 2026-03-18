@@ -18,12 +18,17 @@ MonoBehaviour:
   description: La Edad Tribal de la civilizacion
   icon: {fileID: 0}
   structures:
+  - {fileID: 11400000, guid: 8aa19f09de29d494c80b979829b11545, type: 2}
+  - {fileID: 11400000, guid: 82fd1711f88034a98a677f7f0e1a3a41, type: 2}
   - {fileID: 11400000, guid: 1d4664c08d89041c5a63dd6930ac61b0, type: 2}
+  - {fileID: 11400000, guid: f9c9042eb726044b7b375d8a7a9123f3, type: 2}
   - {fileID: 11400000, guid: 5a4f1482a22534913a9863603dcdc3d6, type: 2}
   - {fileID: 11400000, guid: d8bf5be9fa8ff458c80fbe7fdfa277b4, type: 2}
   enemies:
+  - {fileID: 11400000, guid: 9a1c6c834f3dc4f4d83bedd417e5a788, type: 2}
   - {fileID: 11400000, guid: d176dfdb63e174362b5da41d8d0aff19, type: 2}
   - {fileID: 11400000, guid: 18d9b70bd09714805b808e2758f39b82, type: 2}
+  - {fileID: 11400000, guid: 9a820539ff72c4f9886297b851f2f9ba, type: 2}
   cards:
   - {fileID: 11400000, guid: 3f2571f51013240f6831df21d5863888, type: 2}
   - {fileID: 11400000, guid: 0f95562d111634fce9c7c109049d25cd, type: 2}

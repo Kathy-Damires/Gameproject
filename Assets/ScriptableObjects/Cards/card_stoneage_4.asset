@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: card_stoneage_4
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_stoneage_4
-  cardName: Rio Antiguo
-  description: 'Carta coleccionable: Rio Antiguo'
+  cardName: Primer Cazador
+  description: 'Carta coleccionable de la era StoneAge: Primer Cazador'
   artwork: {fileID: 0}
   era: 0
   planetId: planet_porera
-  rarity: 0
+  rarity: 1
   setIndex: 4
   setCompletionReward:
   - resourceType: 5

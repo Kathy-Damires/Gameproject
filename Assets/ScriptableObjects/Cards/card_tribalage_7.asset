@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_tribalage_7
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_tribalage_7
-  cardName: Espiritu Animal
-  description: 'Carta coleccionable: Espiritu Animal'
+  cardName: Bosque Sagrado
+  description: 'Carta coleccionable de la era TribalAge: Bosque Sagrado'
   artwork: {fileID: 0}
   era: 1
   planetId: planet_porera
@@ -22,4 +22,4 @@ MonoBehaviour:
   setIndex: 7
   setCompletionReward:
   - resourceType: 5
-    amount: 10
+    amount: 15

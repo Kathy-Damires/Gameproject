@@ -18,11 +18,26 @@ MonoBehaviour:
   description: La Edad Robot de la civilizacion
   icon: {fileID: 0}
   structures:
+  - {fileID: 11400000, guid: cc038b26609c84c20bca61b5755846e8, type: 2}
+  - {fileID: 11400000, guid: 5ed009997d2e443f7af053118bd2058b, type: 2}
   - {fileID: 11400000, guid: 839e29885efa64697944ac22d8adf38a, type: 2}
+  - {fileID: 11400000, guid: d6212d4aeb1494b9ea0fa0f1b8778790, type: 2}
   - {fileID: 11400000, guid: a4e486e7c3fd341bb83da37ab499d2cd, type: 2}
   enemies:
+  - {fileID: 11400000, guid: 5c7300044af0a4db69e9f644713c5b4f, type: 2}
+  - {fileID: 11400000, guid: 1befafba9a9984ac9b0fe96f49570e1f, type: 2}
+  - {fileID: 11400000, guid: bba13ff502e2e44fea130ba3bc701b9e, type: 2}
   - {fileID: 11400000, guid: 7f40c6b4544b9414289462d37dac25b0, type: 2}
-  cards: []
+  cards:
+  - {fileID: 11400000, guid: 200a2ba060597405296685d20b3ea2db, type: 2}
+  - {fileID: 11400000, guid: 20855d0e7442443be9eac6a8db9426eb, type: 2}
+  - {fileID: 11400000, guid: d569795461d1141ac931ede1f30eddb6, type: 2}
+  - {fileID: 11400000, guid: cbbf6056851b34cd3acbd1afa529a40e, type: 2}
+  - {fileID: 11400000, guid: 9cdf4241d2fcd4e589c4b86f3c9a8067, type: 2}
+  - {fileID: 11400000, guid: 559bf08d5e0724029b7d9170bfcfd477, type: 2}
+  - {fileID: 11400000, guid: f841dedcba55740dda037c32cd42aac6, type: 2}
+  - {fileID: 11400000, guid: b2b246c036c1046f4b2d3f9220094400, type: 2}
+  - {fileID: 11400000, guid: 7b14c973d083f43b3a1c127b426475c0, type: 2}
   availableEquipment:
   - {fileID: 11400000, guid: 337507171ecd4475fa2fef224fd1ede8, type: 2}
   tools:

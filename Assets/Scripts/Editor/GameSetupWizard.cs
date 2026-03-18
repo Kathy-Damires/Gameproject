@@ -9,6 +9,20 @@ namespace ProjectEvolvion.Editor
 {
     public class GameSetupWizard : EditorWindow
     {
+        // ============================================================
+        // THEME COLORS
+        // ============================================================
+        static readonly Color BG_DEEP = new Color(13f/255, 5f/255, 32f/255);
+        static readonly Color GLASS = new Color(20f/255, 10f/255, 45f/255, 0.75f);
+        static readonly Color GLASS_BORDER = new Color(1f, 1f, 1f, 0.08f);
+        static readonly Color PRIMARY = new Color(0, 0.78f, 0.9f);
+        static readonly Color SECONDARY = new Color(0.78f, 0.2f, 0.7f);
+        static readonly Color ACCENT = new Color(0.9f, 0.75f, 0.2f);
+        static readonly Color NAV_BG = new Color(15f/255, 8f/255, 35f/255, 0.95f);
+        static readonly Color DANGER = new Color(0.86f, 0.24f, 0.24f);
+        static readonly Color SUCCESS = new Color(0.31f, 0.78f, 0.31f);
+        static readonly Color TEXT_MUTED = new Color(0.55f, 0.55f, 0.63f);
+
         [MenuItem("Evolvion/Setup Completo del Juego")]
         public static void SetupGame()
         {
@@ -654,47 +668,59 @@ namespace ProjectEvolvion.Editor
         }
 
         // ============================================================
-        // UI PREFABS
+        // UI PREFABS (REWRITTEN)
         // ============================================================
         static void CreateUIPrefabs()
         {
             EnsureFolder("Assets/Prefabs");
 
             // Structure Slot Prefab (for PlanetView)
-            CreateButtonPrefab("Assets/Prefabs/StructureSlotPrefab.prefab", "StructureSlot", 200, 50, new Color(0.2f, 0.2f, 0.3f));
+            CreateButtonPrefab("Assets/Prefabs/StructureSlotPrefab.prefab", "StructureSlot", 320, 60,
+                GLASS, "btn_secondary.png");
 
             // Structure Item Prefab (for StructurePanel list)
-            CreateButtonPrefab("Assets/Prefabs/StructureItemPrefab.prefab", "StructureItem", 280, 45, new Color(0.25f, 0.2f, 0.15f));
+            CreateButtonPrefab("Assets/Prefabs/StructureItemPrefab.prefab", "StructureItem", 980, 70,
+                GLASS, "btn_secondary.png");
 
             // Inventory Item Prefab (for Equipment)
-            CreateButtonPrefab("Assets/Prefabs/InventoryItemPrefab.prefab", "InventoryItem", 80, 80, new Color(0.15f, 0.25f, 0.15f));
+            CreateButtonPrefab("Assets/Prefabs/InventoryItemPrefab.prefab", "InventoryItem", 100, 100,
+                new Color(GLASS.r, GLASS.g, GLASS.b, 0.6f), "btn_secondary.png");
 
             // Card Item Prefab
-            CreateButtonPrefab("Assets/Prefabs/CardItemPrefab.prefab", "CardItem", 90, 120, new Color(0.2f, 0.15f, 0.3f));
+            CreateButtonPrefab("Assets/Prefabs/CardItemPrefab.prefab", "CardItem", 310, 180,
+                new Color(SECONDARY.r, SECONDARY.g, SECONDARY.b, 0.25f), "btn_secondary.png");
 
             // Shop Item Prefab
-            CreateButtonPrefab("Assets/Prefabs/ShopItemPrefab.prefab", "ShopItem", 150, 60, new Color(0.3f, 0.25f, 0.1f));
+            CreateButtonPrefab("Assets/Prefabs/ShopItemPrefab.prefab", "ShopItem", 480, 90,
+                GLASS, "btn_accent.png");
 
             // Chest Item Prefab
-            CreateButtonPrefab("Assets/Prefabs/ChestItemPrefab.prefab", "ChestItem", 150, 60, new Color(0.35f, 0.2f, 0.1f));
+            CreateButtonPrefab("Assets/Prefabs/ChestItemPrefab.prefab", "ChestItem", 480, 90,
+                new Color(ACCENT.r, ACCENT.g, ACCENT.b, 0.2f), "btn_accent.png");
 
             // Member Item Prefab
-            CreateButtonPrefab("Assets/Prefabs/MemberItemPrefab.prefab", "MemberItem", 250, 40, new Color(0.15f, 0.15f, 0.25f));
+            CreateButtonPrefab("Assets/Prefabs/MemberItemPrefab.prefab", "MemberItem", 980, 55,
+                new Color(GLASS.r, GLASS.g, GLASS.b, 0.5f), "btn_secondary.png");
 
             // Upgrade Item Prefab (Prestige)
-            CreateButtonPrefab("Assets/Prefabs/UpgradeItemPrefab.prefab", "UpgradeItem", 250, 50, new Color(0.3f, 0.1f, 0.3f));
+            CreateButtonPrefab("Assets/Prefabs/UpgradeItemPrefab.prefab", "UpgradeItem", 980, 70,
+                new Color(SECONDARY.r, SECONDARY.g, SECONDARY.b, 0.3f), "btn_secondary.png");
 
             // Battle Pass Reward Prefab
-            CreateButtonPrefab("Assets/Prefabs/BattlePassRewardPrefab.prefab", "BPReward", 120, 50, new Color(0.1f, 0.3f, 0.3f));
+            CreateButtonPrefab("Assets/Prefabs/BattlePassRewardPrefab.prefab", "BPReward", 200, 70,
+                new Color(PRIMARY.r, PRIMARY.g, PRIMARY.b, 0.2f), "btn_primary.png");
         }
 
-        static void CreateButtonPrefab(string path, string name, float width, float height, Color bgColor)
+        static void CreateButtonPrefab(string path, string name, float width, float height, Color bgColor, string btnSpriteName)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
             var rt = go.GetComponent<RectTransform>();
             rt.sizeDelta = new Vector2(width, height);
             var img = go.GetComponent<Image>();
             img.color = bgColor;
+            img.type = Image.Type.Sliced;
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>($"Assets/Sprites/UI/Buttons/{btnSpriteName}");
+            if (sprite != null) img.sprite = sprite;
 
             // Add a text child
             var textGO = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
@@ -702,24 +728,36 @@ namespace ProjectEvolvion.Editor
             var textRT = textGO.GetComponent<RectTransform>();
             textRT.anchorMin = Vector2.zero;
             textRT.anchorMax = Vector2.one;
-            textRT.offsetMin = new Vector2(5, 2);
-            textRT.offsetMax = new Vector2(-5, -2);
+            textRT.offsetMin = new Vector2(8, 4);
+            textRT.offsetMax = new Vector2(-8, -4);
             var text = textGO.GetComponent<Text>();
             text.text = name;
             text.color = Color.white;
-            text.fontSize = 12;
+            text.fontSize = 14;
             text.alignment = TextAnchor.MiddleCenter;
             text.resizeTextForBestFit = true;
-            text.resizeTextMinSize = 8;
-            text.resizeTextMaxSize = 14;
+            text.resizeTextMinSize = 9;
+            text.resizeTextMaxSize = 16;
+            text.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
 
             PrefabUtility.SaveAsPrefabAsset(go, path);
             Object.DestroyImmediate(go);
         }
 
         // ============================================================
-        // SCENE SETUP
+        // SCENE SETUP (REWRITTEN)
         // ============================================================
+        static Font _defaultFont;
+        static Font DefaultFont
+        {
+            get
+            {
+                if (_defaultFont == null)
+                    _defaultFont = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+                return _defaultFont;
+            }
+        }
+
         static void SetupMainScene()
         {
             // Check if GameManager already exists
@@ -801,17 +839,53 @@ namespace ProjectEvolvion.Editor
             // UI Manager
             var uiManager = canvasGO.AddComponent<UIManager>();
 
-            // Create panels
-            var hudPanel = CreatePanel(canvasGO.transform, "HUDPanel", Color.clear);
-            var planetPanel = CreatePanel(canvasGO.transform, "PlanetPanel", new Color(0.05f, 0.05f, 0.1f, 0.95f));
-            var structurePanel = CreatePanel(canvasGO.transform, "StructurePanel", new Color(0.08f, 0.05f, 0.02f, 0.95f));
-            var combatPanel = CreatePanel(canvasGO.transform, "CombatPanel", new Color(0.1f, 0.02f, 0.02f, 0.95f));
-            var equipmentPanel = CreatePanel(canvasGO.transform, "EquipmentPanel", new Color(0.02f, 0.08f, 0.02f, 0.95f));
-            var cardAlbumPanel = CreatePanel(canvasGO.transform, "CardAlbumPanel", new Color(0.05f, 0.02f, 0.1f, 0.95f));
-            var prestigePanel = CreatePanel(canvasGO.transform, "PrestigePanel", new Color(0.1f, 0.02f, 0.1f, 0.95f));
-            var popupPanel = CreatePanel(canvasGO.transform, "PopupPanel", Color.clear);
-            var shopPanel = CreatePanel(canvasGO.transform, "ShopPanel", new Color(0.1f, 0.08f, 0.02f, 0.95f));
-            var clanPanel = CreatePanel(canvasGO.transform, "ClanPanel", new Color(0.02f, 0.05f, 0.1f, 0.95f));
+            // === BACKGROUND IMAGE ===
+            var bgGO = new GameObject("BackgroundImage", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            bgGO.transform.SetParent(canvasGO.transform, false);
+            var bgRT = bgGO.GetComponent<RectTransform>();
+            bgRT.anchorMin = Vector2.zero;
+            bgRT.anchorMax = Vector2.one;
+            bgRT.offsetMin = Vector2.zero;
+            bgRT.offsetMax = Vector2.zero;
+            var bgImg = bgGO.GetComponent<Image>();
+            bgImg.color = BG_DEEP;
+            var bgSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/bg-space.png");
+            if (bgSprite != null) { bgImg.sprite = bgSprite; bgImg.color = Color.white; }
+
+            // === TOP BAR (height 110, anchored top) ===
+            var topBarGO = CreateUIElement(canvasGO.transform, "TopBar",
+                new Vector2(0, 1), new Vector2(1, 1),
+                new Vector2(0, -110), new Vector2(0, 0), GLASS);
+            SetSpriteIfExists(topBarGO, "Assets/Sprites/UI/Panels/panel_glass.png");
+
+            // === CONTENT AREA (between top 115 and bottom 85) ===
+            var contentArea = new GameObject("ContentArea", typeof(RectTransform));
+            contentArea.transform.SetParent(canvasGO.transform, false);
+            var contentRT = contentArea.GetComponent<RectTransform>();
+            contentRT.anchorMin = Vector2.zero;
+            contentRT.anchorMax = Vector2.one;
+            contentRT.offsetMin = new Vector2(0, 85);
+            contentRT.offsetMax = new Vector2(0, -115);
+
+            // Create all panels inside ContentArea
+            var hudPanel = CreatePanel(contentArea.transform, "HUDPanel", Color.clear);
+            var planetPanel = CreatePanel(contentArea.transform, "PlanetPanel", GLASS);
+            SetSpriteIfExists(planetPanel, "Assets/Sprites/UI/Panels/panel_dark.png");
+            var structurePanel = CreatePanel(contentArea.transform, "StructurePanel", GLASS);
+            SetSpriteIfExists(structurePanel, "Assets/Sprites/UI/Panels/panel_glass.png");
+            var combatPanel = CreatePanel(contentArea.transform, "CombatPanel", GLASS);
+            SetSpriteIfExists(combatPanel, "Assets/Sprites/UI/Panels/panel_dark.png");
+            var equipmentPanel = CreatePanel(contentArea.transform, "EquipmentPanel", GLASS);
+            SetSpriteIfExists(equipmentPanel, "Assets/Sprites/UI/Panels/panel_glass.png");
+            var cardAlbumPanel = CreatePanel(contentArea.transform, "CardAlbumPanel", GLASS);
+            SetSpriteIfExists(cardAlbumPanel, "Assets/Sprites/UI/Panels/panel_dark.png");
+            var prestigePanel = CreatePanel(contentArea.transform, "PrestigePanel", GLASS);
+            SetSpriteIfExists(prestigePanel, "Assets/Sprites/UI/Panels/panel_glass.png");
+            var shopPanel = CreatePanel(contentArea.transform, "ShopPanel", GLASS);
+            SetSpriteIfExists(shopPanel, "Assets/Sprites/UI/Panels/panel_glass.png");
+            var clanPanel = CreatePanel(contentArea.transform, "ClanPanel", GLASS);
+            SetSpriteIfExists(clanPanel, "Assets/Sprites/UI/Panels/panel_dark.png");
+            var popupPanel = CreatePanel(contentArea.transform, "PopupPanel", Color.clear);
 
             // Assign to UIManager
             uiManager.hudPanel = hudPanel;
@@ -825,43 +899,40 @@ namespace ProjectEvolvion.Editor
             uiManager.shopPanel = shopPanel;
             uiManager.clanPanel = clanPanel;
 
-            // === HUD SETUP ===
-            var hudCtrl = hudPanel.AddComponent<HUDController>();
-            SetupHUD(hudPanel.transform, hudCtrl, uiManager);
+            // === BOTTOM NAV (height 80, anchored bottom) ===
+            var bottomNavGO = CreateUIElement(canvasGO.transform, "BottomNav",
+                new Vector2(0, 0), new Vector2(1, 0),
+                new Vector2(0, 0), new Vector2(0, 80), NAV_BG);
+            SetSpriteIfExists(bottomNavGO, "Assets/Sprites/UI/Panels/panel_glass.png");
 
-            // === PLANET VIEW SETUP ===
+            // === SETUP EACH PANEL ===
+            var hudCtrl = hudPanel.AddComponent<HUDController>();
+            SetupHUD(topBarGO.transform, bottomNavGO.transform, hudCtrl, uiManager);
+
             var planetCtrl = planetPanel.AddComponent<PlanetViewController>();
             SetupPlanetView(planetPanel.transform, planetCtrl);
 
-            // === STRUCTURE PANEL SETUP ===
             var structCtrl = structurePanel.AddComponent<StructurePanelUI>();
             SetupStructurePanel(structurePanel.transform, structCtrl);
 
-            // === COMBAT PANEL SETUP ===
             var combatCtrl = combatPanel.AddComponent<CombatUI>();
             SetupCombatPanel(combatPanel.transform, combatCtrl, uiManager);
 
-            // === EQUIPMENT PANEL SETUP ===
             var equipCtrl = equipmentPanel.AddComponent<EquipmentUI>();
             SetupEquipmentPanel(equipmentPanel.transform, equipCtrl);
 
-            // === CARD ALBUM SETUP ===
             var cardCtrl = cardAlbumPanel.AddComponent<CardAlbumUI>();
             SetupCardAlbumPanel(cardAlbumPanel.transform, cardCtrl);
 
-            // === PRESTIGE PANEL SETUP ===
             var prestCtrl = prestigePanel.AddComponent<PrestigeUI>();
             SetupPrestigePanel(prestigePanel.transform, prestCtrl);
 
-            // === POPUP SETUP ===
             var popupCtrl = popupPanel.AddComponent<PopupController>();
             SetupPopupPanel(popupPanel.transform, popupCtrl);
 
-            // === SHOP PANEL SETUP ===
             var shopCtrl = shopPanel.AddComponent<ShopUI>();
             SetupShopPanel(shopPanel.transform, shopCtrl);
 
-            // === CLAN PANEL SETUP ===
             var clanCtrl = clanPanel.AddComponent<ClanUI>();
             SetupClanPanel(clanPanel.transform, clanCtrl);
 
@@ -873,91 +944,141 @@ namespace ProjectEvolvion.Editor
         }
 
         // ============================================================
-        // HUD SETUP
+        // HUD SETUP (TopBar + BottomNav)
         // ============================================================
-        static void SetupHUD(Transform parent, HUDController ctrl, UIManager uiManager)
+        static void SetupHUD(Transform topBar, Transform bottomNav, HUDController ctrl, UIManager uiManager)
         {
-            // Top bar with resources
-            var topBar = CreateUIElement(parent, "TopBar", new Vector2(0, 0), new Vector2(1, 1),
-                new Vector2(0, -40), new Vector2(0, -10), new Color(0.1f, 0.1f, 0.15f, 0.9f));
+            // --- TOP BAR CONTENTS ---
 
-            // Resource texts
-            ctrl.stoneText = CreateText(topBar.transform, "StoneText", "Stone: 0", TextAnchor.MiddleLeft,
-                new Vector2(0, 0.5f), new Vector2(0.16f, 1f), new Vector2(10, 0), new Vector2(0, 0)).GetComponent<Text>();
-            ctrl.woodText = CreateText(topBar.transform, "WoodText", "Wood: 0", TextAnchor.MiddleLeft,
-                new Vector2(0.16f, 0.5f), new Vector2(0.33f, 1f), new Vector2(0, 0), new Vector2(0, 0)).GetComponent<Text>();
-            ctrl.foodText = CreateText(topBar.transform, "FoodText", "Food: 0", TextAnchor.MiddleLeft,
-                new Vector2(0.33f, 0.5f), new Vector2(0.5f, 1f), new Vector2(0, 0), new Vector2(0, 0)).GetComponent<Text>();
-            ctrl.bronzeText = CreateText(topBar.transform, "BronzeText", "Bronze: 0", TextAnchor.MiddleLeft,
-                new Vector2(0, 0), new Vector2(0.16f, 0.5f), new Vector2(10, 0), new Vector2(0, 0)).GetComponent<Text>();
-            ctrl.energyText = CreateText(topBar.transform, "EnergyText", "Energy: 0", TextAnchor.MiddleLeft,
-                new Vector2(0.16f, 0), new Vector2(0.33f, 0.5f), new Vector2(0, 0), new Vector2(0, 0)).GetComponent<Text>();
-            ctrl.diamondText = CreateText(topBar.transform, "DiamondText", "Diamonds: 0", TextAnchor.MiddleLeft,
-                new Vector2(0.33f, 0), new Vector2(0.5f, 0.5f), new Vector2(0, 0), new Vector2(0, 0)).GetComponent<Text>();
+            // Title "EVOLVION" (left side)
+            var titleText = CreateText(topBar, "TitleText", "EVOLVION", TextAnchor.MiddleLeft,
+                new Vector2(0, 0.5f), new Vector2(0.15f, 1f), new Vector2(15, 0), new Vector2(0, -5));
+            titleText.GetComponent<Text>().color = PRIMARY;
+            titleText.GetComponent<Text>().fontSize = 18;
+            titleText.GetComponent<Text>().resizeTextForBestFit = false;
 
-            // Era info
-            ctrl.eraText = CreateText(topBar.transform, "EraText", "Edad de Piedra", TextAnchor.MiddleCenter,
-                new Vector2(0.55f, 0.5f), new Vector2(0.85f, 1f), new Vector2(0, 0), new Vector2(0, 0)).GetComponent<Text>();
-            ctrl.arisLevelText = CreateText(topBar.transform, "ArisLevelText", "Aris Nv.1", TextAnchor.MiddleCenter,
-                new Vector2(0.85f, 0.5f), new Vector2(1f, 1f), new Vector2(0, -5), new Vector2(-5, 0)).GetComponent<Text>();
+            // Era badge (center)
+            var eraBadge = CreateUIElement(topBar, "EraBadge",
+                new Vector2(0.35f, 0.55f), new Vector2(0.65f, 0.95f),
+                new Vector2(0, 0), new Vector2(0, -5),
+                new Color(SECONDARY.r, SECONDARY.g, SECONDARY.b, 0.3f));
+            ctrl.eraText = CreateText(eraBadge.transform, "EraText", "Edad de Piedra", TextAnchor.MiddleCenter,
+                Vector2.zero, Vector2.one, new Vector2(5, 2), new Vector2(-5, -2)).GetComponent<Text>();
+            ctrl.eraText.fontSize = 12;
+            ctrl.eraText.color = PRIMARY;
 
-            // Era progress slider
-            var sliderGO = new GameObject("EraProgressSlider", typeof(RectTransform), typeof(Slider));
-            sliderGO.transform.SetParent(topBar.transform, false);
-            var sliderRT = sliderGO.GetComponent<RectTransform>();
-            sliderRT.anchorMin = new Vector2(0.55f, 0f);
-            sliderRT.anchorMax = new Vector2(1f, 0.45f);
-            sliderRT.offsetMin = new Vector2(5, 5);
-            sliderRT.offsetMax = new Vector2(-5, -2);
+            // Aris level (right of era)
+            ctrl.arisLevelText = CreateText(topBar, "ArisLevelText", "Aris Nv.1", TextAnchor.MiddleRight,
+                new Vector2(0.82f, 0.55f), new Vector2(0.98f, 0.95f), new Vector2(0, 0), new Vector2(-8, -5)).GetComponent<Text>();
+            ctrl.arisLevelText.fontSize = 11;
+            ctrl.arisLevelText.color = ACCENT;
 
-            // Slider background
-            var sliderBg = CreateUIElement(sliderGO.transform, "Background", Vector2.zero, Vector2.one,
-                Vector2.zero, Vector2.zero, new Color(0.2f, 0.2f, 0.2f));
-            var fillArea = new GameObject("Fill Area", typeof(RectTransform));
-            fillArea.transform.SetParent(sliderGO.transform, false);
-            var fillAreaRT = fillArea.GetComponent<RectTransform>();
-            fillAreaRT.anchorMin = Vector2.zero;
-            fillAreaRT.anchorMax = Vector2.one;
-            fillAreaRT.offsetMin = Vector2.zero;
-            fillAreaRT.offsetMax = Vector2.zero;
-            var fill = CreateUIElement(fillArea.transform, "Fill", Vector2.zero, new Vector2(0.5f, 1),
-                Vector2.zero, Vector2.zero, new Color(0.2f, 0.6f, 0.2f));
+            // Era progress slider (bottom strip of top bar)
+            var eraSliderGO = CreateSlider(topBar, "EraProgressSlider",
+                new Vector2(0.15f, 0.02f), new Vector2(0.85f, 0.14f), PRIMARY);
+            ctrl.eraProgressSlider = eraSliderGO.GetComponent<Slider>();
 
-            var slider = sliderGO.GetComponent<Slider>();
-            slider.fillRect = fill.GetComponent<RectTransform>();
-            slider.interactable = false;
-            ctrl.eraProgressSlider = slider;
+            // Planet name text (left of era slider area)
+            ctrl.planetNameText = CreateText(topBar, "PlanetNameText", "Porera", TextAnchor.MiddleLeft,
+                new Vector2(0.15f, 0.14f), new Vector2(0.35f, 0.5f), new Vector2(5, 0), new Vector2(0, 0)).GetComponent<Text>();
+            ctrl.planetNameText.fontSize = 11;
+            ctrl.planetNameText.color = TEXT_MUTED;
 
-            // Bottom bar with navigation buttons
-            var bottomBar = CreateUIElement(parent, "BottomBar", new Vector2(0, 0), new Vector2(1, 0),
-                new Vector2(0, 0), new Vector2(0, 70), new Color(0.1f, 0.1f, 0.15f, 0.95f));
+            // --- RESOURCE ROW (lower portion of top bar) ---
+            var resourceRow = new GameObject("ResourceRow", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+            resourceRow.transform.SetParent(topBar, false);
+            var rrRT = resourceRow.GetComponent<RectTransform>();
+            rrRT.anchorMin = new Vector2(0.02f, 0.15f);
+            rrRT.anchorMax = new Vector2(0.98f, 0.52f);
+            rrRT.offsetMin = Vector2.zero;
+            rrRT.offsetMax = Vector2.zero;
+            var rrHLG = resourceRow.GetComponent<HorizontalLayoutGroup>();
+            rrHLG.spacing = 4;
+            rrHLG.childForceExpandWidth = true;
+            rrHLG.childForceExpandHeight = true;
+            rrHLG.childControlWidth = true;
+            rrHLG.childControlHeight = true;
+            rrHLG.childAlignment = TextAnchor.MiddleCenter;
 
-            string[] btnNames = { "Estructuras", "Combate", "Equipo", "Cartas", "Prestigio", "Tienda", "Clan", "Avanzar Era" };
-            for (int i = 0; i < btnNames.Length; i++)
-            {
-                float xMin = (float)i / btnNames.Length;
-                float xMax = (float)(i + 1) / btnNames.Length;
-                var btn = CreateButton(bottomBar.transform, btnNames[i] + "Btn", btnNames[i],
-                    new Vector2(xMin, 0), new Vector2(xMax, 1), new Vector2(2, 5), new Vector2(-2, -5),
-                    new Color(0.2f, 0.25f, 0.35f));
+            // Create 6 resource displays: stone, wood, food, bronze, energy, diamonds
+            ctrl.stoneText = CreateResourceDisplay(resourceRow.transform, "Stone", "0",
+                "Assets/Sprites/UI/Icons/Resources/icon_stone.png");
+            ctrl.woodText = CreateResourceDisplay(resourceRow.transform, "Wood", "0",
+                "Assets/Sprites/UI/Icons/Resources/icon_wood.png");
+            ctrl.foodText = CreateResourceDisplay(resourceRow.transform, "Food", "0",
+                "Assets/Sprites/UI/Icons/Resources/icon_food.png");
+            ctrl.bronzeText = CreateResourceDisplay(resourceRow.transform, "Bronze", "0",
+                "Assets/Sprites/UI/Icons/Resources/icon_bronze.png");
+            ctrl.energyText = CreateResourceDisplay(resourceRow.transform, "Energy", "0",
+                "Assets/Sprites/UI/Icons/Resources/icon_energy.png");
+            ctrl.diamondText = CreateResourceDisplay(resourceRow.transform, "Diamond", "0",
+                "Assets/Sprites/UI/Icons/Resources/icon_diamonds.png");
 
-                var buttonComp = btn.GetComponent<Button>();
-                switch (i)
-                {
-                    case 0: ctrl.structuresButton = buttonComp; break;
-                    case 1: ctrl.combatButton = buttonComp; break;
-                    case 2: ctrl.equipmentButton = buttonComp; break;
-                    case 3: ctrl.cardsButton = buttonComp; break;
-                    case 4: ctrl.prestigeButton = buttonComp; break;
-                    case 5:
-                        buttonComp.onClick.AddListener(() => uiManager.ShowOnlyPanel(PanelType.Shop));
-                        break;
-                    case 6:
-                        buttonComp.onClick.AddListener(() => uiManager.ShowOnlyPanel(PanelType.Clan));
-                        break;
-                    case 7: ctrl.advanceEraButton = buttonComp; break;
-                }
-            }
+            // --- BOTTOM NAV BUTTONS ---
+            // 5 buttons: Shop, Structures, Planet(center elevated), Combat, Cards
+
+            // Shop button (leftmost)
+            var shopBtn = CreateNavButton(bottomNav, "ShopBtn", "Tienda",
+                new Vector2(0, 0), new Vector2(0.2f, 1f),
+                "Assets/Sprites/UI/Icons/Nav/icon_shop.png", false);
+            shopBtn.GetComponent<Button>().onClick.AddListener(() => uiManager.ShowOnlyPanel(PanelType.Shop));
+
+            // Structures button
+            var structBtn = CreateNavButton(bottomNav, "StructuresBtn", "Estructuras",
+                new Vector2(0.2f, 0), new Vector2(0.4f, 1f),
+                "Assets/Sprites/UI/Icons/Nav/icon_structures.png", false);
+            ctrl.structuresButton = structBtn.GetComponent<Button>();
+
+            // Planet button (CENTER, elevated circular)
+            var planetBtnGO = new GameObject("PlanetBtn", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+            planetBtnGO.transform.SetParent(bottomNav, false);
+            var planetBtnRT = planetBtnGO.GetComponent<RectTransform>();
+            planetBtnRT.anchorMin = new Vector2(0.5f, 0.5f);
+            planetBtnRT.anchorMax = new Vector2(0.5f, 0.5f);
+            planetBtnRT.anchoredPosition = new Vector2(0, 20);
+            planetBtnRT.sizeDelta = new Vector2(70, 70);
+            var planetBtnImg = planetBtnGO.GetComponent<Image>();
+            planetBtnImg.color = new Color(SUCCESS.r, SUCCESS.g, SUCCESS.b, 0.9f);
+            var planetBtnSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Buttons/btn_primary.png");
+            if (planetBtnSprite != null) { planetBtnImg.sprite = planetBtnSprite; planetBtnImg.type = Image.Type.Sliced; }
+            // Planet icon inside
+            var planetIconGO = new GameObject("Icon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            planetIconGO.transform.SetParent(planetBtnGO.transform, false);
+            var planetIconRT = planetIconGO.GetComponent<RectTransform>();
+            planetIconRT.anchorMin = new Vector2(0.15f, 0.15f);
+            planetIconRT.anchorMax = new Vector2(0.85f, 0.85f);
+            planetIconRT.offsetMin = Vector2.zero;
+            planetIconRT.offsetMax = Vector2.zero;
+            var planetNavIcon = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Icons/Nav/icon_home.png");
+            if (planetNavIcon != null) planetIconGO.GetComponent<Image>().sprite = planetNavIcon;
+            planetIconGO.GetComponent<Image>().color = Color.white;
+            // Assign planet button -- we use advanceEraButton or a dedicated nav action
+            // Planet button shows planet panel
+            ctrl.advanceEraButton = planetBtnGO.GetComponent<Button>();
+
+            // Combat button
+            var combatBtn = CreateNavButton(bottomNav, "CombatBtn", "Combate",
+                new Vector2(0.6f, 0), new Vector2(0.8f, 1f),
+                "Assets/Sprites/UI/Icons/Nav/icon_combat.png", false);
+            ctrl.combatButton = combatBtn.GetComponent<Button>();
+
+            // Cards button (rightmost)
+            var cardsBtn = CreateNavButton(bottomNav, "CardsBtn", "Cartas",
+                new Vector2(0.8f, 0), new Vector2(1f, 1f),
+                "Assets/Sprites/UI/Icons/Nav/icon_cards.png", false);
+            ctrl.cardsButton = cardsBtn.GetComponent<Button>();
+
+            // Equipment and prestige buttons -- these are not in the bottom nav visually
+            // but we need to assign them. We create hidden buttons on the HUD panel.
+            var equipHiddenBtn = new GameObject("EquipmentBtn_Hidden", typeof(RectTransform), typeof(Button));
+            equipHiddenBtn.transform.SetParent(bottomNav.parent.Find("ContentArea/HUDPanel"), false);
+            equipHiddenBtn.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
+            ctrl.equipmentButton = equipHiddenBtn.GetComponent<Button>();
+
+            var prestigeHiddenBtn = new GameObject("PrestigeBtn_Hidden", typeof(RectTransform), typeof(Button));
+            prestigeHiddenBtn.transform.SetParent(bottomNav.parent.Find("ContentArea/HUDPanel"), false);
+            prestigeHiddenBtn.GetComponent<RectTransform>().sizeDelta = Vector2.zero;
+            ctrl.prestigeButton = prestigeHiddenBtn.GetComponent<Button>();
         }
 
         // ============================================================
@@ -965,32 +1086,35 @@ namespace ProjectEvolvion.Editor
         // ============================================================
         static void SetupPlanetView(Transform parent, PlanetViewController ctrl)
         {
-            // Title area
-            var title = CreateText(parent, "PlanetName", "Porera", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.88f), new Vector2(0.9f, 0.95f), Vector2.zero, Vector2.zero);
-            ctrl.planetNameText = title.GetComponent<Text>();
-            title.GetComponent<Text>().fontSize = 24;
+            // Planet name (large, top)
+            var titleGO = CreateText(parent, "PlanetName", "Porera", TextAnchor.MiddleCenter,
+                new Vector2(0.1f, 0.88f), new Vector2(0.9f, 0.97f), Vector2.zero, Vector2.zero);
+            ctrl.planetNameText = titleGO.GetComponent<Text>();
+            ctrl.planetNameText.fontSize = 28;
+            ctrl.planetNameText.color = PRIMARY;
 
-            var eraName = CreateText(parent, "EraName", "Edad de Piedra", TextAnchor.MiddleCenter,
+            // Era name
+            var eraNameGO = CreateText(parent, "EraName", "Edad de Piedra", TextAnchor.MiddleCenter,
                 new Vector2(0.2f, 0.83f), new Vector2(0.8f, 0.88f), Vector2.zero, Vector2.zero);
-            ctrl.eraNameText = eraName.GetComponent<Text>();
+            ctrl.eraNameText = eraNameGO.GetComponent<Text>();
+            ctrl.eraNameText.color = TEXT_MUTED;
 
-            // Structure container with vertical layout
-            var container = new GameObject("StructureContainer", typeof(RectTransform), typeof(VerticalLayoutGroup), typeof(ContentSizeFitter));
-            container.transform.SetParent(parent, false);
-            var contRT = container.GetComponent<RectTransform>();
-            contRT.anchorMin = new Vector2(0.05f, 0.15f);
-            contRT.anchorMax = new Vector2(0.95f, 0.82f);
-            contRT.offsetMin = Vector2.zero;
-            contRT.offsetMax = Vector2.zero;
-            var vlg = container.GetComponent<VerticalLayoutGroup>();
-            vlg.spacing = 8;
-            vlg.childForceExpandWidth = true;
-            vlg.childForceExpandHeight = false;
-            vlg.childControlWidth = true;
-            vlg.childControlHeight = false;
+            // Planet image (large center)
+            var planetImgGO = new GameObject("PlanetImage", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            planetImgGO.transform.SetParent(parent, false);
+            var piRT = planetImgGO.GetComponent<RectTransform>();
+            piRT.anchorMin = new Vector2(0.2f, 0.45f);
+            piRT.anchorMax = new Vector2(0.8f, 0.82f);
+            piRT.offsetMin = Vector2.zero;
+            piRT.offsetMax = Vector2.zero;
+            var piImg = planetImgGO.GetComponent<Image>();
+            piImg.color = new Color(0.3f, 0.7f, 0.3f, 0.5f);
+            ctrl.planetImage = piImg;
 
-            ctrl.structureContainer = container.transform;
+            // Structure container with vertical layout (lower area)
+            var scrollView = CreateScrollView(parent, "StructureScroll",
+                new Vector2(0.03f, 0.05f), new Vector2(0.97f, 0.43f));
+            ctrl.structureContainer = scrollView.transform.Find("Viewport/Content");
 
             // Load prefab
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/StructureSlotPrefab.prefab");
@@ -1002,42 +1126,54 @@ namespace ProjectEvolvion.Editor
         // ============================================================
         static void SetupStructurePanel(Transform parent, StructurePanelUI ctrl)
         {
-            var title = CreateText(parent, "Title", "ESTRUCTURAS", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.92f), new Vector2(0.7f, 0.98f), Vector2.zero, Vector2.zero);
-            title.GetComponent<Text>().fontSize = 22;
+            // Title
+            var titleGO = CreateText(parent, "Title", "ESTRUCTURAS", TextAnchor.MiddleCenter,
+                new Vector2(0.1f, 0.92f), new Vector2(0.8f, 0.99f), Vector2.zero, Vector2.zero);
+            titleGO.GetComponent<Text>().fontSize = 22;
+            titleGO.GetComponent<Text>().color = PRIMARY;
 
-            // Close button
-            var closeBtn = CreateButton(parent, "CloseBtn", "X",
-                new Vector2(0.85f, 0.93f), new Vector2(0.95f, 0.98f), Vector2.zero, Vector2.zero,
-                new Color(0.5f, 0.1f, 0.1f));
+            // Close button (top right)
+            var closeBtn = CreateIconButton(parent, "CloseBtn", "X",
+                new Vector2(0.88f, 0.93f), new Vector2(0.97f, 0.99f),
+                DANGER, "Assets/Sprites/UI/Buttons/btn_close.png");
             ctrl.closeButton = closeBtn.GetComponent<Button>();
 
-            // List container
+            // Scrollable structure list
             var scrollView = CreateScrollView(parent, "StructureList",
-                new Vector2(0.05f, 0.35f), new Vector2(0.95f, 0.92f));
+                new Vector2(0.03f, 0.30f), new Vector2(0.97f, 0.92f));
             ctrl.structureListContainer = scrollView.transform.Find("Viewport/Content");
 
             var prefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/StructureItemPrefab.prefab");
             ctrl.structureItemPrefab = prefab;
 
-            // Detail panel
+            // Detail panel (glass, bottom)
             var detailPanel = CreateUIElement(parent, "DetailPanel",
-                new Vector2(0.05f, 0.05f), new Vector2(0.95f, 0.33f),
-                Vector2.zero, Vector2.zero, new Color(0.15f, 0.12f, 0.08f, 0.95f));
+                new Vector2(0.03f, 0.02f), new Vector2(0.97f, 0.28f),
+                Vector2.zero, Vector2.zero, GLASS);
+            SetSpriteIfExists(detailPanel, "Assets/Sprites/UI/Panels/panel_glass.png");
             ctrl.detailPanel = detailPanel;
 
             ctrl.detailNameText = CreateText(detailPanel.transform, "DetailName", "Nombre", TextAnchor.MiddleCenter,
                 new Vector2(0.05f, 0.75f), new Vector2(0.95f, 0.95f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.detailNameText.color = PRIMARY;
+            ctrl.detailNameText.fontSize = 16;
+
             ctrl.detailLevelText = CreateText(detailPanel.transform, "DetailLevel", "Nivel: 0", TextAnchor.MiddleLeft,
                 new Vector2(0.05f, 0.55f), new Vector2(0.5f, 0.75f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.detailProductionText = CreateText(detailPanel.transform, "DetailProd", "+0/s", TextAnchor.MiddleLeft,
+            ctrl.detailLevelText.color = Color.white;
+
+            ctrl.detailProductionText = CreateText(detailPanel.transform, "DetailProd", "+0/s", TextAnchor.MiddleRight,
                 new Vector2(0.5f, 0.55f), new Vector2(0.95f, 0.75f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.detailProductionText.color = SUCCESS;
+
             ctrl.detailCostText = CreateText(detailPanel.transform, "DetailCost", "Costo: 0", TextAnchor.MiddleLeft,
                 new Vector2(0.05f, 0.35f), new Vector2(0.95f, 0.55f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.detailCostText.color = ACCENT;
 
-            var buildBtn = CreateButton(detailPanel.transform, "BuildUpgradeBtn", "Construir",
-                new Vector2(0.2f, 0.05f), new Vector2(0.8f, 0.3f), new Vector2(0, 0), new Vector2(0, 0),
-                new Color(0.1f, 0.4f, 0.1f));
+            // Build/Upgrade button (green)
+            var buildBtn = CreateIconButton(detailPanel.transform, "BuildUpgradeBtn", "Construir",
+                new Vector2(0.2f, 0.03f), new Vector2(0.8f, 0.32f),
+                SUCCESS, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.buildUpgradeButton = buildBtn.GetComponent<Button>();
             ctrl.buildUpgradeButtonText = buildBtn.GetComponentInChildren<Text>();
         }
@@ -1047,65 +1183,108 @@ namespace ProjectEvolvion.Editor
         // ============================================================
         static void SetupCombatPanel(Transform parent, CombatUI ctrl, UIManager uiManager)
         {
-            var title = CreateText(parent, "Title", "COMBATE", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.92f), new Vector2(0.9f, 0.98f), Vector2.zero, Vector2.zero);
-            title.GetComponent<Text>().fontSize = 22;
+            // Title
+            var titleGO = CreateText(parent, "Title", "COMBATE", TextAnchor.MiddleCenter,
+                new Vector2(0.1f, 0.93f), new Vector2(0.9f, 0.99f), Vector2.zero, Vector2.zero);
+            titleGO.GetComponent<Text>().fontSize = 22;
+            titleGO.GetComponent<Text>().color = PRIMARY;
 
-            // Aris info
+            // --- ARIS side (left) ---
             ctrl.arisNameText = CreateText(parent, "ArisName", "Aris", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.82f), new Vector2(0.45f, 0.88f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.03f, 0.85f), new Vector2(0.47f, 0.92f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.arisNameText.color = PRIMARY;
+            ctrl.arisNameText.fontSize = 16;
+
             ctrl.arisStatsText = CreateText(parent, "ArisStats", "ATK:0 DEF:0 HP:0", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.88f), new Vector2(0.45f, 0.92f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.03f, 0.80f), new Vector2(0.47f, 0.85f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.arisStatsText.color = TEXT_MUTED;
+            ctrl.arisStatsText.fontSize = 10;
+
             ctrl.arisHPText = CreateText(parent, "ArisHP", "HP: 100/100", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.76f), new Vector2(0.45f, 0.82f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.03f, 0.74f), new Vector2(0.47f, 0.80f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.arisHPText.color = Color.white;
 
-            var arisSliderGO = CreateSlider(parent, "ArisHPBar",
-                new Vector2(0.05f, 0.72f), new Vector2(0.45f, 0.76f), new Color(0.2f, 0.7f, 0.2f));
-            ctrl.arisHPBar = arisSliderGO.GetComponent<Slider>();
+            var arisHPSliderGO = CreateSlider(parent, "ArisHPBar",
+                new Vector2(0.05f, 0.70f), new Vector2(0.45f, 0.74f), SUCCESS);
+            ctrl.arisHPBar = arisHPSliderGO.GetComponent<Slider>();
 
-            // Enemy info
+            // --- VS display ---
+            var vsText = CreateText(parent, "VSText", "VS", TextAnchor.MiddleCenter,
+                new Vector2(0.44f, 0.74f), new Vector2(0.56f, 0.85f), Vector2.zero, Vector2.zero);
+            vsText.GetComponent<Text>().fontSize = 24;
+            vsText.GetComponent<Text>().color = ACCENT;
+
+            // --- ENEMY side (right) ---
             ctrl.enemyNameText = CreateText(parent, "EnemyName", "Enemigo", TextAnchor.MiddleCenter,
-                new Vector2(0.55f, 0.82f), new Vector2(0.95f, 0.88f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.53f, 0.85f), new Vector2(0.97f, 0.92f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.enemyNameText.color = DANGER;
+            ctrl.enemyNameText.fontSize = 16;
+
             ctrl.enemyHPText = CreateText(parent, "EnemyHP", "HP: 50/50", TextAnchor.MiddleCenter,
-                new Vector2(0.55f, 0.76f), new Vector2(0.95f, 0.82f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.53f, 0.74f), new Vector2(0.97f, 0.80f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.enemyHPText.color = Color.white;
 
-            var enemySliderGO = CreateSlider(parent, "EnemyHPBar",
-                new Vector2(0.55f, 0.72f), new Vector2(0.95f, 0.76f), new Color(0.7f, 0.2f, 0.2f));
-            ctrl.enemyHPBar = enemySliderGO.GetComponent<Slider>();
+            var enemyHPSliderGO = CreateSlider(parent, "EnemyHPBar",
+                new Vector2(0.55f, 0.70f), new Vector2(0.95f, 0.74f), DANGER);
+            ctrl.enemyHPBar = enemyHPSliderGO.GetComponent<Slider>();
 
-            // Combat log and rewards
-            ctrl.combatLogText = CreateText(parent, "CombatLog", "Esperando combate...", TextAnchor.UpperLeft,
-                new Vector2(0.05f, 0.25f), new Vector2(0.95f, 0.70f), new Vector2(10, 10), new Vector2(-10, -10)).GetComponent<Text>();
+            // Enemy icon
+            var enemyIconGO = new GameObject("EnemyIcon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            enemyIconGO.transform.SetParent(parent, false);
+            var eiRT = enemyIconGO.GetComponent<RectTransform>();
+            eiRT.anchorMin = new Vector2(0.65f, 0.55f);
+            eiRT.anchorMax = new Vector2(0.85f, 0.70f);
+            eiRT.offsetMin = Vector2.zero;
+            eiRT.offsetMax = Vector2.zero;
+            enemyIconGO.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+            ctrl.enemyIcon = enemyIconGO.GetComponent<Image>();
+
+            // Combat log (scrollable text area)
+            var logBg = CreateUIElement(parent, "CombatLogBG",
+                new Vector2(0.03f, 0.22f), new Vector2(0.97f, 0.54f),
+                Vector2.zero, Vector2.zero, new Color(BG_DEEP.r, BG_DEEP.g, BG_DEEP.b, 0.6f));
+            ctrl.combatLogText = CreateText(logBg.transform, "CombatLog", "Esperando combate...", TextAnchor.UpperLeft,
+                Vector2.zero, Vector2.one, new Vector2(12, 8), new Vector2(-12, -8)).GetComponent<Text>();
             ctrl.combatLogText.fontSize = 11;
-            ctrl.rewardsText = CreateText(parent, "RewardsText", "", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.20f), new Vector2(0.95f, 0.25f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.combatLogText.color = Color.white;
+            ctrl.combatLogText.resizeTextForBestFit = false;
 
-            // Result panel
+            // Rewards text
+            ctrl.rewardsText = CreateText(parent, "RewardsText", "", TextAnchor.MiddleCenter,
+                new Vector2(0.03f, 0.17f), new Vector2(0.97f, 0.22f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.rewardsText.color = ACCENT;
+
+            // Result panel (overlay)
             var resultPanel = CreateUIElement(parent, "ResultPanel",
-                new Vector2(0.15f, 0.35f), new Vector2(0.85f, 0.65f),
-                Vector2.zero, Vector2.zero, new Color(0.05f, 0.05f, 0.1f, 0.95f));
+                new Vector2(0.12f, 0.30f), new Vector2(0.88f, 0.65f),
+                Vector2.zero, Vector2.zero, GLASS);
+            SetSpriteIfExists(resultPanel, "Assets/Sprites/UI/Panels/panel_popup.png");
             ctrl.resultPanel = resultPanel;
+
             ctrl.resultTitleText = CreateText(resultPanel.transform, "ResultTitle", "Victoria!", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.5f), new Vector2(0.9f, 0.9f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.resultTitleText.fontSize = 20;
+                new Vector2(0.1f, 0.55f), new Vector2(0.9f, 0.9f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.resultTitleText.fontSize = 22;
+            ctrl.resultTitleText.color = ACCENT;
+
             ctrl.resultDetailsText = CreateText(resultPanel.transform, "ResultDetails", "", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.1f), new Vector2(0.9f, 0.5f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.1f, 0.1f), new Vector2(0.9f, 0.55f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.resultDetailsText.color = Color.white;
             resultPanel.SetActive(false);
 
-            // Buttons
-            var startBtn = CreateButton(parent, "StartCombatBtn", "Iniciar Combate",
-                new Vector2(0.1f, 0.08f), new Vector2(0.35f, 0.18f), Vector2.zero, Vector2.zero,
-                new Color(0.1f, 0.4f, 0.1f));
+            // Buttons row
+            var startBtn = CreateIconButton(parent, "StartCombatBtn", "Iniciar Combate",
+                new Vector2(0.05f, 0.04f), new Vector2(0.35f, 0.15f),
+                SUCCESS, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.startCombatButton = startBtn.GetComponent<Button>();
 
-            var endBtn = CreateButton(parent, "EndCombatBtn", "Terminar",
-                new Vector2(0.37f, 0.08f), new Vector2(0.63f, 0.18f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.3f, 0.1f));
+            var endBtn = CreateIconButton(parent, "EndCombatBtn", "Terminar",
+                new Vector2(0.37f, 0.04f), new Vector2(0.63f, 0.15f),
+                ACCENT, "Assets/Sprites/UI/Buttons/btn_accent.png");
             ctrl.endCombatButton = endBtn.GetComponent<Button>();
 
-            var closeBtn = CreateButton(parent, "CloseCombatBtn", "Volver",
-                new Vector2(0.65f, 0.08f), new Vector2(0.9f, 0.18f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.1f, 0.1f));
+            var closeBtn = CreateIconButton(parent, "CloseCombatBtn", "Volver",
+                new Vector2(0.65f, 0.04f), new Vector2(0.95f, 0.15f),
+                DANGER, "Assets/Sprites/UI/Buttons/btn_danger.png");
             ctrl.closeButton = closeBtn.GetComponent<Button>();
         }
 
@@ -1114,79 +1293,108 @@ namespace ProjectEvolvion.Editor
         // ============================================================
         static void SetupEquipmentPanel(Transform parent, EquipmentUI ctrl)
         {
-            var title = CreateText(parent, "Title", "EQUIPAMIENTO", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.92f), new Vector2(0.9f, 0.98f), Vector2.zero, Vector2.zero);
-            title.GetComponent<Text>().fontSize = 22;
+            // Title
+            var titleGO = CreateText(parent, "Title", "EQUIPAMIENTO", TextAnchor.MiddleCenter,
+                new Vector2(0.1f, 0.93f), new Vector2(0.8f, 0.99f), Vector2.zero, Vector2.zero);
+            titleGO.GetComponent<Text>().fontSize = 22;
+            titleGO.GetComponent<Text>().color = PRIMARY;
 
-            // Equipped slots (container with Image + child Text)
-            var helmetSlot = CreateUIElement(parent, "Slot_Casco",
-                new Vector2(0.01f, 0.78f), new Vector2(0.24f, 0.90f), Vector2.zero, Vector2.zero, new Color(0.15f, 0.2f, 0.15f, 0.5f));
+            // Close button
+            var closeBtn = CreateIconButton(parent, "CloseBtn", "X",
+                new Vector2(0.88f, 0.93f), new Vector2(0.97f, 0.99f),
+                DANGER, "Assets/Sprites/UI/Buttons/btn_close.png");
+            ctrl.closeButton = closeBtn.GetComponent<Button>();
+
+            // 2x2 equipment slot grid (top area)
+            var slotContainer = CreateUIElement(parent, "SlotGrid",
+                new Vector2(0.05f, 0.76f), new Vector2(0.95f, 0.92f),
+                Vector2.zero, Vector2.zero, Color.clear);
+
+            // Helmet (top-left)
+            var helmetSlot = CreateUIElement(slotContainer.transform, "Slot_Casco",
+                new Vector2(0, 0.5f), new Vector2(0.48f, 1f),
+                new Vector2(4, 4), new Vector2(-4, -4),
+                new Color(GLASS.r, GLASS.g, GLASS.b, 0.6f));
             ctrl.helmetText = CreateText(helmetSlot.transform, "Text", "[Casco]\nVacio", TextAnchor.MiddleCenter,
-                Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.helmetText.fontSize = 10;
+                Vector2.zero, Vector2.one, new Vector2(4, 2), new Vector2(-4, -2)).GetComponent<Text>();
+            ctrl.helmetText.fontSize = 11;
+            ctrl.helmetText.color = Color.white;
 
-            var weaponSlot = CreateUIElement(parent, "Slot_Arma",
-                new Vector2(0.26f, 0.78f), new Vector2(0.49f, 0.90f), Vector2.zero, Vector2.zero, new Color(0.15f, 0.2f, 0.15f, 0.5f));
+            // Weapon (top-right)
+            var weaponSlot = CreateUIElement(slotContainer.transform, "Slot_Arma",
+                new Vector2(0.52f, 0.5f), new Vector2(1f, 1f),
+                new Vector2(4, 4), new Vector2(-4, -4),
+                new Color(GLASS.r, GLASS.g, GLASS.b, 0.6f));
             ctrl.weaponText = CreateText(weaponSlot.transform, "Text", "[Arma]\nVacio", TextAnchor.MiddleCenter,
-                Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.weaponText.fontSize = 10;
+                Vector2.zero, Vector2.one, new Vector2(4, 2), new Vector2(-4, -2)).GetComponent<Text>();
+            ctrl.weaponText.fontSize = 11;
+            ctrl.weaponText.color = Color.white;
 
-            var armorSlot = CreateUIElement(parent, "Slot_Armadura",
-                new Vector2(0.51f, 0.78f), new Vector2(0.74f, 0.90f), Vector2.zero, Vector2.zero, new Color(0.15f, 0.2f, 0.15f, 0.5f));
+            // Armor (bottom-left)
+            var armorSlot = CreateUIElement(slotContainer.transform, "Slot_Armadura",
+                new Vector2(0, 0), new Vector2(0.48f, 0.48f),
+                new Vector2(4, 4), new Vector2(-4, -4),
+                new Color(GLASS.r, GLASS.g, GLASS.b, 0.6f));
             ctrl.armorText = CreateText(armorSlot.transform, "Text", "[Armadura]\nVacio", TextAnchor.MiddleCenter,
-                Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.armorText.fontSize = 10;
+                Vector2.zero, Vector2.one, new Vector2(4, 2), new Vector2(-4, -2)).GetComponent<Text>();
+            ctrl.armorText.fontSize = 11;
+            ctrl.armorText.color = Color.white;
 
-            var gadgetSlot = CreateUIElement(parent, "Slot_Gadget",
-                new Vector2(0.76f, 0.78f), new Vector2(0.99f, 0.90f), Vector2.zero, Vector2.zero, new Color(0.15f, 0.2f, 0.15f, 0.5f));
+            // Gadget (bottom-right)
+            var gadgetSlot = CreateUIElement(slotContainer.transform, "Slot_Gadget",
+                new Vector2(0.52f, 0), new Vector2(1f, 0.48f),
+                new Vector2(4, 4), new Vector2(-4, -4),
+                new Color(GLASS.r, GLASS.g, GLASS.b, 0.6f));
             ctrl.gadgetText = CreateText(gadgetSlot.transform, "Text", "[Gadget]\nVacio", TextAnchor.MiddleCenter,
-                Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.gadgetText.fontSize = 10;
+                Vector2.zero, Vector2.one, new Vector2(4, 2), new Vector2(-4, -2)).GetComponent<Text>();
+            ctrl.gadgetText.fontSize = 11;
+            ctrl.gadgetText.color = Color.white;
 
             // Inventory scroll
             var scrollView = CreateScrollView(parent, "InventoryList",
-                new Vector2(0.05f, 0.30f), new Vector2(0.95f, 0.76f));
+                new Vector2(0.03f, 0.28f), new Vector2(0.97f, 0.74f));
             ctrl.inventoryContainer = scrollView.transform.Find("Viewport/Content");
             ctrl.inventoryItemPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/InventoryItemPrefab.prefab");
 
-            // Detail panel
+            // Detail panel (bottom glass)
             var detailPanel = CreateUIElement(parent, "DetailPanel",
-                new Vector2(0.05f, 0.05f), new Vector2(0.95f, 0.28f),
-                Vector2.zero, Vector2.zero, new Color(0.12f, 0.15f, 0.12f, 0.95f));
+                new Vector2(0.03f, 0.02f), new Vector2(0.97f, 0.26f),
+                Vector2.zero, Vector2.zero, GLASS);
+            SetSpriteIfExists(detailPanel, "Assets/Sprites/UI/Panels/panel_glass.png");
             ctrl.detailPanel = detailPanel;
 
             ctrl.detailNameText = CreateText(detailPanel.transform, "DetailName", "Nombre", TextAnchor.MiddleCenter,
                 new Vector2(0.05f, 0.75f), new Vector2(0.95f, 0.95f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.detailNameText.color = PRIMARY;
+
             ctrl.detailRarityText = CreateText(detailPanel.transform, "DetailRarity", "Rareza: Comun", TextAnchor.MiddleLeft,
                 new Vector2(0.05f, 0.55f), new Vector2(0.5f, 0.75f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.detailStatsText = CreateText(detailPanel.transform, "DetailStats", "ATK:0 DEF:0 HP:0", TextAnchor.MiddleLeft,
+            ctrl.detailRarityText.color = ACCENT;
+
+            ctrl.detailStatsText = CreateText(detailPanel.transform, "DetailStats", "ATK:0 DEF:0 HP:0", TextAnchor.MiddleRight,
                 new Vector2(0.5f, 0.55f), new Vector2(0.95f, 0.75f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.detailStatsText.color = Color.white;
 
             // Fusion info
             ctrl.fuseInfoText = CreateText(detailPanel.transform, "FuseInfo", "0/3 para fusion", TextAnchor.MiddleCenter,
                 new Vector2(0.05f, 0.35f), new Vector2(0.95f, 0.55f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.fuseInfoText.color = SECONDARY;
 
             // Buttons row
-            var equipBtn = CreateButton(detailPanel.transform, "EquipBtn", "Equipar",
-                new Vector2(0.02f, 0.02f), new Vector2(0.25f, 0.32f), Vector2.zero, Vector2.zero,
-                new Color(0.1f, 0.3f, 0.4f));
+            var equipBtn = CreateIconButton(detailPanel.transform, "EquipBtn", "Equipar",
+                new Vector2(0.02f, 0.02f), new Vector2(0.25f, 0.32f),
+                PRIMARY, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.equipButton = equipBtn.GetComponent<Button>();
 
-            var fuseBtn = CreateButton(detailPanel.transform, "FuseBtn", "Fusionar",
-                new Vector2(0.27f, 0.02f), new Vector2(0.50f, 0.32f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.2f, 0.4f));
+            var fuseBtn = CreateIconButton(detailPanel.transform, "FuseBtn", "Fusionar",
+                new Vector2(0.27f, 0.02f), new Vector2(0.50f, 0.32f),
+                SECONDARY, "Assets/Sprites/UI/Buttons/btn_secondary.png");
             ctrl.fuseButton = fuseBtn.GetComponent<Button>();
 
-            var recycleBtn = CreateButton(detailPanel.transform, "RecycleBtn", "Reciclar",
-                new Vector2(0.52f, 0.02f), new Vector2(0.75f, 0.32f), Vector2.zero, Vector2.zero,
-                new Color(0.3f, 0.3f, 0.1f));
+            var recycleBtn = CreateIconButton(detailPanel.transform, "RecycleBtn", "Reciclar",
+                new Vector2(0.52f, 0.02f), new Vector2(0.75f, 0.32f),
+                ACCENT, "Assets/Sprites/UI/Buttons/btn_accent.png");
             ctrl.recycleButton = recycleBtn.GetComponent<Button>();
-
-            // Close button (top right of main panel)
-            var closeBtn = CreateButton(parent, "CloseBtn", "X",
-                new Vector2(0.90f, 0.93f), new Vector2(0.98f, 0.98f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.1f, 0.1f));
-            ctrl.closeButton = closeBtn.GetComponent<Button>();
         }
 
         // ============================================================
@@ -1196,68 +1404,128 @@ namespace ProjectEvolvion.Editor
         {
             // Album title
             ctrl.albumTitleText = CreateText(parent, "AlbumTitle", "ALBUM DE CARTAS", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.92f), new Vector2(0.9f, 0.98f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.1f, 0.93f), new Vector2(0.8f, 0.99f), Vector2.zero, Vector2.zero).GetComponent<Text>();
             ctrl.albumTitleText.fontSize = 22;
+            ctrl.albumTitleText.color = PRIMARY;
 
-            // Era tabs (individual fields)
-            var tabContainer = CreateUIElement(parent, "TabContainer",
-                new Vector2(0.05f, 0.85f), new Vector2(0.95f, 0.92f),
-                Vector2.zero, Vector2.zero, Color.clear);
+            // Close button
+            var closeBtn = CreateIconButton(parent, "CloseBtn", "X",
+                new Vector2(0.88f, 0.93f), new Vector2(0.97f, 0.99f),
+                DANGER, "Assets/Sprites/UI/Buttons/btn_close.png");
+            ctrl.closeButton = closeBtn.GetComponent<Button>();
 
-            var stoneTab = CreateButton(tabContainer.transform, "Tab_Piedra", "Piedra",
-                new Vector2(0, 0), new Vector2(0.33f, 1), new Vector2(2, 0), new Vector2(-2, 0),
-                new Color(0.15f, 0.1f, 0.25f));
-            ctrl.stoneAgeTab = stoneTab.GetComponent<Button>();
+            // Era tabs (horizontal scroll area with 9 tabs)
+            var tabScroll = new GameObject("TabScroll", typeof(RectTransform), typeof(ScrollRect));
+            tabScroll.transform.SetParent(parent, false);
+            var tabScrollRT = tabScroll.GetComponent<RectTransform>();
+            tabScrollRT.anchorMin = new Vector2(0.02f, 0.85f);
+            tabScrollRT.anchorMax = new Vector2(0.98f, 0.92f);
+            tabScrollRT.offsetMin = Vector2.zero;
+            tabScrollRT.offsetMax = Vector2.zero;
 
-            var tribalTab = CreateButton(tabContainer.transform, "Tab_Tribal", "Tribal",
-                new Vector2(0.33f, 0), new Vector2(0.66f, 1), new Vector2(2, 0), new Vector2(-2, 0),
-                new Color(0.15f, 0.1f, 0.25f));
-            ctrl.tribalAgeTab = tribalTab.GetComponent<Button>();
+            var tabViewport = new GameObject("Viewport", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Mask));
+            tabViewport.transform.SetParent(tabScroll.transform, false);
+            var tabVPRT = tabViewport.GetComponent<RectTransform>();
+            tabVPRT.anchorMin = Vector2.zero;
+            tabVPRT.anchorMax = Vector2.one;
+            tabVPRT.offsetMin = Vector2.zero;
+            tabVPRT.offsetMax = Vector2.zero;
+            tabViewport.GetComponent<Image>().color = new Color(0, 0, 0, 0.01f);
+            tabViewport.GetComponent<Mask>().showMaskGraphic = false;
 
-            var bronzeTab = CreateButton(tabContainer.transform, "Tab_Bronce", "Bronce",
-                new Vector2(0.66f, 0), new Vector2(1f, 1), new Vector2(2, 0), new Vector2(-2, 0),
-                new Color(0.15f, 0.1f, 0.25f));
-            ctrl.bronzeAgeTab = bronzeTab.GetComponent<Button>();
+            var tabContent = new GameObject("Content", typeof(RectTransform), typeof(HorizontalLayoutGroup), typeof(ContentSizeFitter));
+            tabContent.transform.SetParent(tabViewport.transform, false);
+            var tabContentRT = tabContent.GetComponent<RectTransform>();
+            tabContentRT.anchorMin = new Vector2(0, 0);
+            tabContentRT.anchorMax = new Vector2(0, 1);
+            tabContentRT.pivot = new Vector2(0, 0.5f);
+            tabContentRT.offsetMin = Vector2.zero;
+            tabContentRT.offsetMax = Vector2.zero;
+            var tabHLG = tabContent.GetComponent<HorizontalLayoutGroup>();
+            tabHLG.spacing = 4;
+            tabHLG.childForceExpandWidth = false;
+            tabHLG.childForceExpandHeight = true;
+            tabHLG.childControlWidth = false;
+            tabHLG.childControlHeight = true;
+            var tabCSF = tabContent.GetComponent<ContentSizeFitter>();
+            tabCSF.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            var tabScrollRect = tabScroll.GetComponent<ScrollRect>();
+            tabScrollRect.viewport = tabVPRT;
+            tabScrollRect.content = tabContentRT;
+            tabScrollRect.horizontal = true;
+            tabScrollRect.vertical = false;
+
+            // Create 9 era tab buttons
+            string[] tabNames = { "Piedra", "Tribal", "Bronce", "Clasica", "Media", "Industrial", "Robot", "Espacial", "Singular" };
+            Color tabColor = new Color(GLASS.r, GLASS.g, GLASS.b, 0.8f);
+
+            ctrl.stoneAgeTab = CreateTabButton(tabContent.transform, tabNames[0], 100, tabColor);
+            ctrl.tribalAgeTab = CreateTabButton(tabContent.transform, tabNames[1], 100, tabColor);
+            ctrl.bronzeAgeTab = CreateTabButton(tabContent.transform, tabNames[2], 100, tabColor);
+            ctrl.classicalAgeTab = CreateTabButton(tabContent.transform, tabNames[3], 100, tabColor);
+            ctrl.middleAgeTab = CreateTabButton(tabContent.transform, tabNames[4], 100, tabColor);
+            ctrl.industrialAgeTab = CreateTabButton(tabContent.transform, tabNames[5], 110, tabColor);
+            ctrl.robotAgeTab = CreateTabButton(tabContent.transform, tabNames[6], 100, tabColor);
+            ctrl.spaceAgeTab = CreateTabButton(tabContent.transform, tabNames[7], 110, tabColor);
+            ctrl.singularityAgeTab = CreateTabButton(tabContent.transform, tabNames[8], 110, tabColor);
 
             // Progress
-            ctrl.progressText = CreateText(parent, "ProgressText", "0/9 cartas", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.80f), new Vector2(0.7f, 0.85f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.progressText = CreateText(parent, "ProgressText", "0/9 cartas", TextAnchor.MiddleLeft,
+                new Vector2(0.05f, 0.80f), new Vector2(0.55f, 0.85f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.progressText.color = TEXT_MUTED;
 
             var progressSliderGO = CreateSlider(parent, "ProgressSlider",
-                new Vector2(0.7f, 0.80f), new Vector2(0.95f, 0.85f), new Color(0.6f, 0.4f, 0.8f));
+                new Vector2(0.58f, 0.81f), new Vector2(0.95f, 0.84f), SECONDARY);
             ctrl.progressSlider = progressSliderGO.GetComponent<Slider>();
 
-            // Card grid
+            // Card grid (3-column)
             var scrollView = CreateScrollView(parent, "CardGrid",
-                new Vector2(0.05f, 0.20f), new Vector2(0.95f, 0.79f));
+                new Vector2(0.02f, 0.05f), new Vector2(0.98f, 0.79f));
             ctrl.cardGridContainer = scrollView.transform.Find("Viewport/Content");
             // Replace VerticalLayout with GridLayout on content
             Object.DestroyImmediate(ctrl.cardGridContainer.GetComponent<VerticalLayoutGroup>());
             var gridLayout = ctrl.cardGridContainer.gameObject.AddComponent<GridLayoutGroup>();
-            gridLayout.cellSize = new Vector2(90, 120);
-            gridLayout.spacing = new Vector2(10, 10);
-            gridLayout.padding = new RectOffset(10, 10, 10, 10);
+            gridLayout.cellSize = new Vector2(310, 180);
+            gridLayout.spacing = new Vector2(12, 12);
+            gridLayout.padding = new RectOffset(12, 12, 12, 12);
+            gridLayout.constraint = GridLayoutGroup.Constraint.FixedColumnCount;
+            gridLayout.constraintCount = 3;
 
             ctrl.cardItemPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/CardItemPrefab.prefab");
 
-            // Card detail panel
+            // Card detail panel (popup overlay)
             var cardDetail = CreateUIElement(parent, "CardDetailPanel",
-                new Vector2(0.15f, 0.30f), new Vector2(0.85f, 0.70f),
-                Vector2.zero, Vector2.zero, new Color(0.1f, 0.05f, 0.15f, 0.98f));
+                new Vector2(0.1f, 0.25f), new Vector2(0.9f, 0.75f),
+                Vector2.zero, Vector2.zero, GLASS);
+            SetSpriteIfExists(cardDetail, "Assets/Sprites/UI/Panels/panel_popup.png");
             ctrl.cardDetailPanel = cardDetail;
-            ctrl.cardNameText = CreateText(cardDetail.transform, "CardName", "Nombre", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.75f), new Vector2(0.95f, 0.95f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.cardDescriptionText = CreateText(cardDetail.transform, "CardDesc", "Descripcion", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.45f), new Vector2(0.95f, 0.75f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.cardRarityText = CreateText(cardDetail.transform, "CardRarity", "Rareza: Comun", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.25f), new Vector2(0.95f, 0.45f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            cardDetail.SetActive(false);
 
-            // Close button
-            var closeBtn = CreateButton(parent, "CloseBtn", "Volver",
-                new Vector2(0.35f, 0.05f), new Vector2(0.65f, 0.13f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.1f, 0.1f));
-            ctrl.closeButton = closeBtn.GetComponent<Button>();
+            ctrl.cardNameText = CreateText(cardDetail.transform, "CardName", "Nombre", TextAnchor.MiddleCenter,
+                new Vector2(0.05f, 0.78f), new Vector2(0.95f, 0.95f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.cardNameText.color = PRIMARY;
+            ctrl.cardNameText.fontSize = 18;
+
+            // Card artwork
+            var artworkGO = new GameObject("CardArtwork", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            artworkGO.transform.SetParent(cardDetail.transform, false);
+            var artRT = artworkGO.GetComponent<RectTransform>();
+            artRT.anchorMin = new Vector2(0.3f, 0.40f);
+            artRT.anchorMax = new Vector2(0.7f, 0.75f);
+            artRT.offsetMin = Vector2.zero;
+            artRT.offsetMax = Vector2.zero;
+            artworkGO.GetComponent<Image>().color = new Color(1, 1, 1, 0.3f);
+            ctrl.cardArtwork = artworkGO.GetComponent<Image>();
+
+            ctrl.cardDescriptionText = CreateText(cardDetail.transform, "CardDesc", "Descripcion", TextAnchor.MiddleCenter,
+                new Vector2(0.05f, 0.18f), new Vector2(0.95f, 0.38f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.cardDescriptionText.color = Color.white;
+
+            ctrl.cardRarityText = CreateText(cardDetail.transform, "CardRarity", "Rareza: Comun", TextAnchor.MiddleCenter,
+                new Vector2(0.05f, 0.05f), new Vector2(0.95f, 0.18f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.cardRarityText.color = ACCENT;
+
+            cardDetail.SetActive(false);
         }
 
         // ============================================================
@@ -1265,49 +1533,69 @@ namespace ProjectEvolvion.Editor
         // ============================================================
         static void SetupPrestigePanel(Transform parent, PrestigeUI ctrl)
         {
-            var title = CreateText(parent, "Title", "PRESTIGIO", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.92f), new Vector2(0.9f, 0.98f), Vector2.zero, Vector2.zero);
-            title.GetComponent<Text>().fontSize = 22;
+            // Title
+            var titleGO = CreateText(parent, "Title", "PRESTIGIO", TextAnchor.MiddleCenter,
+                new Vector2(0.1f, 0.93f), new Vector2(0.8f, 0.99f), Vector2.zero, Vector2.zero);
+            titleGO.GetComponent<Text>().fontSize = 22;
+            titleGO.GetComponent<Text>().color = PRIMARY;
 
-            ctrl.prestigeLevelText = CreateText(parent, "PrestigeLevel", "Nivel de Prestigio: 0", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.85f), new Vector2(0.95f, 0.91f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            // Close button
+            var closeBtn = CreateIconButton(parent, "CloseBtn", "X",
+                new Vector2(0.88f, 0.93f), new Vector2(0.97f, 0.99f),
+                DANGER, "Assets/Sprites/UI/Buttons/btn_close.png");
+            ctrl.closeButton = closeBtn.GetComponent<Button>();
+
+            // Large prestige level circle (center top)
+            var circleGO = CreateUIElement(parent, "PrestigeCircle",
+                new Vector2(0.3f, 0.72f), new Vector2(0.7f, 0.92f),
+                Vector2.zero, Vector2.zero,
+                new Color(SECONDARY.r, SECONDARY.g, SECONDARY.b, 0.3f));
+
+            ctrl.prestigeLevelText = CreateText(circleGO.transform, "PrestigeLevel", "0", TextAnchor.MiddleCenter,
+                Vector2.zero, Vector2.one, Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.prestigeLevelText.fontSize = 32;
+            ctrl.prestigeLevelText.color = SECONDARY;
+
+            // Stats below circle
             ctrl.multiplierText = CreateText(parent, "Multiplier", "Multiplicador: x1.0", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.79f), new Vector2(0.95f, 0.85f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.05f, 0.66f), new Vector2(0.95f, 0.72f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.multiplierText.color = ACCENT;
+
             ctrl.productionText = CreateText(parent, "Production", "Produccion: 0/s", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.73f), new Vector2(0.95f, 0.79f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.05f, 0.60f), new Vector2(0.95f, 0.66f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.productionText.color = Color.white;
+
             ctrl.currentResourcesText = CreateText(parent, "CurrentRes", "Recursos actuales: 0", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.67f), new Vector2(0.95f, 0.73f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.05f, 0.54f), new Vector2(0.95f, 0.60f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.currentResourcesText.color = TEXT_MUTED;
+
             ctrl.accumulatedResourcesText = CreateText(parent, "AccumulatedRes", "Acumulados: 0", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.61f), new Vector2(0.95f, 0.67f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.05f, 0.48f), new Vector2(0.95f, 0.54f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.accumulatedResourcesText.color = TEXT_MUTED;
 
             // Prestige preview
             ctrl.prestigeGainPreviewText = CreateText(parent, "Preview", "Prestigio al reiniciar: +0", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.54f), new Vector2(0.95f, 0.61f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.prestigeGainPreviewText.fontSize = 12;
-            ctrl.prestigeGainPreviewText.color = Color.yellow;
+                new Vector2(0.05f, 0.42f), new Vector2(0.95f, 0.48f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.prestigeGainPreviewText.fontSize = 13;
+            ctrl.prestigeGainPreviewText.color = ACCENT;
 
             // Upgrades scroll
             var scrollView = CreateScrollView(parent, "UpgradeList",
-                new Vector2(0.05f, 0.25f), new Vector2(0.95f, 0.53f));
+                new Vector2(0.03f, 0.18f), new Vector2(0.97f, 0.41f));
             ctrl.upgradeContainer = scrollView.transform.Find("Viewport/Content");
             ctrl.upgradeItemPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/UpgradeItemPrefab.prefab");
 
             // Buttons
-            var resetBtn = CreateButton(parent, "ResetBtn", "PRESTIGIAR",
-                new Vector2(0.05f, 0.08f), new Vector2(0.32f, 0.20f), Vector2.zero, Vector2.zero,
-                new Color(0.5f, 0.1f, 0.5f));
+            var resetBtn = CreateIconButton(parent, "ResetBtn", "PRESTIGIAR",
+                new Vector2(0.03f, 0.04f), new Vector2(0.33f, 0.16f),
+                SECONDARY, "Assets/Sprites/UI/Buttons/btn_secondary.png");
             ctrl.prestigeResetButton = resetBtn.GetComponent<Button>();
 
-            var startStopBtn = CreateButton(parent, "StartStopBtn", "Iniciar",
-                new Vector2(0.34f, 0.08f), new Vector2(0.65f, 0.20f), Vector2.zero, Vector2.zero,
-                new Color(0.3f, 0.1f, 0.3f));
+            var startStopBtn = CreateIconButton(parent, "StartStopBtn", "Iniciar",
+                new Vector2(0.35f, 0.04f), new Vector2(0.65f, 0.16f),
+                PRIMARY, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.startStopButton = startStopBtn.GetComponent<Button>();
             ctrl.startStopButtonText = startStopBtn.GetComponentInChildren<Text>();
-
-            var closeBtn = CreateButton(parent, "CloseBtn", "Volver",
-                new Vector2(0.67f, 0.08f), new Vector2(0.95f, 0.20f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.1f, 0.1f));
-            ctrl.closeButton = closeBtn.GetComponent<Button>();
         }
 
         // ============================================================
@@ -1315,25 +1603,46 @@ namespace ProjectEvolvion.Editor
         // ============================================================
         static void SetupPopupPanel(Transform parent, PopupController ctrl)
         {
+            // Semi-transparent overlay
+            var overlayImg = parent.gameObject.AddComponent<Image>();
+            overlayImg.color = new Color(0, 0, 0, 0.5f);
+
+            // Popup card
             var popup = CreateUIElement(parent, "PopupPanel",
-                new Vector2(0.1f, 0.70f), new Vector2(0.9f, 0.88f),
-                Vector2.zero, Vector2.zero, new Color(0.1f, 0.1f, 0.2f, 0.95f));
+                new Vector2(0.1f, 0.35f), new Vector2(0.9f, 0.65f),
+                Vector2.zero, Vector2.zero, GLASS);
+            SetSpriteIfExists(popup, "Assets/Sprites/UI/Panels/panel_popup.png");
 
             ctrl.popupPanel = popup;
-            ctrl.popupTitleText = CreateText(popup.transform, "PopupTitle", "Titulo", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.55f), new Vector2(0.95f, 0.95f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.popupTitleText.fontSize = 16;
-            ctrl.popupMessageText = CreateText(popup.transform, "PopupMessage", "Mensaje", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.1f), new Vector2(0.85f, 0.55f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.popupMessageText.fontSize = 12;
 
-            // Close button for popup
-            var popupCloseBtn = CreateButton(popup.transform, "PopupCloseBtn", "X",
-                new Vector2(0.88f, 0.7f), new Vector2(0.98f, 0.95f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.1f, 0.1f));
+            // Icon
+            var iconGO = new GameObject("PopupIcon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            iconGO.transform.SetParent(popup.transform, false);
+            var iconRT = iconGO.GetComponent<RectTransform>();
+            iconRT.anchorMin = new Vector2(0.4f, 0.65f);
+            iconRT.anchorMax = new Vector2(0.6f, 0.9f);
+            iconRT.offsetMin = Vector2.zero;
+            iconRT.offsetMax = Vector2.zero;
+            iconGO.GetComponent<Image>().color = new Color(1, 1, 1, 0.5f);
+            ctrl.popupIcon = iconGO.GetComponent<Image>();
+
+            ctrl.popupTitleText = CreateText(popup.transform, "PopupTitle", "Titulo", TextAnchor.MiddleCenter,
+                new Vector2(0.05f, 0.45f), new Vector2(0.95f, 0.65f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.popupTitleText.fontSize = 18;
+            ctrl.popupTitleText.color = PRIMARY;
+
+            ctrl.popupMessageText = CreateText(popup.transform, "PopupMessage", "Mensaje", TextAnchor.MiddleCenter,
+                new Vector2(0.08f, 0.15f), new Vector2(0.92f, 0.45f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.popupMessageText.fontSize = 13;
+            ctrl.popupMessageText.color = Color.white;
+
+            // Close button
+            var popupCloseBtn = CreateIconButton(popup.transform, "PopupCloseBtn", "X",
+                new Vector2(0.85f, 0.82f), new Vector2(0.97f, 0.97f),
+                DANGER, "Assets/Sprites/UI/Buttons/btn_close.png");
             ctrl.popupCloseButton = popupCloseBtn.GetComponent<Button>();
 
-            popup.SetActive(false);
+            parent.gameObject.SetActive(false);
         }
 
         // ============================================================
@@ -1341,84 +1650,113 @@ namespace ProjectEvolvion.Editor
         // ============================================================
         static void SetupShopPanel(Transform parent, ShopUI ctrl)
         {
-            var title = CreateText(parent, "Title", "TIENDA", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.92f), new Vector2(0.9f, 0.98f), Vector2.zero, Vector2.zero);
-            title.GetComponent<Text>().fontSize = 22;
+            // Title
+            var titleGO = CreateText(parent, "Title", "TIENDA", TextAnchor.MiddleCenter,
+                new Vector2(0.1f, 0.93f), new Vector2(0.8f, 0.99f), Vector2.zero, Vector2.zero);
+            titleGO.GetComponent<Text>().fontSize = 22;
+            titleGO.GetComponent<Text>().color = PRIMARY;
 
-            // Tabs (individual fields)
+            // Close button
+            var closeBtn = CreateIconButton(parent, "CloseBtn", "X",
+                new Vector2(0.88f, 0.93f), new Vector2(0.97f, 0.99f),
+                DANGER, "Assets/Sprites/UI/Buttons/btn_close.png");
+            ctrl.closeButton = closeBtn.GetComponent<Button>();
+
+            // 4 category tabs
             var tabContainer = CreateUIElement(parent, "ShopTabs",
-                new Vector2(0.05f, 0.85f), new Vector2(0.95f, 0.92f),
+                new Vector2(0.02f, 0.86f), new Vector2(0.98f, 0.92f),
                 Vector2.zero, Vector2.zero, Color.clear);
 
+            Color tabBg = new Color(GLASS.r, GLASS.g, GLASS.b, 0.8f);
+
             var shopTabBtn = CreateButton(tabContainer.transform, "ShopTab_Tienda", "Tienda",
-                new Vector2(0, 0), new Vector2(0.25f, 1), new Vector2(2, 0), new Vector2(-2, 0),
-                new Color(0.25f, 0.2f, 0.1f));
+                new Vector2(0, 0), new Vector2(0.25f, 1), new Vector2(2, 0), new Vector2(-2, 0), tabBg);
+            shopTabBtn.GetComponentInChildren<Text>().color = PRIMARY;
             ctrl.shopTab = shopTabBtn.GetComponent<Button>();
 
             var vipTabBtn = CreateButton(tabContainer.transform, "ShopTab_VIP", "VIP",
-                new Vector2(0.25f, 0), new Vector2(0.5f, 1), new Vector2(2, 0), new Vector2(-2, 0),
-                new Color(0.25f, 0.2f, 0.1f));
+                new Vector2(0.25f, 0), new Vector2(0.5f, 1), new Vector2(2, 0), new Vector2(-2, 0), tabBg);
+            vipTabBtn.GetComponentInChildren<Text>().color = ACCENT;
             ctrl.vipTab = vipTabBtn.GetComponent<Button>();
 
             var bpTabBtn = CreateButton(tabContainer.transform, "ShopTab_Pase", "Pase",
-                new Vector2(0.5f, 0), new Vector2(0.75f, 1), new Vector2(2, 0), new Vector2(-2, 0),
-                new Color(0.25f, 0.2f, 0.1f));
+                new Vector2(0.5f, 0), new Vector2(0.75f, 1), new Vector2(2, 0), new Vector2(-2, 0), tabBg);
+            bpTabBtn.GetComponentInChildren<Text>().color = SECONDARY;
             ctrl.battlePassTab = bpTabBtn.GetComponent<Button>();
 
             var chestTabBtn = CreateButton(tabContainer.transform, "ShopTab_Cofres", "Cofres",
-                new Vector2(0.75f, 0), new Vector2(1f, 1), new Vector2(2, 0), new Vector2(-2, 0),
-                new Color(0.25f, 0.2f, 0.1f));
+                new Vector2(0.75f, 0), new Vector2(1f, 1), new Vector2(2, 0), new Vector2(-2, 0), tabBg);
+            chestTabBtn.GetComponentInChildren<Text>().color = ACCENT;
             ctrl.chestsTab = chestTabBtn.GetComponent<Button>();
 
             // --- Shop sub-panel ---
             var shopSubPanel = CreatePanel(parent, "ShopSubPanel", Color.clear);
             ctrl.shopPanel = shopSubPanel;
             var shopScroll = CreateScrollView(shopSubPanel.transform, "ShopItems",
-                new Vector2(0.05f, 0.15f), new Vector2(0.95f, 0.84f));
+                new Vector2(0.03f, 0.05f), new Vector2(0.97f, 0.95f));
             ctrl.shopItemContainer = shopScroll.transform.Find("Viewport/Content");
             ctrl.shopItemPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/ShopItemPrefab.prefab");
 
             // --- VIP sub-panel ---
             var vipSubPanel = CreatePanel(parent, "VIPSubPanel", Color.clear);
             ctrl.vipPanel = vipSubPanel;
+
             ctrl.vipStatusText = CreateText(vipSubPanel.transform, "VIPStatus", "VIP INACTIVO", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.72f), new Vector2(0.9f, 0.82f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.1f, 0.78f), new Vector2(0.9f, 0.88f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.vipStatusText.color = ACCENT;
+            ctrl.vipStatusText.fontSize = 18;
+
             ctrl.vipTimerText = CreateText(vipSubPanel.transform, "VIPTimer", "", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.65f), new Vector2(0.9f, 0.72f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.1f, 0.72f), new Vector2(0.9f, 0.78f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.vipTimerText.color = TEXT_MUTED;
+
             ctrl.vipBenefitsText = CreateText(vipSubPanel.transform, "VIPBenefits", "Beneficios VIP", TextAnchor.UpperLeft,
-                new Vector2(0.05f, 0.25f), new Vector2(0.95f, 0.64f), new Vector2(10, 10), new Vector2(-10, -10)).GetComponent<Text>();
-            ctrl.vipBenefitsText.fontSize = 11;
-            var vipBuyBtn = CreateButton(vipSubPanel.transform, "VIPBuyBtn", "Comprar VIP",
-                new Vector2(0.1f, 0.15f), new Vector2(0.5f, 0.24f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.3f, 0.1f));
+                new Vector2(0.05f, 0.30f), new Vector2(0.95f, 0.70f), new Vector2(12, 8), new Vector2(-12, -8)).GetComponent<Text>();
+            ctrl.vipBenefitsText.fontSize = 12;
+            ctrl.vipBenefitsText.color = Color.white;
+
+            var vipBuyBtn = CreateIconButton(vipSubPanel.transform, "VIPBuyBtn", "Comprar VIP",
+                new Vector2(0.1f, 0.18f), new Vector2(0.5f, 0.28f),
+                ACCENT, "Assets/Sprites/UI/Buttons/btn_accent.png");
             ctrl.vipPurchaseButton = vipBuyBtn.GetComponent<Button>();
-            var vipDailyBtn = CreateButton(vipSubPanel.transform, "VIPDailyBtn", "Diario",
-                new Vector2(0.52f, 0.15f), new Vector2(0.72f, 0.24f), Vector2.zero, Vector2.zero,
-                new Color(0.1f, 0.3f, 0.1f));
+
+            var vipDailyBtn = CreateIconButton(vipSubPanel.transform, "VIPDailyBtn", "Diario",
+                new Vector2(0.52f, 0.18f), new Vector2(0.72f, 0.28f),
+                SUCCESS, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.vipDailyClaimButton = vipDailyBtn.GetComponent<Button>();
-            var vipWeeklyBtn = CreateButton(vipSubPanel.transform, "VIPWeeklyBtn", "Semanal",
-                new Vector2(0.74f, 0.15f), new Vector2(0.95f, 0.24f), Vector2.zero, Vector2.zero,
-                new Color(0.1f, 0.1f, 0.3f));
+
+            var vipWeeklyBtn = CreateIconButton(vipSubPanel.transform, "VIPWeeklyBtn", "Semanal",
+                new Vector2(0.74f, 0.18f), new Vector2(0.95f, 0.28f),
+                PRIMARY, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.vipWeeklyClaimButton = vipWeeklyBtn.GetComponent<Button>();
 
             // --- Battle Pass sub-panel ---
             var bpSubPanel = CreatePanel(parent, "BattlePassSubPanel", Color.clear);
             ctrl.battlePassPanel = bpSubPanel;
+
             ctrl.battlePassLevelText = CreateText(bpSubPanel.transform, "BPLevel", "Nivel 0", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.75f), new Vector2(0.5f, 0.82f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.1f, 0.82f), new Vector2(0.5f, 0.90f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.battlePassLevelText.color = PRIMARY;
+
             ctrl.battlePassExpText = CreateText(bpSubPanel.transform, "BPExp", "0/100 EXP", TextAnchor.MiddleCenter,
-                new Vector2(0.5f, 0.75f), new Vector2(0.9f, 0.82f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.5f, 0.82f), new Vector2(0.9f, 0.90f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.battlePassExpText.color = TEXT_MUTED;
+
             var bpSliderGO = CreateSlider(bpSubPanel.transform, "BPExpSlider",
-                new Vector2(0.1f, 0.70f), new Vector2(0.9f, 0.75f), new Color(0.2f, 0.6f, 0.8f));
+                new Vector2(0.1f, 0.77f), new Vector2(0.9f, 0.82f), PRIMARY);
             ctrl.battlePassExpSlider = bpSliderGO.GetComponent<Slider>();
-            ctrl.premiumPassStatusText = CreateText(bpSubPanel.transform, "PremiumStatus", "Comprar Premium", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.63f), new Vector2(0.6f, 0.70f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            var premBtn = CreateButton(bpSubPanel.transform, "PremiumBtn", "Premium",
-                new Vector2(0.62f, 0.63f), new Vector2(0.9f, 0.70f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.3f, 0.1f));
+
+            ctrl.premiumPassStatusText = CreateText(bpSubPanel.transform, "PremiumStatus", "Comprar Premium", TextAnchor.MiddleLeft,
+                new Vector2(0.1f, 0.70f), new Vector2(0.6f, 0.77f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.premiumPassStatusText.color = ACCENT;
+
+            var premBtn = CreateIconButton(bpSubPanel.transform, "PremiumBtn", "Premium",
+                new Vector2(0.62f, 0.70f), new Vector2(0.9f, 0.77f),
+                ACCENT, "Assets/Sprites/UI/Buttons/btn_accent.png");
             ctrl.premiumPassButton = premBtn.GetComponent<Button>();
+
             var bpRewardScroll = CreateScrollView(bpSubPanel.transform, "BPRewards",
-                new Vector2(0.05f, 0.15f), new Vector2(0.95f, 0.62f));
+                new Vector2(0.03f, 0.05f), new Vector2(0.97f, 0.68f));
             ctrl.battlePassRewardContainer = bpRewardScroll.transform.Find("Viewport/Content");
             ctrl.battlePassRewardPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/BattlePassRewardPrefab.prefab");
 
@@ -1426,27 +1764,23 @@ namespace ProjectEvolvion.Editor
             var chestSubPanel = CreatePanel(parent, "ChestsSubPanel", Color.clear);
             ctrl.chestsPanel = chestSubPanel;
             var chestScroll = CreateScrollView(chestSubPanel.transform, "ChestItems",
-                new Vector2(0.05f, 0.15f), new Vector2(0.95f, 0.84f));
+                new Vector2(0.03f, 0.15f), new Vector2(0.97f, 0.95f));
             ctrl.chestContainer = chestScroll.transform.Find("Viewport/Content");
             ctrl.chestItemPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/ChestItemPrefab.prefab");
 
-            // Ad reward
-            var adBtn = CreateButton(parent, "WatchAdBtn", "Ver Anuncio",
-                new Vector2(0.05f, 0.05f), new Vector2(0.3f, 0.13f), Vector2.zero, Vector2.zero,
-                new Color(0.1f, 0.3f, 0.3f));
+            // Ad reward button + info (bottom of main shop panel)
+            var adBtn = CreateIconButton(parent, "WatchAdBtn", "Ver Anuncio",
+                new Vector2(0.03f, 0.02f), new Vector2(0.30f, 0.10f),
+                SUCCESS, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.watchAdButton = adBtn.GetComponent<Button>();
+
             ctrl.adsRemainingText = CreateText(parent, "AdsRemaining", "Anuncios: 10", TextAnchor.MiddleLeft,
-                new Vector2(0.32f, 0.05f), new Vector2(0.55f, 0.13f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.32f, 0.02f), new Vector2(0.55f, 0.10f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.adsRemainingText.color = TEXT_MUTED;
 
-            // Boost display
             ctrl.activeBoostText = CreateText(parent, "ActiveBoost", "", TextAnchor.MiddleCenter,
-                new Vector2(0.56f, 0.05f), new Vector2(0.78f, 0.13f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-
-            // Close button
-            var closeBtn = CreateButton(parent, "CloseBtn", "Volver",
-                new Vector2(0.80f, 0.05f), new Vector2(0.95f, 0.13f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.1f, 0.1f));
-            ctrl.closeButton = closeBtn.GetComponent<Button>();
+                new Vector2(0.56f, 0.02f), new Vector2(0.78f, 0.10f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.activeBoostText.color = ACCENT;
         }
 
         // ============================================================
@@ -1454,16 +1788,26 @@ namespace ProjectEvolvion.Editor
         // ============================================================
         static void SetupClanPanel(Transform parent, ClanUI ctrl)
         {
-            var title = CreateText(parent, "Title", "CLAN", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.92f), new Vector2(0.9f, 0.98f), Vector2.zero, Vector2.zero);
-            title.GetComponent<Text>().fontSize = 22;
+            // Title
+            var titleGO = CreateText(parent, "Title", "CLAN", TextAnchor.MiddleCenter,
+                new Vector2(0.1f, 0.93f), new Vector2(0.8f, 0.99f), Vector2.zero, Vector2.zero);
+            titleGO.GetComponent<Text>().fontSize = 22;
+            titleGO.GetComponent<Text>().color = PRIMARY;
+
+            // Close button
+            var closeBtn = CreateIconButton(parent, "CloseBtn", "X",
+                new Vector2(0.88f, 0.93f), new Vector2(0.97f, 0.99f),
+                DANGER, "Assets/Sprites/UI/Buttons/btn_close.png");
+            ctrl.closeButton = closeBtn.GetComponent<Button>();
 
             // --- No Clan Panel ---
             var noClanPanel = CreatePanel(parent, "NoClanPanel", Color.clear);
             ctrl.noClanPanel = noClanPanel;
 
-            CreateText(noClanPanel.transform, "NoClanTitle", "No estas en un clan", TextAnchor.MiddleCenter,
-                new Vector2(0.1f, 0.65f), new Vector2(0.9f, 0.75f), Vector2.zero, Vector2.zero);
+            var noClanTitle = CreateText(noClanPanel.transform, "NoClanTitle", "No estas en un clan", TextAnchor.MiddleCenter,
+                new Vector2(0.1f, 0.65f), new Vector2(0.9f, 0.78f), Vector2.zero, Vector2.zero);
+            noClanTitle.GetComponent<Text>().fontSize = 18;
+            noClanTitle.GetComponent<Text>().color = TEXT_MUTED;
 
             // Clan name input
             var inputGO = new GameObject("ClanNameInput", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(InputField));
@@ -1473,115 +1817,129 @@ namespace ProjectEvolvion.Editor
             inputRT.anchorMax = new Vector2(0.9f, 0.63f);
             inputRT.offsetMin = Vector2.zero;
             inputRT.offsetMax = Vector2.zero;
-            inputGO.GetComponent<Image>().color = new Color(0.2f, 0.2f, 0.25f);
+            inputGO.GetComponent<Image>().color = new Color(BG_DEEP.r, BG_DEEP.g, BG_DEEP.b, 0.8f);
             var inputTextGO = CreateText(inputGO.transform, "InputText", "", TextAnchor.MiddleLeft,
-                new Vector2(0, 0), new Vector2(1, 1), new Vector2(10, 2), new Vector2(-10, -2));
+                Vector2.zero, Vector2.one, new Vector2(12, 4), new Vector2(-12, -4));
             var placeholderGO = CreateText(inputGO.transform, "Placeholder", "Nombre del clan...", TextAnchor.MiddleLeft,
-                new Vector2(0, 0), new Vector2(1, 1), new Vector2(10, 2), new Vector2(-10, -2));
-            placeholderGO.GetComponent<Text>().color = new Color(1, 1, 1, 0.3f);
+                Vector2.zero, Vector2.one, new Vector2(12, 4), new Vector2(-12, -4));
+            placeholderGO.GetComponent<Text>().color = TEXT_MUTED;
             var inputField = inputGO.GetComponent<InputField>();
             inputField.textComponent = inputTextGO.GetComponent<Text>();
             inputField.placeholder = placeholderGO.GetComponent<Text>();
             ctrl.clanNameInput = inputField;
 
-            var createBtn = CreateButton(noClanPanel.transform, "CreateClanBtn", "Crear Clan",
-                new Vector2(0.1f, 0.42f), new Vector2(0.48f, 0.52f), Vector2.zero, Vector2.zero,
-                new Color(0.1f, 0.3f, 0.4f));
+            var createBtn = CreateIconButton(noClanPanel.transform, "CreateClanBtn", "Crear Clan",
+                new Vector2(0.1f, 0.42f), new Vector2(0.48f, 0.52f),
+                PRIMARY, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.createClanButton = createBtn.GetComponent<Button>();
 
-            var joinBtn = CreateButton(noClanPanel.transform, "JoinClanBtn", "Unirse a Clan",
-                new Vector2(0.52f, 0.42f), new Vector2(0.9f, 0.52f), Vector2.zero, Vector2.zero,
-                new Color(0.1f, 0.4f, 0.1f));
+            var joinBtn = CreateIconButton(noClanPanel.transform, "JoinClanBtn", "Unirse a Clan",
+                new Vector2(0.52f, 0.42f), new Vector2(0.9f, 0.52f),
+                SUCCESS, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.joinClanButton = joinBtn.GetComponent<Button>();
 
             // --- Clan Panel (when in clan) ---
-            var clanPanel = CreatePanel(parent, "ClanInfoPanel", Color.clear);
-            ctrl.clanPanel = clanPanel;
+            var clanInfoPanel = CreatePanel(parent, "ClanInfoPanel", Color.clear);
+            ctrl.clanPanel = clanInfoPanel;
 
-            ctrl.clanNameText = CreateText(clanPanel.transform, "ClanName", "Mi Clan", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.85f), new Vector2(0.95f, 0.91f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.clanLevelText = CreateText(clanPanel.transform, "ClanLevel", "Nivel: 0", TextAnchor.MiddleLeft,
-                new Vector2(0.05f, 0.80f), new Vector2(0.35f, 0.85f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.clanMembersText = CreateText(clanPanel.transform, "ClanMembers", "0/10", TextAnchor.MiddleCenter,
-                new Vector2(0.35f, 0.80f), new Vector2(0.65f, 0.85f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.clanNameText = CreateText(clanInfoPanel.transform, "ClanName", "Mi Clan", TextAnchor.MiddleCenter,
+                new Vector2(0.05f, 0.86f), new Vector2(0.95f, 0.92f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.clanNameText.color = PRIMARY;
+            ctrl.clanNameText.fontSize = 18;
 
-            var clanExpSliderGO = CreateSlider(clanPanel.transform, "ClanExpSlider",
-                new Vector2(0.65f, 0.80f), new Vector2(0.95f, 0.85f), new Color(0.2f, 0.5f, 0.8f));
+            ctrl.clanLevelText = CreateText(clanInfoPanel.transform, "ClanLevel", "Nivel: 0", TextAnchor.MiddleLeft,
+                new Vector2(0.05f, 0.81f), new Vector2(0.35f, 0.86f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.clanLevelText.color = ACCENT;
+
+            ctrl.clanMembersText = CreateText(clanInfoPanel.transform, "ClanMembers", "0/10", TextAnchor.MiddleCenter,
+                new Vector2(0.35f, 0.81f), new Vector2(0.65f, 0.86f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.clanMembersText.color = Color.white;
+
+            var clanExpSliderGO = CreateSlider(clanInfoPanel.transform, "ClanExpSlider",
+                new Vector2(0.65f, 0.82f), new Vector2(0.95f, 0.85f), PRIMARY);
             ctrl.clanExpSlider = clanExpSliderGO.GetComponent<Slider>();
 
             // Donations
-            ctrl.donationsRemainingText = CreateText(clanPanel.transform, "DonationsRemaining", "Donaciones: 5 restantes", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.74f), new Vector2(0.95f, 0.80f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.totalDonatedText = CreateText(clanPanel.transform, "TotalDonated", "Total donado: 0", TextAnchor.MiddleCenter,
-                new Vector2(0.05f, 0.69f), new Vector2(0.95f, 0.74f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.donationsRemainingText = CreateText(clanInfoPanel.transform, "DonationsRemaining", "Donaciones: 5 restantes", TextAnchor.MiddleCenter,
+                new Vector2(0.05f, 0.75f), new Vector2(0.95f, 0.81f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.donationsRemainingText.color = TEXT_MUTED;
 
-            var donateStoneBtn = CreateButton(clanPanel.transform, "DonateStoneBtn", "Donar Piedra",
-                new Vector2(0.05f, 0.62f), new Vector2(0.33f, 0.69f), Vector2.zero, Vector2.zero,
-                new Color(0.1f, 0.3f, 0.1f));
-            ctrl.donateStoneButton = donateStoneBtn.GetComponent<Button>();
+            ctrl.totalDonatedText = CreateText(clanInfoPanel.transform, "TotalDonated", "Total donado: 0", TextAnchor.MiddleCenter,
+                new Vector2(0.05f, 0.70f), new Vector2(0.95f, 0.75f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.totalDonatedText.color = TEXT_MUTED;
 
-            var donateFoodBtn = CreateButton(clanPanel.transform, "DonateFoodBtn", "Donar Comida",
-                new Vector2(0.35f, 0.62f), new Vector2(0.63f, 0.69f), Vector2.zero, Vector2.zero,
-                new Color(0.3f, 0.3f, 0.1f));
-            ctrl.donateFoodButton = donateFoodBtn.GetComponent<Button>();
-
-            var donateEnergyBtn = CreateButton(clanPanel.transform, "DonateEnergyBtn", "Donar Energia",
-                new Vector2(0.65f, 0.62f), new Vector2(0.95f, 0.69f), Vector2.zero, Vector2.zero,
-                new Color(0.1f, 0.1f, 0.3f));
+            var donateEnergyBtn = CreateIconButton(clanInfoPanel.transform, "DonateEnergyBtn", "Energia",
+                new Vector2(0.05f, 0.63f), new Vector2(0.33f, 0.70f),
+                PRIMARY, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.donateEnergyButton = donateEnergyBtn.GetComponent<Button>();
 
+            var donateStoneBtn = CreateIconButton(clanInfoPanel.transform, "DonateStoneBtn", "Piedra",
+                new Vector2(0.35f, 0.63f), new Vector2(0.63f, 0.70f),
+                new Color(GLASS.r, GLASS.g, GLASS.b, 0.9f), "Assets/Sprites/UI/Buttons/btn_secondary.png");
+            ctrl.donateStoneButton = donateStoneBtn.GetComponent<Button>();
+
+            var donateFoodBtn = CreateIconButton(clanInfoPanel.transform, "DonateFoodBtn", "Comida",
+                new Vector2(0.65f, 0.63f), new Vector2(0.95f, 0.70f),
+                SUCCESS, "Assets/Sprites/UI/Buttons/btn_primary.png");
+            ctrl.donateFoodButton = donateFoodBtn.GetComponent<Button>();
+
             // Event panel
-            var eventPanel = CreateUIElement(clanPanel.transform, "EventPanel",
-                new Vector2(0.05f, 0.48f), new Vector2(0.95f, 0.60f),
-                Vector2.zero, Vector2.zero, new Color(0.1f, 0.1f, 0.15f, 0.5f));
+            var eventPanel = CreateUIElement(clanInfoPanel.transform, "EventPanel",
+                new Vector2(0.03f, 0.48f), new Vector2(0.97f, 0.61f),
+                Vector2.zero, Vector2.zero,
+                new Color(GLASS.r, GLASS.g, GLASS.b, 0.5f));
             ctrl.eventPanel = eventPanel;
+
             ctrl.eventNameText = CreateText(eventPanel.transform, "EventName", "Evento: Ninguno", TextAnchor.MiddleLeft,
-                new Vector2(0.02f, 0.5f), new Vector2(0.6f, 1f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.02f, 0.5f), new Vector2(0.6f, 1f), new Vector2(8, 0), new Vector2(0, 0)).GetComponent<Text>();
+            ctrl.eventNameText.color = PRIMARY;
+
             ctrl.eventTimerText = CreateText(eventPanel.transform, "EventTimer", "", TextAnchor.MiddleRight,
-                new Vector2(0.6f, 0.5f), new Vector2(0.98f, 1f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.6f, 0.5f), new Vector2(0.98f, 1f), new Vector2(0, 0), new Vector2(-8, 0)).GetComponent<Text>();
+            ctrl.eventTimerText.color = ACCENT;
+
             ctrl.eventProgressText = CreateText(eventPanel.transform, "EventProgress", "0/0", TextAnchor.MiddleLeft,
-                new Vector2(0.02f, 0f), new Vector2(0.5f, 0.5f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+                new Vector2(0.02f, 0f), new Vector2(0.5f, 0.5f), new Vector2(8, 0), new Vector2(0, 0)).GetComponent<Text>();
+            ctrl.eventProgressText.color = Color.white;
 
             var eventProgressSliderGO = CreateSlider(eventPanel.transform, "EventProgressSlider",
-                new Vector2(0.5f, 0.05f), new Vector2(0.75f, 0.45f), new Color(0.6f, 0.4f, 0.1f));
+                new Vector2(0.5f, 0.1f), new Vector2(0.75f, 0.4f), ACCENT);
             ctrl.eventProgressSlider = eventProgressSliderGO.GetComponent<Slider>();
 
-            var claimEventBtn = CreateButton(eventPanel.transform, "ClaimEventBtn", "Reclamar",
-                new Vector2(0.77f, 0.05f), new Vector2(0.98f, 0.45f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.3f, 0.1f));
+            var claimEventBtn = CreateIconButton(eventPanel.transform, "ClaimEventBtn", "Reclamar",
+                new Vector2(0.77f, 0.05f), new Vector2(0.98f, 0.45f),
+                ACCENT, "Assets/Sprites/UI/Buttons/btn_accent.png");
             ctrl.claimEventRewardButton = claimEventBtn.GetComponent<Button>();
 
-            var startEventBtn = CreateButton(clanPanel.transform, "StartEventBtn", "Iniciar Evento",
-                new Vector2(0.05f, 0.42f), new Vector2(0.35f, 0.48f), Vector2.zero, Vector2.zero,
-                new Color(0.2f, 0.3f, 0.4f));
+            var startEventBtn = CreateIconButton(clanInfoPanel.transform, "StartEventBtn", "Iniciar Evento",
+                new Vector2(0.03f, 0.42f), new Vector2(0.35f, 0.48f),
+                PRIMARY, "Assets/Sprites/UI/Buttons/btn_primary.png");
             ctrl.startEventButton = startEventBtn.GetComponent<Button>();
 
             // Member list
-            var scrollView = CreateScrollView(clanPanel.transform, "MemberList",
-                new Vector2(0.05f, 0.18f), new Vector2(0.95f, 0.41f));
+            var scrollView = CreateScrollView(clanInfoPanel.transform, "MemberList",
+                new Vector2(0.03f, 0.15f), new Vector2(0.97f, 0.41f));
             ctrl.memberListContainer = scrollView.transform.Find("Viewport/Content");
             ctrl.memberItemPrefab = AssetDatabase.LoadAssetAtPath<GameObject>("Assets/Prefabs/MemberItemPrefab.prefab");
 
             // Ranking
-            ctrl.globalRankText = CreateText(clanPanel.transform, "GlobalRank", "Ranking: -", TextAnchor.MiddleLeft,
-                new Vector2(0.05f, 0.12f), new Vector2(0.5f, 0.18f), Vector2.zero, Vector2.zero).GetComponent<Text>();
-            ctrl.globalScoreText = CreateText(clanPanel.transform, "GlobalScore", "Puntuacion: 0", TextAnchor.MiddleLeft,
-                new Vector2(0.5f, 0.12f), new Vector2(0.95f, 0.18f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.globalRankText = CreateText(clanInfoPanel.transform, "GlobalRank", "Ranking: -", TextAnchor.MiddleLeft,
+                new Vector2(0.05f, 0.09f), new Vector2(0.5f, 0.15f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.globalRankText.color = ACCENT;
+
+            ctrl.globalScoreText = CreateText(clanInfoPanel.transform, "GlobalScore", "Puntuacion: 0", TextAnchor.MiddleRight,
+                new Vector2(0.5f, 0.09f), new Vector2(0.95f, 0.15f), Vector2.zero, Vector2.zero).GetComponent<Text>();
+            ctrl.globalScoreText.color = Color.white;
 
             // Bottom buttons
-            var leaveBtn = CreateButton(clanPanel.transform, "LeaveClanBtn", "Salir del Clan",
-                new Vector2(0.05f, 0.04f), new Vector2(0.35f, 0.11f), Vector2.zero, Vector2.zero,
-                new Color(0.4f, 0.1f, 0.1f));
+            var leaveBtn = CreateIconButton(clanInfoPanel.transform, "LeaveClanBtn", "Salir del Clan",
+                new Vector2(0.05f, 0.02f), new Vector2(0.40f, 0.09f),
+                DANGER, "Assets/Sprites/UI/Buttons/btn_danger.png");
             ctrl.leaveClanButton = leaveBtn.GetComponent<Button>();
-
-            var closeBtn = CreateButton(parent, "CloseBtn", "Volver",
-                new Vector2(0.65f, 0.04f), new Vector2(0.95f, 0.11f), Vector2.zero, Vector2.zero,
-                new Color(0.3f, 0.15f, 0.15f));
-            ctrl.closeButton = closeBtn.GetComponent<Button>();
         }
 
         // ============================================================
-        // UTILITY METHODS
+        // UTILITY METHODS (PRESERVED)
         // ============================================================
 
         static T CreateOrLoad<T>(string path) where T : ScriptableObject
@@ -1623,6 +1981,22 @@ namespace ProjectEvolvion.Editor
             }
         }
 
+        // ============================================================
+        // UI HELPER METHODS (REWRITTEN)
+        // ============================================================
+
+        static void SetSpriteIfExists(GameObject go, string spritePath)
+        {
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+            if (sprite != null)
+            {
+                var img = go.GetComponent<Image>();
+                if (img == null) img = go.AddComponent<Image>();
+                img.sprite = sprite;
+                img.type = Image.Type.Sliced;
+            }
+        }
+
         static GameObject CreatePanel(Transform parent, string name, Color bgColor)
         {
             var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer));
@@ -1637,6 +2011,7 @@ namespace ProjectEvolvion.Editor
             {
                 var img = go.AddComponent<Image>();
                 img.color = bgColor;
+                img.type = Image.Type.Sliced;
             }
 
             return go;
@@ -1652,7 +2027,9 @@ namespace ProjectEvolvion.Editor
             rt.anchorMax = anchorMax;
             rt.offsetMin = offsetMin;
             rt.offsetMax = offsetMax;
-            go.GetComponent<Image>().color = bgColor;
+            var img = go.GetComponent<Image>();
+            img.color = bgColor;
+            img.type = Image.Type.Sliced;
             return go;
         }
 
@@ -1674,7 +2051,7 @@ namespace ProjectEvolvion.Editor
             t.resizeTextForBestFit = true;
             t.resizeTextMinSize = 8;
             t.resizeTextMaxSize = 18;
-            t.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            t.font = DefaultFont;
             return go;
         }
 
@@ -1688,24 +2065,65 @@ namespace ProjectEvolvion.Editor
             rt.anchorMax = anchorMax;
             rt.offsetMin = offsetMin;
             rt.offsetMax = offsetMax;
-            go.GetComponent<Image>().color = bgColor;
+            var img = go.GetComponent<Image>();
+            img.color = bgColor;
+            img.type = Image.Type.Sliced;
 
             var textGO = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
             textGO.transform.SetParent(go.transform, false);
             var textRT = textGO.GetComponent<RectTransform>();
             textRT.anchorMin = Vector2.zero;
             textRT.anchorMax = Vector2.one;
-            textRT.offsetMin = new Vector2(2, 2);
-            textRT.offsetMax = new Vector2(-2, -2);
+            textRT.offsetMin = new Vector2(4, 2);
+            textRT.offsetMax = new Vector2(-4, -2);
             var t = textGO.GetComponent<Text>();
             t.text = label;
             t.color = Color.white;
-            t.fontSize = 12;
+            t.fontSize = 13;
             t.alignment = TextAnchor.MiddleCenter;
             t.resizeTextForBestFit = true;
-            t.resizeTextMinSize = 7;
-            t.resizeTextMaxSize = 14;
-            t.font = Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+            t.resizeTextMinSize = 8;
+            t.resizeTextMaxSize = 15;
+            t.font = DefaultFont;
+
+            return go;
+        }
+
+        /// <summary>
+        /// Creates a button with an optional 9-sliced sprite background.
+        /// </summary>
+        static GameObject CreateIconButton(Transform parent, string name, string label,
+            Vector2 anchorMin, Vector2 anchorMax, Color tintColor, string spritePath)
+        {
+            var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+            go.transform.SetParent(parent, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = anchorMin;
+            rt.anchorMax = anchorMax;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            var img = go.GetComponent<Image>();
+            img.color = tintColor;
+            img.type = Image.Type.Sliced;
+            var sprite = AssetDatabase.LoadAssetAtPath<Sprite>(spritePath);
+            if (sprite != null) img.sprite = sprite;
+
+            var textGO = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
+            textGO.transform.SetParent(go.transform, false);
+            var textRT = textGO.GetComponent<RectTransform>();
+            textRT.anchorMin = Vector2.zero;
+            textRT.anchorMax = Vector2.one;
+            textRT.offsetMin = new Vector2(4, 2);
+            textRT.offsetMax = new Vector2(-4, -2);
+            var t = textGO.GetComponent<Text>();
+            t.text = label;
+            t.color = Color.white;
+            t.fontSize = 13;
+            t.alignment = TextAnchor.MiddleCenter;
+            t.resizeTextForBestFit = true;
+            t.resizeTextMinSize = 8;
+            t.resizeTextMaxSize = 15;
+            t.font = DefaultFont;
 
             return go;
         }
@@ -1721,8 +2139,11 @@ namespace ProjectEvolvion.Editor
             rt.offsetMin = Vector2.zero;
             rt.offsetMax = Vector2.zero;
 
+            // Background
             var bg = CreateUIElement(go.transform, "Background", Vector2.zero, Vector2.one,
-                Vector2.zero, Vector2.zero, new Color(0.2f, 0.2f, 0.2f));
+                Vector2.zero, Vector2.zero, new Color(BG_DEEP.r, BG_DEEP.g, BG_DEEP.b, 0.6f));
+            var barBgSprite = AssetDatabase.LoadAssetAtPath<Sprite>("Assets/Sprites/UI/Bars/bar_bg.png");
+            if (barBgSprite != null) { bg.GetComponent<Image>().sprite = barBgSprite; bg.GetComponent<Image>().type = Image.Type.Sliced; }
 
             var fillArea = new GameObject("Fill Area", typeof(RectTransform));
             fillArea.transform.SetParent(go.transform, false);
@@ -1761,7 +2182,7 @@ namespace ProjectEvolvion.Editor
             vpRT.anchorMax = Vector2.one;
             vpRT.offsetMin = Vector2.zero;
             vpRT.offsetMax = Vector2.zero;
-            viewport.GetComponent<Image>().color = new Color(0.1f, 0.1f, 0.1f, 0.3f);
+            viewport.GetComponent<Image>().color = new Color(BG_DEEP.r, BG_DEEP.g, BG_DEEP.b, 0.25f);
             viewport.GetComponent<Mask>().showMaskGraphic = true;
 
             // Content
@@ -1774,8 +2195,8 @@ namespace ProjectEvolvion.Editor
             contentRT.offsetMin = Vector2.zero;
             contentRT.offsetMax = Vector2.zero;
             var vlg = content.GetComponent<VerticalLayoutGroup>();
-            vlg.spacing = 5;
-            vlg.padding = new RectOffset(5, 5, 5, 5);
+            vlg.spacing = 6;
+            vlg.padding = new RectOffset(8, 8, 8, 8);
             vlg.childForceExpandWidth = true;
             vlg.childForceExpandHeight = false;
             vlg.childControlWidth = true;
@@ -1790,6 +2211,137 @@ namespace ProjectEvolvion.Editor
             scrollRect.vertical = true;
 
             return scrollGO;
+        }
+
+        /// <summary>
+        /// Creates a resource display (icon + text) for the top bar.
+        /// Returns the Text component.
+        /// </summary>
+        static Text CreateResourceDisplay(Transform parent, string resourceName, string defaultValue, string iconPath)
+        {
+            var container = new GameObject($"Res_{resourceName}", typeof(RectTransform), typeof(HorizontalLayoutGroup));
+            container.transform.SetParent(parent, false);
+            var crt = container.GetComponent<RectTransform>();
+            crt.sizeDelta = new Vector2(150, 30);
+            var hlg = container.GetComponent<HorizontalLayoutGroup>();
+            hlg.spacing = 3;
+            hlg.childForceExpandWidth = false;
+            hlg.childForceExpandHeight = true;
+            hlg.childControlWidth = false;
+            hlg.childControlHeight = true;
+            hlg.childAlignment = TextAnchor.MiddleLeft;
+
+            // Icon
+            var iconGO = new GameObject("Icon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(LayoutElement));
+            iconGO.transform.SetParent(container.transform, false);
+            var le = iconGO.GetComponent<LayoutElement>();
+            le.preferredWidth = 22;
+            le.preferredHeight = 22;
+            var iconImg = iconGO.GetComponent<Image>();
+            iconImg.color = Color.white;
+            var iconSprite = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
+            if (iconSprite != null) iconImg.sprite = iconSprite;
+
+            // Value text
+            var textGO = new GameObject("Value", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text), typeof(LayoutElement));
+            textGO.transform.SetParent(container.transform, false);
+            var tle = textGO.GetComponent<LayoutElement>();
+            tle.preferredWidth = 80;
+            tle.flexibleWidth = 1;
+            var t = textGO.GetComponent<Text>();
+            t.text = defaultValue;
+            t.color = Color.white;
+            t.fontSize = 12;
+            t.alignment = TextAnchor.MiddleLeft;
+            t.resizeTextForBestFit = true;
+            t.resizeTextMinSize = 8;
+            t.resizeTextMaxSize = 14;
+            t.font = DefaultFont;
+
+            return t;
+        }
+
+        /// <summary>
+        /// Creates a bottom nav button with icon + label.
+        /// </summary>
+        static GameObject CreateNavButton(Transform parent, string name, string label,
+            Vector2 anchorMin, Vector2 anchorMax, string iconPath, bool elevated)
+        {
+            var go = new GameObject(name, typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button));
+            go.transform.SetParent(parent, false);
+            var rt = go.GetComponent<RectTransform>();
+            rt.anchorMin = anchorMin;
+            rt.anchorMax = anchorMax;
+            rt.offsetMin = new Vector2(2, 2);
+            rt.offsetMax = new Vector2(-2, elevated ? 20 : -2);
+            var img = go.GetComponent<Image>();
+            img.color = new Color(0, 0, 0, 0.01f); // nearly transparent background
+
+            // Icon
+            var iconGO = new GameObject("Icon", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image));
+            iconGO.transform.SetParent(go.transform, false);
+            var iconRT = iconGO.GetComponent<RectTransform>();
+            iconRT.anchorMin = new Vector2(0.25f, 0.40f);
+            iconRT.anchorMax = new Vector2(0.75f, 0.90f);
+            iconRT.offsetMin = Vector2.zero;
+            iconRT.offsetMax = Vector2.zero;
+            var iconImg = iconGO.GetComponent<Image>();
+            iconImg.color = Color.white;
+            var iconSprite = AssetDatabase.LoadAssetAtPath<Sprite>(iconPath);
+            if (iconSprite != null) iconImg.sprite = iconSprite;
+
+            // Label
+            var labelGO = new GameObject("Label", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
+            labelGO.transform.SetParent(go.transform, false);
+            var labelRT = labelGO.GetComponent<RectTransform>();
+            labelRT.anchorMin = new Vector2(0, 0);
+            labelRT.anchorMax = new Vector2(1, 0.38f);
+            labelRT.offsetMin = Vector2.zero;
+            labelRT.offsetMax = Vector2.zero;
+            var labelText = labelGO.GetComponent<Text>();
+            labelText.text = label;
+            labelText.color = TEXT_MUTED;
+            labelText.fontSize = 10;
+            labelText.alignment = TextAnchor.MiddleCenter;
+            labelText.resizeTextForBestFit = true;
+            labelText.resizeTextMinSize = 7;
+            labelText.resizeTextMaxSize = 11;
+            labelText.font = DefaultFont;
+
+            return go;
+        }
+
+        /// <summary>
+        /// Creates a single era tab button for the card album horizontal scroll.
+        /// </summary>
+        static Button CreateTabButton(Transform parent, string label, float width, Color bgColor)
+        {
+            var go = new GameObject($"Tab_{label}", typeof(RectTransform), typeof(CanvasRenderer), typeof(Image), typeof(Button), typeof(LayoutElement));
+            go.transform.SetParent(parent, false);
+            var le = go.GetComponent<LayoutElement>();
+            le.preferredWidth = width;
+            var img = go.GetComponent<Image>();
+            img.color = bgColor;
+            img.type = Image.Type.Sliced;
+
+            var textGO = new GameObject("Text", typeof(RectTransform), typeof(CanvasRenderer), typeof(Text));
+            textGO.transform.SetParent(go.transform, false);
+            var textRT = textGO.GetComponent<RectTransform>();
+            textRT.anchorMin = Vector2.zero;
+            textRT.anchorMax = Vector2.one;
+            textRT.offsetMin = new Vector2(4, 2);
+            textRT.offsetMax = new Vector2(-4, -2);
+            var t = textGO.GetComponent<Text>();
+            t.text = label;
+            t.color = PRIMARY;
+            t.fontSize = 11;
+            t.alignment = TextAnchor.MiddleCenter;
+            t.resizeTextForBestFit = true;
+            t.resizeTextMinSize = 8;
+            t.resizeTextMaxSize = 13;
+            t.font = DefaultFont;
+
+            return go.GetComponent<Button>();
         }
     }
 }

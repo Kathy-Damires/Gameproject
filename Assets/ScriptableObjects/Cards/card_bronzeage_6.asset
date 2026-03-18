@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_bronzeage_6
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_bronzeage_6
-  cardName: Codigo de Leyes
-  description: 'Carta coleccionable: Codigo de Leyes'
+  cardName: Carro de Guerra
+  description: 'Carta coleccionable de la era BronzeAge: Carro de Guerra'
   artwork: {fileID: 0}
   era: 2
   planetId: planet_porera
@@ -22,4 +22,4 @@ MonoBehaviour:
   setIndex: 6
   setCompletionReward:
   - resourceType: 5
-    amount: 10
+    amount: 20

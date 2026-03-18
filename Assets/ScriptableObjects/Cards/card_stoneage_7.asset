@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_stoneage_7
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_stoneage_7
-  cardName: Hueso Tallado
-  description: 'Carta coleccionable: Hueso Tallado'
+  cardName: Mano Pintada
+  description: 'Carta coleccionable de la era StoneAge: Mano Pintada'
   artwork: {fileID: 0}
   era: 0
   planetId: planet_porera

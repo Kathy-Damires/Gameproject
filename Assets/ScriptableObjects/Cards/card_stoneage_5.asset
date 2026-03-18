@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_stoneage_5
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_stoneage_5
-  cardName: Cielo Nocturno
-  description: 'Carta coleccionable: Cielo Nocturno'
+  cardName: Refugio de Roca
+  description: 'Carta coleccionable de la era StoneAge: Refugio de Roca'
   artwork: {fileID: 0}
   era: 0
   planetId: planet_porera

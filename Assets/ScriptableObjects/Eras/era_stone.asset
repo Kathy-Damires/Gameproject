@@ -18,11 +18,16 @@ MonoBehaviour:
   description: La Edad de Piedra de la civilizacion
   icon: {fileID: 0}
   structures:
+  - {fileID: 11400000, guid: b0b68684deda34f46b40673012639630, type: 2}
   - {fileID: 11400000, guid: f82ea918d05cb4911b8673de724c6419, type: 2}
   - {fileID: 11400000, guid: 3b4106cee552d4bd0890be73a062a80b, type: 2}
+  - {fileID: 11400000, guid: a20e2c04d5b244218ae5c7b8b533221f, type: 2}
+  - {fileID: 11400000, guid: eb777939e401e479a8f411a07f69c61a, type: 2}
   - {fileID: 11400000, guid: d5195edf3b6a44e95bb714d5c053c719, type: 2}
   enemies:
   - {fileID: 11400000, guid: 8e5554b4f145240e1a235f57167913c8, type: 2}
+  - {fileID: 11400000, guid: 73d27398c93fc4c089060799b6885db0, type: 2}
+  - {fileID: 11400000, guid: cdd1c36192d704e1dac73f05e6fcae9b, type: 2}
   - {fileID: 11400000, guid: b6684a96ae7524aa7862cdd32986f1ef, type: 2}
   cards:
   - {fileID: 11400000, guid: f780da4dc9c174df0900b23e605cbeea, type: 2}

@@ -14,7 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.PlanetData
   planetId: planet_porera
   planetName: Porera
-  description: El planeta natal. Aqui comienza tu viaje a traves de las eras.
+  description: Mundo verde primordial. Aqui comienza tu viaje desde herramientas
+    de piedra hasta el descubrimiento de los metales.
   icon: {fileID: 0}
   eras:
   - {fileID: 11400000, guid: 7fbc40dc2010e44b08bb623063379f8e, type: 2}
@@ -27,3 +28,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 9837584526a6f4d2ea2e8c1ca6b03e22, type: 2}
   - {fileID: 11400000, guid: 3646fc28282854f7aaf0a6691e125dc3, type: 2}
   cardsPerEra: 9
+  planetColor: {r: 0.47, g: 0.69, b: 0.28, a: 1}
+  iconEmoji: volcano
+  planetImage: {fileID: 0}
+  population: 85000
+  startsUnlocked: 1

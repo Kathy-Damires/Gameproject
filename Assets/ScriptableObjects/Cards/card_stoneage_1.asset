@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: card_stoneage_1
   m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.CardData
   cardId: card_stoneage_1
-  cardName: Fuego Primordial
-  description: 'Carta coleccionable: Fuego Primordial'
+  cardName: Pintura Rupestre
+  description: 'Carta coleccionable de la era StoneAge: Pintura Rupestre'
   artwork: {fileID: 0}
   era: 0
   planetId: planet_porera

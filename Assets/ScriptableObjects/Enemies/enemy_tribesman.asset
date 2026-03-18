@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a3196c7afa484c659b830d1c0decada, type: 3}
+  m_Name: enemy_tribesman
+  m_EditorClassIdentifier: Assembly-CSharp::ProjectEvolvion.EnemyData
+  enemyId: enemy_tribesman
+  enemyName: Rival Tribal
+  description: Enemigo de la TribalAge
+  icon: {fileID: 0}
+  era: 1
+  maxHP: 70
+  attack: 15
+  defense: 8
+  attackSpeed: 1
+  resourceRewards:
+  - resourceType: 1
+    minAmount: 12.5
+    maxAmount: 50
+  cardDropChance: 0.1
+  equipmentDropChance: 0.05
+  experienceReward: 25
