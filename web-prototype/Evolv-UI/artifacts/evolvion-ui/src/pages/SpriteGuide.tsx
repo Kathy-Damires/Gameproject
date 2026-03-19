@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
-import { Palette, Image, Check, AlertCircle } from "lucide-react";
+import { Palette, ImageIcon, Check, AlertCircle } from "lucide-react";
 
 interface SpriteItem {
   name: string;
@@ -270,7 +270,7 @@ export default function SpriteGuide() {
                   {item.status === "real" ? (
                     <Check className="w-4 h-4 text-green-400" />
                   ) : (
-                    <Image className="w-4 h-4" style={{ color: `${item.color}80` }} />
+                    <ImageIcon className="w-4 h-4" style={{ color: `${item.color}80` }} />
                   )}
                 </div>
 
