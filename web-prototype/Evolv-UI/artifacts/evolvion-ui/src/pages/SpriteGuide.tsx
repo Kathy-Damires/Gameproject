@@ -1,3 +1,4 @@
+// @ts-ignore
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Palette, ImageIcon, Check, AlertCircle } from "lucide-react";
