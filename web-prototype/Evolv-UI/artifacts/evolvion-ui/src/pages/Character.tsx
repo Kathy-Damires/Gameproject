@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
-import { Sword, Shield, Heart, Zap } from "lucide-react";
+import { Sword, Shield, Heart, Zap, BatteryCharging, Play, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const EQUIPMENT = {
-  helmet: { name:"Máscara Tribal",      emoji:"🪖", rarity:"epic",      atk:0,   def:30,  hp:80  },
+  helmet: { name:"Mascara Tribal",      emoji:"🪖", rarity:"epic",      atk:0,   def:30,  hp:80  },
   weapon: { name:"Espada de Bronce",    emoji:"🗡️", rarity:"clear",     atk:120, def:0,   hp:0   },
-  armor:  { name:"Túnica de Cuero",     emoji:"🛡️", rarity:"common",    atk:0,   def:30,  hp:0   },
+  armor:  { name:"Tunica de Cuero",     emoji:"🛡️", rarity:"common",    atk:0,   def:30,  hp:0   },
   gadget: { name:"Amuleto de la Suerte",emoji:"📿", rarity:"legendary", atk:0,   def:0,   hp:150 },
 };
 
@@ -16,14 +16,17 @@ const totalEq = (key:"atk"|"def"|"hp") => Object.values(EQUIPMENT).reduce((a,e)=
 const STATS = { atk:BASE.atk+totalEq("atk"), def:BASE.def+totalEq("def"), hp:BASE.hp+totalEq("hp") };
 
 const ENEMIES = [
-  { name:"Bestia de la Cueva", emoji:"🦁", sprite:"🦁", hp:200, atk:20, def:5,  color:"#FF8A65", reward:"🪨×30 • XP+50"   },
-  { name:"Lobo Tribal",        emoji:"🐺", sprite:"🐺", hp:350, atk:35, def:12, color:"#78909C", reward:"🪵×25 • XP+90"   },
-  { name:"Guerrero de Bronce", emoji:"🛡️", sprite:"🛡️", hp:500, atk:50, def:20, color:"#CD7F32", reward:"🥉×15 • XP+150"  },
+  { name:"Bestia de la Cueva", emoji:"🦁", sprite:"🦁", hp:200, atk:20, def:5,  color:"#FF8A65", reward:"🪨x30 - XP+50"   },
+  { name:"Lobo Tribal",        emoji:"🐺", sprite:"🐺", hp:350, atk:35, def:12, color:"#78909C", reward:"🪵x25 - XP+90"   },
+  { name:"Guerrero de Bronce", emoji:"🛡️", sprite:"🛡️", hp:500, atk:50, def:20, color:"#CD7F32", reward:"🥉x15 - XP+150"  },
 ];
 
 const RARITY_COLOR: Record<string,string> = {
   common:"hsl(210 20% 60%)", clear:"hsl(193 100% 50%)", epic:"hsl(280 90% 65%)", legendary:"hsl(45 100% 55%)",
 };
+
+const ENERGY_MAX = 30;
+const ENERGY_COST = 5;
 
 type LogEntry = { id:number; text:string; type:"dealt"|"received"|"info"|"crit"|"reward" };
 
@@ -34,7 +37,8 @@ export default function Character() {
   const [enemyHP, setEnemyHP] = useState(ENEMIES[0].hp);
   const [fighting, setFighting] = useState(false);
   const [wins, setWins] = useState(12);
-  const [log, setLog] = useState<LogEntry[]>([{ id:0, text:"¡Presiona Iniciar para combatir!", type:"info" }]);
+  const [energy, setEnergy] = useState(28);
+  const [log, setLog] = useState<LogEntry[]>([{ id:0, text:"Presiona Iniciar para combatir!", type:"info" }]);
   const [arisShake, setArisShake] = useState(false);
   const [enemyShake, setEnemyShake] = useState(false);
   const [arisAttack, setArisAttack] = useState(false);
@@ -52,8 +56,14 @@ export default function Character() {
     setLog([{id:Date.now(), text:`Enemigo: ${ENEMIES[idx].name}`, type:"info"}]);
   };
 
+  const canFight = energy >= ENERGY_COST;
+
   const startCombat = () => {
     if (fighting) { if(timerRef.current) clearInterval(timerRef.current); setFighting(false); return; }
+    if (!canFight) return;
+
+    setEnergy(e => e - ENERGY_COST);
+
     let aHp = arisHP > 0 ? arisHP : STATS.hp;
     let eHp = enemyHP > 0 ? enemyHP : enemy.hp;
     if(arisHP <= 0) { setArisHP(STATS.hp); aHp = STATS.hp; }
@@ -65,7 +75,6 @@ export default function Character() {
       const dmg = Math.max(1, Math.floor((STATS.atk - enemy.def) * (isCrit ? 2 : 1) + Math.random()*12 - 6));
       const take = Math.max(1, Math.floor(enemy.atk - STATS.def + Math.random()*8 - 4));
 
-      // Animate: Aris attacks
       setArisAttack(true);
       setTimeout(() => {
         setArisAttack(false);
@@ -74,7 +83,6 @@ export default function Character() {
         setTimeout(()=>{ setEnemyShake(false); setLastDmg(p=>({...p,enemy:undefined})); }, 500);
       }, 250);
 
-      // Animate: enemy counterattacks
       setTimeout(() => {
         setEnemyAttack(true);
         setTimeout(()=>{
@@ -92,14 +100,14 @@ export default function Character() {
       setRound(r => r+1);
 
       const newLog: LogEntry[] = [
-        { id:Date.now(), text:isCrit ? `⚡CRÍTICO! Aris golpea: ${dmg}` : `Aris ataca: ${dmg}`, type: isCrit ? "crit" : "dealt" },
+        { id:Date.now(), text:isCrit ? `CRITICO! Aris golpea: ${dmg}` : `Aris ataca: ${dmg}`, type: isCrit ? "crit" : "dealt" },
         { id:Date.now()+1, text:`${enemy.name} responde: ${take}`, type:"received" },
       ];
 
       if (eHp <= 0) {
         clearInterval(timerRef.current!); setFighting(false);
         setWins(w=>w+1);
-        newLog.push({ id:Date.now()+2, text:`🎉 ¡Victoria! ${enemy.reward}`, type:"reward" });
+        newLog.push({ id:Date.now()+2, text:`Victoria! ${enemy.reward}`, type:"reward" });
       } else if (aHp <= 0) {
         clearInterval(timerRef.current!); setFighting(false);
         setTimeout(()=>setArisHP(Math.floor(STATS.hp*0.3)), 800);
@@ -115,12 +123,52 @@ export default function Character() {
 
   const arisHpPct = Math.max(0, (arisHP / STATS.hp) * 100);
   const enemyHpPct = Math.max(0, (enemyHP / enemy.hp) * 100);
+  const energyPct = (energy / ENERGY_MAX) * 100;
 
   return (
     <div className="space-y-4">
+      {/* Energy bar */}
+      <div className="glass-panel p-3 rounded-2xl border border-yellow-500/20"
+        style={{ background: "linear-gradient(135deg, rgba(234,179,8,0.05), rgba(234,179,8,0.1))" }}>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center gap-2">
+            <Zap className="w-4 h-4 text-yellow-400" />
+            <span className="font-display text-sm text-white">Energia: {energy}/{ENERGY_MAX}</span>
+          </div>
+          <span className="text-[9px] text-muted-foreground font-display">Costo por combate: {ENERGY_COST}</span>
+        </div>
+        <Progress value={energyPct}
+          indicatorClassName={cn(
+            "transition-all",
+            energyPct > 50 ? "bg-gradient-to-r from-yellow-500 to-amber-400"
+              : energyPct > 20 ? "bg-gradient-to-r from-orange-500 to-amber-500"
+              : "bg-gradient-to-r from-red-500 to-orange-500"
+          )} />
+
+        {!canFight && (
+          <motion.div initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }}
+            className="mt-2 text-center">
+            <div className="text-[10px] text-red-400 font-display mb-2">
+              Necesitas {ENERGY_COST} energia para luchar
+            </div>
+          </motion.div>
+        )}
+
+        <div className="flex gap-2 mt-2">
+          <button onClick={() => setEnergy(e => Math.min(ENERGY_MAX, e + ENERGY_MAX))}
+            className="flex-1 py-2 rounded-xl font-display text-[10px] uppercase tracking-wide transition-all bg-gradient-to-r from-accent to-orange-500 text-black flex items-center justify-center gap-1 shadow-[0_0_10px_rgba(255,170,0,0.2)]">
+            <BatteryCharging className="w-3 h-3" /> Recargar — 10 💎
+          </button>
+          <button onClick={() => setEnergy(e => Math.min(ENERGY_MAX, e + 5))}
+            className="flex-1 py-2 rounded-xl font-display text-[10px] uppercase tracking-wide transition-all bg-white/10 text-white border border-white/10 hover:bg-white/15 flex items-center justify-center gap-1">
+            <Eye className="w-3 h-3" /> Ver anuncio +5
+          </button>
+        </div>
+      </div>
+
       {/* Tabs */}
       <div className="flex gap-2">
-        {[{id:"combat" as const,label:"⚔️ Combate"},{id:"equipment" as const,label:"🛡️ Equipo"}].map(t=>(
+        {[{id:"combat" as const,label:"Combate"},{id:"equipment" as const,label:"Equipo"}].map(t=>(
           <button key={t.id} onClick={()=>setActiveTab(t.id)}
             className={cn(
               "flex-1 py-2.5 rounded-2xl font-display text-xs uppercase tracking-wide transition-all border",
@@ -162,25 +210,21 @@ export default function Character() {
           ))}
         </div>
 
-        {/* ══ VISUAL ARENA ══ */}
+        {/* VISUAL ARENA */}
         <div className="rounded-3xl overflow-hidden relative"
           style={{ background:"linear-gradient(180deg, #0d0520 0%, #120828 40%, #0a1428 100%)", minHeight:260 }}>
 
-          {/* BG grid lines for sci-fi look */}
           <div className="absolute inset-0 opacity-10"
             style={{ backgroundImage:"linear-gradient(rgba(0,212,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.3) 1px, transparent 1px)", backgroundSize:"40px 40px" }} />
 
-          {/* Glow beneath fighters */}
           <div className="absolute bottom-0 left-[18%] w-24 h-6 rounded-full opacity-50"
             style={{ background:"radial-gradient(ellipse, rgba(76,175,80,0.8), transparent 70%)", filter:"blur(4px)" }} />
           <div className="absolute bottom-0 right-[18%] w-24 h-6 rounded-full opacity-50"
             style={{ background:`radial-gradient(ellipse, ${enemy.color}cc, transparent 70%)`, filter:"blur(4px)" }} />
 
-          {/* Fighters row */}
           <div className="relative flex items-end justify-between px-6 pt-6 pb-4" style={{ minHeight:200 }}>
             {/* Aris */}
             <div className="flex flex-col items-center" style={{ width:"40%" }}>
-              {/* Damage popup */}
               <AnimatePresence>
                 {lastDmg.aris && (
                   <motion.div key="aris-dmg"
@@ -192,7 +236,6 @@ export default function Character() {
                 )}
               </AnimatePresence>
 
-              {/* Aris sprite */}
               <motion.div
                 animate={
                   arisShake ? { x:[-6,6,-4,4,0] } :
@@ -203,7 +246,6 @@ export default function Character() {
                 🧑‍🚀
               </motion.div>
 
-              {/* HP bar */}
               <div className="w-full mt-3 space-y-1">
                 <div className="flex justify-between text-[9px] font-display">
                   <span className="text-white">Aris</span>
@@ -285,18 +327,22 @@ export default function Character() {
           <div className="px-3 pb-3">
             <motion.button whileTap={{ scale:0.96 }}
               onClick={startCombat}
+              disabled={!canFight && !fighting}
               className={cn(
                 "w-full py-3 rounded-2xl font-display text-sm uppercase tracking-wide text-white transition-all",
                 fighting
                   ? "bg-gradient-to-r from-slate-600 to-slate-700"
-                  : arisHP <= 0
-                    ? "bg-gradient-to-r from-blue-600 to-blue-700"
-                    : "bg-gradient-to-r from-red-600 to-pink-600 shadow-[0_0_20px_rgba(244,67,54,0.4)]"
+                  : !canFight
+                    ? "bg-white/5 text-white/30 cursor-not-allowed"
+                    : arisHP <= 0
+                      ? "bg-gradient-to-r from-blue-600 to-blue-700"
+                      : "bg-gradient-to-r from-red-600 to-pink-600 shadow-[0_0_20px_rgba(244,67,54,0.4)]"
               )}>
-              {fighting ? "⏸ Pausar" : arisHP <= 0 ? "♻️ Reiniciar" : `▶ Luchar — ${enemy.name}`}
+              {fighting ? "⏸ Pausar" : !canFight ? `Energia insuficiente (${energy}/${ENERGY_COST})` : arisHP <= 0 ? "Reiniciar" : `Luchar — ${enemy.name}`}
             </motion.button>
             <div className="text-center text-[9px] text-muted-foreground mt-1">
               Recompensa: <span className="text-accent font-bold">{enemy.reward}</span>
+              {canFight && <span className="text-yellow-400 ml-2">(-{ENERGY_COST} energia)</span>}
             </div>
           </div>
         </div>
@@ -325,9 +371,9 @@ export default function Character() {
         </div>
         <div className="flex gap-2">
           {[
-            {label:"✨ Auto Equipar", cls:"bg-gradient-to-r from-primary to-secondary text-white shadow-[0_0_15px_rgba(0,212,255,0.3)]"},
-            {label:"🔗 Fusionar ×3",  cls:"bg-gradient-to-r from-accent to-orange-500 text-black"},
-            {label:"♻️ Reciclar",     cls:"bg-white/5 text-white/50 border border-white/10"},
+            {label:"Auto Equipar", cls:"bg-gradient-to-r from-primary to-secondary text-white shadow-[0_0_15px_rgba(0,212,255,0.3)]"},
+            {label:"Fusionar x3",  cls:"bg-gradient-to-r from-accent to-orange-500 text-black"},
+            {label:"Reciclar",     cls:"bg-white/5 text-white/50 border border-white/10"},
           ].map(btn=>(
             <button key={btn.label} className={cn("flex-1 py-2.5 rounded-2xl font-display text-[10px] uppercase tracking-wide transition-all", btn.cls)}>
               {btn.label}

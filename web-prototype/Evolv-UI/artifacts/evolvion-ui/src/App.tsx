@@ -14,6 +14,10 @@ import Clans from "./pages/Clans";
 import MiniGames from "./pages/MiniGames";
 import Structures from "./pages/Structures";
 import Shop from "./pages/Shop";
+import ChestOpen from "./pages/ChestOpen";
+import Settings from "./pages/Settings";
+import DailyRewards from "./pages/DailyRewards";
+import SpriteGuide from "./pages/SpriteGuide";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -38,6 +42,10 @@ function Router() {
         <Route path="/clans" component={Clans} />
         <Route path="/minigames" component={MiniGames} />
         <Route path="/shop" component={Shop} />
+        <Route path="/chest/:type" component={ChestOpen} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/daily-rewards" component={DailyRewards} />
+        <Route path="/sprite-guide" component={SpriteGuide} />
         <Route component={NotFound} />
       </Switch>
     </Shell>
