@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="80" fill="none" viewBox="0 0 256 80">
+<!-- SVG created with Arrow, by QuiverAI (https://quiver.ai) -->
+  <path d="m0 0h256v80h-256v-80z" fill="url(#paint0_radial_6043_20246)"/>
+  <path d="m231.7 7.82h-207c-8.79 0-15.55 7.49-15.55 16.36v29.39c0 9.4 6.76 16.71 15.55 16.71h207c9.21 0 16.07-7.65 16.07-16.71v-29.39c0-9.06-6.86-16.36-16.07-16.36z" fill="url(#paint1_radial_6043_20246)" fill-opacity=".75"/>
+  <path d="m231.4 12.16h-206.4c-7.35 0-12.46 6.85-12.46 13.25v28.48c0 7.27 5.58 12.83 12.26 12.83h206.5c7.69 0 12.19-6.71 12.19-12.78v-28.48c0-7.18-5.38-13.3-12.14-13.3z" fill="url(#paint2_linear_6043_20246)" stroke="#F8FFFE" stroke-width="1.081"/>
+  <path d="m223.2 23.91h-190.4c-5.2 0-8.43 4.72-8.43 9.39v12.85c0 5.51 3.42 9.79 8.39 9.79h190.4c5.34 0 7.23-4.61 7.23-9.83v-12.85c0-4.87-2.85-9.35-7.18-9.35z" fill="#1D2939" fill-opacity=".95"/>
+  <defs>
+    <radialGradient id="paint0_radial_6043_20246" cx="0" cy="0" r="1" gradientTransform="translate(128 40) scale(165.9 57.14)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5723B5" stop-opacity=".71" offset="0"/>
+      <stop stop-color="#6800E1" stop-opacity=".62" offset=".6719"/>
+      <stop stop-color="#CC3DFF" stop-opacity=".51" offset=".8698"/>
+      <stop stop-color="#FF7BFF" stop-opacity=".22" offset="1"/>
+    </radialGradient>
+    <radialGradient id="paint1_radial_6043_20246" cx="0" cy="0" r="1" gradientTransform="translate(128.5 39.05) scale(164.1 60.22)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#000035" offset="0"/>
+      <stop stop-color="#003561" stop-opacity=".8281" offset=".4062"/>
+      <stop stop-color="#0082B2" stop-opacity=".71" offset=".6458"/>
+      <stop stop-color="#00D1FF" stop-opacity=".48" offset="1"/>
+    </radialGradient>
+    <linearGradient id="paint2_linear_6043_20246" x1="128.1" x2="128.1" y1="11.62" y2="67.26" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6800B3" offset="0"/>
+      <stop stop-color="#1D2939" stop-opacity=".96" offset=".5365"/>
+      <stop stop-color="#1D2939" stop-opacity=".96" offset="1"/>
+    </linearGradient>
+  </defs>
+</svg>

@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="250" height="250" fill="none" viewBox="0 0 250 250">
+<!-- SVG created with Arrow, by QuiverAI (https://quiver.ai) -->
+  <path d="m249 116.1-1.24-5.89c-4.2-15.11-17.75-26.13-33.9-26.24h-179.8c-15.7 0.06-28.98 11.26-31.86 26.12l-1.08 6.01v11.92l1.08 6.11c2.94 14.55 16.04 25.83 31.86 25.84h180c15.67-0.12 28.92-11.26 32.64-25.87l2.39-6.08v-11.92z" fill="url(#paint0_radial_1411_1621)"/>
+  <path d="m207.2 93.12h-164.3c-16.92 0-31.18 14.97-31.18 30.96v0.33c0 15.56 14.23 31.49 31.37 31.49h164.1c17.14 0 31.77-15.02 31.77-31.39s-14.1-31.39-31.77-31.39z" fill="url(#paint1_linear_1411_1621)"/>
+  <path d="m207.4 95.76h-164.2c-15.42 0-28.57 13.47-28.57 28v0.93c0 14.19 13.03 28.54 28.71 28.54h163.7c15.16 0 29.02-14.17 29.02-29.11s-12.47-28.36-28.71-28.36z" fill="#FF7878"/>
+  <path d="m205.7 94.77v59.36h1.7c15.46 0 29.86-14.42 29.86-30.19 0-15.33-13.37-29.17-29.58-29.17h-1.98z" fill="url(#paint2_linear_1411_1621)"/>
+  <path d="m206.2 97.24v54.6h1.23c13.79 0 27.17-12.61 27.17-27.83 0-13.9-12.32-26.77-26.79-26.77h-1.61z" fill="#FF7878"/>
+  <path d="m205.7 101.8h-161.8c-11.97 0-22.99 10.56-22.99 22.53v0.63c0 11.55 10.92 22.85 23.12 22.85h161.4c11.81 0 23.15-10.95 23.15-23.06s-10.65-22.95-22.9-22.95z" fill="#CC2E2E"/>
+  <path d="m205.1 104.9h-161.1c-10.37 0-20.32 9.2-20.32 19.57v0.54c0 10.07 9.85 19.58 20.46 19.58h160.8c10.22 0 20.98-9.68 20.98-20.19s-10-19.5-20.74-19.5z" fill="#E53F3F"/>
+  <path d="m203.2 96.99h-51.67v5.71h51.67v-5.71z" fill="#c33"/>
+  <path d="m202 98.12h-49.22v3.51h49.22v-3.51z" fill="#FF7878"/>
+  <path d="m149.9 96.99h-47.52v5.71h47.52v-5.71z" fill="#c33"/>
+  <path d="m148.7 98.12h-45.29v3.51h45.29v-3.51z" fill="#FF7878"/>
+  <path d="m100.5 96.99h-53.06v5.71h53.06v-5.71z" fill="#c33"/>
+  <path d="m99.31 98.12h-50.71v3.51h50.71v-3.51z" fill="#FF7878"/>
+  <path d="m151.4 145.9v6.85h51.67v-6.85h-51.67z" fill="#c33"/>
+  <path d="m152.6 147.1v4.51h49.31v-4.51h-49.31z" fill="#FF7878"/>
+  <path d="m102.2 145.9v6.85h47.52v-6.85h-47.52z" fill="#c33"/>
+  <path d="m103.4 147.1v4.51h45.29v-4.51h-45.29z" fill="#FF7878"/>
+  <path d="m47.29 145.9v6.85h53.06v-6.85h-53.06z" fill="#c33"/>
+  <path d="m48.47 147.1v4.51h50.71v-4.51h-50.71z" fill="#FF7878"/>
+  <path d="m229.3 123.4 7.17 0.08-0.01 1.51-7.17-0.07 0.01-1.52z" fill="#CC2E2E"/>
+  <path d="m13.89 123.5 6.38-0.07 0.02 1.52-6.41 0.06 0.01-1.51z" fill="#CC2E2E"/>
+  <defs>
+    <radialGradient id="paint0_radial_1411_1621" cx="0" cy="0" r="1" gradientTransform="translate(125 122) scale(138.9 63.08)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#00B1FF" offset="0"/>
+      <stop stop-color="#90f" stop-opacity=".51" offset=".6802"/>
+      <stop stop-color="#90f" stop-opacity=".06" offset="1"/>
+    </radialGradient>
+    <linearGradient id="paint1_linear_1411_1621" x1="11.75" x2="239" y1="124.5" y2="124.5" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#23C9FF" offset="0"/>
+      <stop stop-color="#B000FF" offset="1"/>
+    </linearGradient>
+    <linearGradient id="paint2_linear_1411_1621" x1="221.5" x2="221.5" y1="94.77" y2="154.1" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#B000FF" offset="0"/>
+      <stop stop-color="#90f" offset="1"/>
+    </linearGradient>
+  </defs>
+</svg>

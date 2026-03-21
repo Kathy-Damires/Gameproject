@@ -1,12 +1,15 @@
 import React, { useEffect, useState, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { GalleryVerticalEnd, ShoppingBag, Trophy, Users, Settings, Gift } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
+import { RESOURCE_ICONS, NAV_ICONS, BADGE_ICONS } from "@/lib/icons";
 
 interface Resources { stone:number; wood:number; food:number; bronze:number; energy:number; diamonds:number; }
 const RATES: Resources = { stone:2.5, wood:1.8, food:1.2, bronze:0.4, energy:0.8, diamonds:0.02 };
-const ICONS: Record<keyof Resources,string> = { stone:"🪨", wood:"🪵", food:"🍖", bronze:"🥉", energy:"⚡", diamonds:"💎" };
+const RES_ICON_MAP: Record<keyof Resources, string> = {
+  stone: RESOURCE_ICONS.stone, wood: RESOURCE_ICONS.wood, food: RESOURCE_ICONS.food,
+  bronze: RESOURCE_ICONS.bronze, energy: RESOURCE_ICONS.energy, diamonds: RESOURCE_ICONS.diamonds,
+};
 
 /* ── Social notification messages ── */
 const SOCIAL_MESSAGES = [
@@ -125,8 +128,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <div className="flex items-center gap-1.5">
             {/* Daily rewards notification dot */}
             <Link href="/daily-rewards"
-              className="relative flex items-center p-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition-colors">
-              <Gift className="w-3.5 h-3.5 text-amber-400" />
+              className="relative flex items-center p-1 rounded-full bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 transition-colors">
+              <img src={BADGE_ICONS.dailyreward} alt="daily" className="w-5 h-5" />
               <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-red-500 border border-background animate-pulse" />
             </Link>
             <span className="text-[10px] px-2 py-1 rounded-full bg-white/5 border border-white/10 text-muted-foreground font-display">
@@ -134,8 +137,8 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </span>
             {/* Configuracion */}
             <Link href="/settings"
-              className="flex items-center p-1.5 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
-              <Settings className="w-3.5 h-3.5 text-muted-foreground" />
+              className="flex items-center p-1 rounded-full bg-white/5 border border-white/10 hover:bg-white/10 transition-colors">
+              <img src={NAV_ICONS.settings} alt="settings" className="w-5 h-5 opacity-60" />
             </Link>
           </div>
         </div>
@@ -144,7 +147,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
         <div className="grid grid-cols-6 gap-1 pb-0.5">
           {(Object.keys(resources) as (keyof Resources)[]).map(key => (
             <div key={key} className="flex items-center gap-0.5 bg-black/30 px-1.5 py-1 rounded-lg border border-white/8 text-[10px]">
-              <span className="text-xs">{ICONS[key]}</span>
+              <img src={RES_ICON_MAP[key]} alt={key} className="w-4 h-4" />
               <span className="font-bold text-white">{fmt(resources[key])}</span>
             </div>
           ))}
@@ -159,9 +162,9 @@ export function Shell({ children }: { children: React.ReactNode }) {
             <Link href="/shop">
               <motion.div whileTap={{ scale: 0.9 }}
                 className="relative w-12 flex flex-col items-center cursor-pointer">
-                <div className="w-11 h-11 rounded-full bg-secondary/20 border-2 border-secondary/40 flex flex-col items-center justify-center shadow-[0_0_10px_rgba(200,50,180,0.3)]">
+                <div className="w-11 h-11 rounded-full bg-secondary/20 border-2 border-secondary/40 flex items-center justify-center shadow-[0_0_10px_rgba(200,50,180,0.3)]">
                   <div className="absolute inset-0 rounded-full border-2 border-secondary/20 animate-ping pointer-events-none" />
-                  <span className="text-sm leading-none">🔥</span>
+                  <img src={BADGE_ICONS.event} alt="event" className="w-7 h-7" />
                 </div>
                 <span className="text-[7px] font-display text-secondary mt-0.5">x2 XP</span>
                 <span className="text-[6px] text-white/60 tabular-nums">{evtH}:{String(evtM).padStart(2,"0")}:{String(evtS).padStart(2,"0")}</span>
@@ -174,7 +177,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
             className="relative w-12 flex flex-col items-center">
             <div className="absolute -top-1 -right-0.5 w-3.5 h-3.5 rounded-full bg-red-500 flex items-center justify-center text-[6px] font-display text-white z-10">!</div>
             <div className="w-11 h-11 rounded-full bg-purple-500/20 border-2 border-purple-500/30 flex items-center justify-center">
-              <span className="text-sm leading-none">📜</span>
+              <img src={BADGE_ICONS.battlepass} alt="battlepass" className="w-7 h-7" />
             </div>
             <span className="text-[7px] font-display text-purple-400 mt-0.5">Pase</span>
             <span className="text-[6px] text-white/60">Nv.7</span>
@@ -186,7 +189,7 @@ export function Shell({ children }: { children: React.ReactNode }) {
               className="relative w-12 flex flex-col items-center">
               <div className="absolute -top-1 -right-0.5 w-3.5 h-3.5 rounded-full bg-amber-500 flex items-center justify-center text-[6px] font-display text-black z-10">{3 - adsWatched}</div>
               <div className="w-11 h-11 rounded-full bg-amber-400/15 border-2 border-amber-400/30 flex items-center justify-center">
-                <span className="text-sm leading-none">🎬</span>
+                <img src={BADGE_ICONS.freeads} alt="freeads" className="w-7 h-7" />
               </div>
               <span className="text-[7px] font-display text-amber-300 mt-0.5">Gratis</span>
               <span className="text-[6px] text-white/60">{3 - adsWatched}/3</span>
@@ -338,10 +341,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
           <div className="flex items-end px-3 py-1.5 gap-1">
 
             {/* LEFT: Tienda */}
-            <NavFull href="/shop" icon={ShoppingBag} label="Tienda" active={location==="/shop"} accent />
+            <NavImg href="/shop" src={NAV_ICONS.shop} label="Tienda" active={location==="/shop"} />
 
             {/* LEFT: Cartas */}
-            <NavFull href="/collection" icon={GalleryVerticalEnd} label="Cartas" active={location==="/collection"} />
+            <NavImg href="/collection" src={NAV_ICONS.cards} label="Cartas" active={location==="/collection"} />
 
             {/* CENTER: Planet button */}
             <Link href="/" className="flex-shrink-0 flex justify-center mx-1" style={{ marginTop:-20 }}>
@@ -365,10 +368,10 @@ export function Shell({ children }: { children: React.ReactNode }) {
             </Link>
 
             {/* RIGHT: Clanes */}
-            <NavBadge href="/clans" icon={Users} label="Clanes" active={location==="/clans"} badge={5} color="blue" />
+            <NavImg href="/clans" src={NAV_ICONS.clan} label="Clanes" active={location==="/clans"} badge={5} />
 
             {/* RIGHT: Logros */}
-            <NavBadge href="/achievements" icon={Trophy} label="Logros" active={location==="/achievements"} badge={7} color="gold" />
+            <NavImg href="/achievements" src={NAV_ICONS.achievements} label="Logros" active={location==="/achievements"} badge={7} />
 
           </div>
         </div>
@@ -377,7 +380,44 @@ export function Shell({ children }: { children: React.ReactNode }) {
   );
 }
 
-/* Full nav item (icon + label below) */
+/* Nav item with SVG image */
+function NavImg({ href, src, label, active, badge }:
+  { href:string; src:string; label:string; active:boolean; badge?:number }) {
+  return (
+    <Link href={href} className="flex-1">
+      <div className="flex flex-col items-center justify-center gap-0.5 py-1">
+        <div className="relative">
+          <div className={cn(
+            "p-2 rounded-xl transition-all duration-300",
+            active ? "bg-primary/20" : "hover:bg-white/10"
+          )}>
+            <img src={src} alt={label} className={cn("w-6 h-6", !active && "opacity-50")} />
+            {active && (
+              <motion.div layoutId={`blob-${href}`}
+                className="absolute inset-0 rounded-xl blur-sm -z-10 bg-primary/20"
+                transition={{ type:"spring", bounce:0.2, duration:0.6 }} />
+            )}
+          </div>
+          {badge !== undefined && (
+            <div className={cn(
+              "absolute -top-1 -right-1 min-w-[16px] h-4 rounded-full flex items-center justify-center",
+              "text-[8px] font-display text-white px-1",
+              active ? "bg-primary" : "bg-white/20"
+            )}>
+              {badge}
+            </div>
+          )}
+        </div>
+        <span className={cn(
+          "text-[9px] font-display transition-colors",
+          active ? "text-primary" : "text-muted-foreground"
+        )}>{label}</span>
+      </div>
+    </Link>
+  );
+}
+
+/* Full nav item (icon + label below) — legacy, kept for reference */
 function NavFull({ href, icon:Icon, label, active, accent }:
   { href:string; icon:any; label:string; active:boolean; accent?:boolean }) {
   const activeColor = accent ? "text-secondary bg-secondary/20" : "text-primary bg-primary/20";

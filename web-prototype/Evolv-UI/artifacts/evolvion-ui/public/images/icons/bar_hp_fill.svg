@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="96" fill="none" viewBox="0 0 256 96">
+<!-- SVG created with Arrow, by QuiverAI (https://quiver.ai) -->
+  <path d="m255.4 0h-255v95.71h255v-95.71z" fill="url(#paint0_radial_2091_21651)"/>
+  <path d="m211.7 26.19h-167.1c-11.66 0-20.17 10.31-20.17 21.57v0.01c0 11.09 8.76 19.04 19.3 19.04h167.4c11.47 0 20.5-9.29 20.5-19.3v-0.01c0-11.09-8.26-21.31-19.92-21.31z" fill="#46D580" stroke="#70FFA2" stroke-miterlimit="10" stroke-width="4.741"/>
+  <path d="m152.1 29.06h-48.29c-10.1 0-18.28 8.84-18.28 18.55 0 9.9 8.11 17.85 17.9 17.85h48.06c10.18 0 19.1-8.6 18.71-18.97-0.38-9.54-8.53-17.43-18.1-17.43z" fill="#46D580" stroke="#70FFA2" stroke-miterlimit="10" stroke-width="4.054"/>
+  <defs>
+    <radialGradient id="paint0_radial_2091_21651" cx="0" cy="0" r="1" gradientTransform="translate(127.9 47.86) scale(181.5 90.18)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9542EF" offset="0"/>
+      <stop stop-color="#B852FF" stop-opacity=".7216" offset=".5729"/>
+      <stop stop-color="#C66BFF" stop-opacity=".6143" offset=".686"/>
+      <stop stop-color="#D280FF" stop-opacity=".5031" offset=".8045"/>
+      <stop stop-color="#D994FF" stop-opacity=".3326" offset=".9835"/>
+      <stop stop-color="#DB98FF" stop-opacity=".32" offset="1"/>
+    </radialGradient>
+  </defs>
+</svg>

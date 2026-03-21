@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useRoute, Link } from "wouter";
 import { ArrowLeft, Sparkles } from "lucide-react";
+import { RESOURCE_ICONS } from "@/lib/icons";
 
 const RARITY_CONFIG: Record<string, { border: string; bg: string; label: string; glow: string }> = {
   common: { border: "hsl(210 20% 60%)", bg: "from-slate-700/60 to-slate-800/60", label: "Comun", glow: "rgba(148,163,184,0.3)" },
@@ -11,49 +12,49 @@ const RARITY_CONFIG: Record<string, { border: string; bg: string; label: string;
   legendary: { border: "hsl(45 100% 55%)", bg: "from-yellow-900/60 to-amber-950/60", label: "Legendaria", glow: "rgba(245,158,11,0.6)" },
 };
 
-const CHEST_CONFIG: Record<string, { name: string; icon: string; rarity: string; minItems: number; maxItems: number; dropWeights: Record<string, number> }> = {
+const CHEST_CONFIG: Record<string, { name: string; emoji: string; rarity: string; minItems: number; maxItems: number; dropWeights: Record<string, number> }> = {
   basic: {
-    name: "Cofre Basico", icon: "📦", rarity: "common", minItems: 1, maxItems: 3,
+    name: "Cofre Basico", emoji: "📦", rarity: "common", minItems: 1, maxItems: 3,
     dropWeights: { common: 70, clear: 25, epic: 4.5, legendary: 0.5 },
   },
   epic: {
-    name: "Cofre Epico", icon: "🎁", rarity: "epic", minItems: 3, maxItems: 5,
+    name: "Cofre Epico", emoji: "🎁", rarity: "epic", minItems: 3, maxItems: 5,
     dropWeights: { common: 30, clear: 40, epic: 25, legendary: 5 },
   },
   legendary: {
-    name: "Cofre Legendario", icon: "👑", rarity: "legendary", minItems: 5, maxItems: 7,
+    name: "Cofre Legendario", emoji: "👑", rarity: "legendary", minItems: 5, maxItems: 7,
     dropWeights: { common: 10, clear: 30, epic: 40, legendary: 20 },
   },
 };
 
-const POSSIBLE_ITEMS: Record<string, Array<{ name: string; icon: string }>> = {
+const POSSIBLE_ITEMS: Record<string, Array<{ name: string; iconSrc?: string; emoji?: string }>> = {
   common: [
-    { name: "Piedra x200", icon: "🪨" },
-    { name: "Madera x200", icon: "🪵" },
-    { name: "Comida x150", icon: "🍖" },
-    { name: "Carta Comun", icon: "🃏" },
-    { name: "Pocion Menor", icon: "🧪" },
+    { name: "Piedra x200", iconSrc: RESOURCE_ICONS.stone },
+    { name: "Madera x200", iconSrc: RESOURCE_ICONS.wood },
+    { name: "Comida x150", iconSrc: RESOURCE_ICONS.food },
+    { name: "Carta Comun", emoji: "🃏" },
+    { name: "Pocion Menor", emoji: "🧪" },
   ],
   clear: [
-    { name: "Bronce x100", icon: "🥉" },
-    { name: "Espada Clara", icon: "🗡️" },
-    { name: "Escudo Claro", icon: "🛡️" },
-    { name: "Carta Clara", icon: "🃏" },
-    { name: "Energia x300", icon: "⚡" },
+    { name: "Bronce x100", iconSrc: RESOURCE_ICONS.bronze },
+    { name: "Espada Clara", emoji: "🗡️" },
+    { name: "Escudo Claro", emoji: "🛡️" },
+    { name: "Carta Clara", emoji: "🃏" },
+    { name: "Energia x300", iconSrc: RESOURCE_ICONS.energy },
   ],
   epic: [
-    { name: "Armadura Epica", icon: "🛡️" },
-    { name: "Espada Epica", icon: "🗡️" },
-    { name: "Carta Epica", icon: "🃏" },
-    { name: "Amuleto Epico", icon: "📿" },
-    { name: "Diamantes x50", icon: "💎" },
+    { name: "Armadura Epica", emoji: "🛡️" },
+    { name: "Espada Epica", emoji: "🗡️" },
+    { name: "Carta Epica", emoji: "🃏" },
+    { name: "Amuleto Epico", emoji: "🔮" },
+    { name: "Diamantes x50", iconSrc: RESOURCE_ICONS.diamonds },
   ],
   legendary: [
-    { name: "Espada Legendaria", icon: "🗡️" },
-    { name: "Armadura Legendaria", icon: "🛡️" },
-    { name: "Carta Legendaria", icon: "🃏" },
-    { name: "Amuleto Legendario", icon: "📿" },
-    { name: "Diamantes x200", icon: "💎" },
+    { name: "Espada Legendaria", emoji: "🗡️" },
+    { name: "Armadura Legendaria", emoji: "🛡️" },
+    { name: "Carta Legendaria", emoji: "🃏" },
+    { name: "Amuleto Legendario", emoji: "🔮" },
+    { name: "Diamantes x200", iconSrc: RESOURCE_ICONS.diamonds },
   ],
 };
 
@@ -69,7 +70,7 @@ function pickRarity(weights: Record<string, number>): string {
 
 function generateItems(config: typeof CHEST_CONFIG[string]) {
   const count = config.minItems + Math.floor(Math.random() * (config.maxItems - config.minItems + 1));
-  const items: Array<{ name: string; icon: string; rarity: string }> = [];
+  const items: Array<{ name: string; iconSrc?: string; emoji?: string; rarity: string }> = [];
   for (let i = 0; i < count; i++) {
     const rarity = pickRarity(config.dropWeights);
     const pool = POSSIBLE_ITEMS[rarity];
@@ -86,7 +87,7 @@ export default function ChestOpen() {
   const chestRarity = RARITY_CONFIG[config.rarity];
 
   const [phase, setPhase] = useState<"ready" | "opening" | "revealing" | "done">("ready");
-  const [items, setItems] = useState<Array<{ name: string; icon: string; rarity: string }>>([]);
+  const [items, setItems] = useState<Array<{ name: string; iconSrc?: string; emoji?: string; rarity: string }>>([]);
   const [revealIndex, setRevealIndex] = useState(-1);
 
   const handleOpen = useCallback(() => {
@@ -151,7 +152,7 @@ export default function ChestOpen() {
                 transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
                 className="text-8xl mb-6 drop-shadow-2xl"
                 style={{ filter: `drop-shadow(0 0 20px ${chestRarity.glow})` }}>
-                {config.icon}
+                <span className="text-6xl">{config.emoji}</span>
               </motion.div>
               <motion.button whileTap={{ scale: 0.95 }}
                 onClick={handleOpen}
@@ -170,7 +171,7 @@ export default function ChestOpen() {
                 transition={{ duration: 1, ease: "easeInOut" }}
                 className="text-8xl mb-4"
                 style={{ filter: `drop-shadow(0 0 30px ${chestRarity.glow})` }}>
-                {config.icon}
+                <span className="text-6xl">{config.emoji}</span>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0] }}
@@ -200,7 +201,7 @@ export default function ChestOpen() {
                       background: `linear-gradient(135deg, ${RARITY_CONFIG[items[revealIndex].rarity].glow}22, ${RARITY_CONFIG[items[revealIndex].rarity].glow}44)`,
                       boxShadow: `0 0 30px ${RARITY_CONFIG[items[revealIndex].rarity].glow}`,
                     }}>
-                    <span className="text-5xl">{items[revealIndex].icon}</span>
+                    {items[revealIndex].iconSrc ? <img src={items[revealIndex].iconSrc} alt="" className="w-12 h-12" /> : <span className="text-5xl">{items[revealIndex].emoji}</span>}
                   </div>
                   <div className="font-display text-sm text-white mb-1">{items[revealIndex].name}</div>
                   <span className="text-[9px] px-2 py-0.5 rounded-full font-display"
@@ -243,7 +244,7 @@ export default function ChestOpen() {
                     transition={{ delay: idx * 0.08 }}
                     className="glass-panel rounded-xl p-3 flex flex-col items-center border-2"
                     style={{ borderColor: `${RARITY_CONFIG[item.rarity].border}55` }}>
-                    <span className="text-2xl mb-1">{item.icon}</span>
+                    {item.iconSrc ? <img src={item.iconSrc} alt="" className="w-6 h-6 mb-1" /> : <span className="text-xl mb-1">{item.emoji}</span>}
                     <div className="text-[9px] text-white text-center font-display leading-tight">{item.name}</div>
                     <span className="text-[8px] mt-0.5"
                       style={{ color: RARITY_CONFIG[item.rarity].border }}>
@@ -278,7 +279,7 @@ export default function ChestOpen() {
             {items.slice(0, revealIndex).map((item, idx) => (
               <div key={idx} className="shrink-0 w-14 flex flex-col items-center glass-panel rounded-lg p-1.5 border"
                 style={{ borderColor: `${RARITY_CONFIG[item.rarity].border}44` }}>
-                <span className="text-lg">{item.icon}</span>
+                {item.iconSrc ? <img src={item.iconSrc} alt="" className="w-5 h-5" /> : <span className="text-base">{item.emoji}</span>}
                 <span className="text-[7px] text-center leading-tight text-white/60">{item.name.split(" ")[0]}</span>
               </div>
             ))}

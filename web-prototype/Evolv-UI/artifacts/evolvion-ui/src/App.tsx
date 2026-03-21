@@ -18,6 +18,7 @@ import ChestOpen from "./pages/ChestOpen";
 import Settings from "./pages/Settings";
 import DailyRewards from "./pages/DailyRewards";
 import SpriteGuide from "./pages/SpriteGuide";
+import DesignFlows from "./pages/DesignFlows";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,6 +32,12 @@ const queryClient = new QueryClient({
 
 function Router() {
   return (
+    <Switch>
+      {/* Full-screen pages (no Shell) */}
+      <Route path="/design-flows" component={DesignFlows} />
+
+      {/* Game pages (with Shell) */}
+      <Route>{() => (
     <Shell>
       <Switch>
         <Route path="/" component={Home} />
@@ -49,6 +56,8 @@ function Router() {
         <Route component={NotFound} />
       </Switch>
     </Shell>
+      )}</Route>
+    </Switch>
   );
 }
 

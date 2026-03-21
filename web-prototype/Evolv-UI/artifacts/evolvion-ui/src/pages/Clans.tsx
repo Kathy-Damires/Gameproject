@@ -2,13 +2,14 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Users, Search, Plus, MessageCircle, Shield, Star, Send } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { RESOURCE_ICONS, NAV_ICONS, CLAN_ICONS } from "@/lib/icons";
 
 const MOCK_CLANS = [
-  { id:1, name:"Cosmic Voyagers",  desc:"¡Explorando lo desconocido!", level:12, members:45, max:50, emblem:"🛡️", isJoined:false, power:45200, rank:"Gold"   },
-  { id:2, name:"Nebula Knights",   desc:"Solo combatientes feroces.",   level:8,  members:20, max:30, emblem:"⚔️", isJoined:true,  power:28900, rank:"Silver" },
-  { id:3, name:"Tech Syndicate",   desc:"Clan nativo de Aitherium.",    level:15, members:50, max:50, emblem:"⚙️", isJoined:false, power:68000, rank:"Diamond"},
-  { id:4, name:"Solar Guardians",  desc:"Guardianes del Sistema.",      level:5,  members:12, max:25, emblem:"☀️", isJoined:false, power:14200, rank:"Silver" },
-  { id:5, name:"Void Reapers",     desc:"Del vacío emergemos.",         level:20, members:48, max:50, emblem:"💀", isJoined:false, power:92000, rank:"Legend" },
+  { id:1, name:"Cosmic Voyagers",  desc:"¡Explorando lo desconocido!", level:12, members:45, max:50, emblemSrc:CLAN_ICONS.stellar_wolves, isJoined:false, power:45200, rank:"Gold"   },
+  { id:2, name:"Nebula Knights",   desc:"Solo combatientes feroces.",   level:8,  members:20, max:30, emblemSrc:CLAN_ICONS.dragon_knights, isJoined:true,  power:28900, rank:"Silver" },
+  { id:3, name:"Tech Syndicate",   desc:"Clan nativo de Aitherium.",    level:15, members:50, max:50, emblemSrc:CLAN_ICONS.singularity_seekers, isJoined:false, power:68000, rank:"Diamond"},
+  { id:4, name:"Solar Guardians",  desc:"Guardianes del Sistema.",      level:5,  members:12, max:25, emblemSrc:CLAN_ICONS.nova_collective, isJoined:false, power:14200, rank:"Silver" },
+  { id:5, name:"Void Reapers",     desc:"Del vacío emergemos.",         level:20, members:48, max:50, emblemSrc:CLAN_ICONS.iron_forge, isJoined:false, power:92000, rank:"Legend" },
 ];
 
 const MY_CLAN = MOCK_CLANS.find(c=>c.isJoined)!;
@@ -48,8 +49,8 @@ export default function Clans() {
   const chatRef = useRef<HTMLDivElement>(null);
 
   // Create form state
-  const [createForm, setCreateForm] = useState({ name:"", desc:"", emblem:"🛡️", isPublic:true });
-  const EMBLEMS = ["🛡️","⚔️","⚙️","🔮","🐉","☀️","🌑","💎","🌀","🔥","⭐","💀"];
+  const [createForm, setCreateForm] = useState({ name:"", desc:"", emblemSrc:CLAN_ICONS.stellar_wolves as string, isPublic:true });
+  const EMBLEM_SRCS = [CLAN_ICONS.stellar_wolves, CLAN_ICONS.ancient_guardians, CLAN_ICONS.nova_collective, CLAN_ICONS.iron_forge, CLAN_ICONS.dragon_knights, CLAN_ICONS.singularity_seekers];
 
   useEffect(()=>{ if(chatRef.current) chatRef.current.scrollTop = 99999; },[chat]);
 
@@ -65,8 +66,8 @@ export default function Clans() {
     <div className="space-y-4">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="p-3 bg-blue-500/20 rounded-2xl text-blue-400">
-          <Users className="w-6 h-6" />
+        <div className="p-3 bg-blue-500/20 rounded-2xl">
+          <img src={NAV_ICONS.clan} alt="clans" className="w-6 h-6" />
         </div>
         <div>
           <h1 className="text-2xl font-display uppercase">Clanes</h1>
@@ -83,7 +84,7 @@ export default function Clans() {
               tab===t
                 ? "bg-primary/20 border-primary/50 text-primary"
                 : "bg-white/5 border-white/10 text-muted-foreground hover:text-white"
-            )}>{t==="Mi Clan"?"🛡️ Mi Clan":t==="Buscar"?"🔍 Buscar":"➕ Crear"}</button>
+            )}>{t==="Mi Clan"?<>🛡️ Mi Clan</>:t==="Buscar"?<>🔍 Buscar</>:<>➕ Crear</>}</button>
         ))}
       </div>
 
@@ -99,8 +100,8 @@ export default function Clans() {
                   style={{ background:"linear-gradient(135deg, rgba(30,20,80,0.9), rgba(10,14,39,0.9))", borderColor:"rgba(99,102,241,0.5)" }}>
                   <div className="absolute top-0 right-0 -mr-6 -mt-6 w-28 h-28 bg-indigo-500/10 rounded-full blur-3xl" />
                   <div className="flex items-center gap-4 relative z-10">
-                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center text-4xl border border-indigo-500/30 bg-black/30">
-                      {MY_CLAN.emblem}
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center border border-indigo-500/30 bg-black/30">
+                      <img src={MY_CLAN.emblemSrc} alt="" className="w-10 h-10" />
                     </div>
                     <div>
                       <h2 className="text-xl font-display text-white">{MY_CLAN.name}</h2>
@@ -125,7 +126,7 @@ export default function Clans() {
                         clanTab===ct
                           ? "bg-indigo-500/20 border-indigo-500/50 text-indigo-400"
                           : "bg-white/5 border-white/10 text-muted-foreground"
-                      )}>{ct==="Info"?"📊 Info":ct==="Chat"?"💬 Chat":"👥 Miembros"}</button>
+                      )}>{ct}</button>
                   ))}
                 </div>
 
@@ -134,13 +135,13 @@ export default function Clans() {
                   <div className="space-y-3">
                     <div className="glass-panel rounded-2xl p-4 grid grid-cols-2 gap-3">
                       {[
-                        {label:"Poder Total",  val:MY_CLAN.power.toLocaleString(), icon:"⚡"},
-                        {label:"Nivel",        val:MY_CLAN.level,   icon:"🏅"},
-                        {label:"Miembros",     val:`${MY_CLAN.members}/${MY_CLAN.max}`, icon:"👥"},
-                        {label:"Rango",        val:MY_CLAN.rank,    icon:"🛡️"},
+                        {label:"Poder Total",  val:MY_CLAN.power.toLocaleString(), emoji:"⚡"},
+                        {label:"Nivel",        val:MY_CLAN.level,   emoji:"⭐"},
+                        {label:"Miembros",     val:`${MY_CLAN.members}/${MY_CLAN.max}`, emoji:"👥"},
+                        {label:"Rango",        val:MY_CLAN.rank,    emoji:"🏆"},
                       ].map(s=>(
                         <div key={s.label} className="bg-black/20 rounded-xl p-3 text-center">
-                          <div className="text-2xl mb-1">{s.icon}</div>
+                          <span className="text-xl block mx-auto mb-1">{s.emoji}</span>
                           <div className="font-display text-sm text-white">{s.val}</div>
                           <div className="text-[9px] text-muted-foreground">{s.label}</div>
                         </div>
@@ -151,16 +152,16 @@ export default function Clans() {
                     <div className="glass-panel rounded-2xl p-4">
                       <div className="font-display text-xs text-white/70 uppercase mb-2">Eventos Activos</div>
                       <div className="space-y-2">
-                        {[
-                          {name:"Raid Galáctico",   time:"Hoy 22:00", reward:"💎×100", color:"text-accent"},
-                          {name:"Liga de Clanes",   time:"3 días",    reward:"🥇 Trofeo",color:"text-yellow-400"},
-                        ].map(e=>(
+                        {([
+                          {name:"Raid Galáctico",   time:"Hoy 22:00", rewardSrc:RESOURCE_ICONS.diamonds, rewardEmoji:undefined as string|undefined, rewardText:"x100", color:"text-accent"},
+                          {name:"Liga de Clanes",   time:"3 días",    rewardSrc:undefined as string|undefined, rewardEmoji:"🏆", rewardText:"Trofeo",color:"text-yellow-400"},
+                        ]).map(e=>(
                           <div key={e.name} className="flex items-center justify-between bg-black/20 rounded-xl px-3 py-2">
                             <div>
                               <div className="text-xs text-white font-bold">{e.name}</div>
                               <div className="text-[10px] text-muted-foreground">{e.time}</div>
                             </div>
-                            <span className={cn("text-xs font-bold", e.color)}>{e.reward}</span>
+                            <span className={cn("text-xs font-bold flex items-center gap-0.5", e.color)}>{e.rewardSrc ? <img src={e.rewardSrc} alt="" className="w-4 h-4 inline" /> : <span>{e.rewardEmoji}</span>}{e.rewardText}</span>
                           </div>
                         ))}
                       </div>
@@ -224,7 +225,7 @@ export default function Clans() {
                             {m.name==="TúPlayer" && <span className="text-[9px] text-primary font-display">TÚ</span>}
                             <span className="text-[9px] px-1.5 py-0.5 rounded bg-white/10 text-muted-foreground font-display">{m.role}</span>
                           </div>
-                          <div className="text-[10px] text-muted-foreground">Nv.{m.level} • ⚡{m.power.toLocaleString()}</div>
+                          <div className="text-[10px] text-muted-foreground flex items-center gap-0.5">Nv.{m.level} • <img src={RESOURCE_ICONS.energy} alt="" className="w-3 h-3 inline" />{m.power.toLocaleString()}</div>
                         </div>
                         <div className="text-xs font-display text-muted-foreground">#{i+1}</div>
                       </div>
@@ -233,7 +234,7 @@ export default function Clans() {
                 )}
               </>) : (
                 <div className="glass-panel rounded-3xl p-6 text-center">
-                  <div className="text-5xl mb-3">🛡️</div>
+                  <img src={NAV_ICONS.clan} alt="" className="w-12 h-12 mx-auto mb-3" />
                   <h3 className="font-display text-white mb-1">Sin clan</h3>
                   <p className="text-xs text-muted-foreground mb-4">Únete o crea un clan para competir</p>
                   <div className="flex gap-2">
@@ -275,8 +276,8 @@ export default function Clans() {
                   const rankCol = RANK_COLOR[clan.rank]??"#fff";
                   return (
                     <div key={clan.id} className="glass-panel rounded-2xl p-4 flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl border border-white/10 bg-black/30 shrink-0">
-                        {clan.emblem}
+                      <div className="w-12 h-12 rounded-xl flex items-center justify-center border border-white/10 bg-black/30 shrink-0">
+                        <img src={clan.emblemSrc} alt="" className="w-7 h-7" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-0.5">
@@ -288,7 +289,7 @@ export default function Clans() {
                         <div className="flex gap-2 text-[9px] text-muted-foreground">
                           <span>Nv.{clan.level}</span>
                           <span className={full?"text-red-400":"text-green-400"}>{clan.members}/{clan.max}</span>
-                          <span>⚡{clan.power.toLocaleString()}</span>
+                          <span className="inline-flex items-center gap-0.5"><img src={RESOURCE_ICONS.energy} alt="" className="w-3 h-3 inline" />{clan.power.toLocaleString()}</span>
                         </div>
                       </div>
                       <button
@@ -321,21 +322,21 @@ export default function Clans() {
                 <div className="mb-4">
                   <label className="text-[10px] font-display text-muted-foreground uppercase block mb-2">Emblema</label>
                   <div className="flex gap-2 flex-wrap">
-                    {EMBLEMS.map(e=>(
-                      <button key={e} onClick={()=>setCreateForm(f=>({...f,emblem:e}))}
+                    {EMBLEM_SRCS.map(src=>(
+                      <button key={src} onClick={()=>setCreateForm(f=>({...f,emblemSrc:src}))}
                         className={cn(
-                          "w-10 h-10 rounded-xl text-xl transition-all border-2",
-                          createForm.emblem===e
+                          "w-10 h-10 rounded-xl flex items-center justify-center transition-all border-2",
+                          createForm.emblemSrc===src
                             ? "border-primary bg-primary/20 scale-110"
                             : "border-white/10 bg-white/5 hover:border-white/30"
-                        )}>{e}</button>
+                        )}><img src={src} alt="" className="w-6 h-6" /></button>
                     ))}
                   </div>
                 </div>
 
                 {/* Preview */}
                 <div className="bg-black/20 rounded-2xl p-3 mb-4 flex items-center gap-3">
-                  <div className="text-3xl">{createForm.emblem}</div>
+                  <img src={createForm.emblemSrc} alt="" className="w-8 h-8" />
                   <div>
                     <div className="font-display text-sm text-white">{createForm.name||"Nombre del Clan"}</div>
                     <div className="text-[10px] text-muted-foreground">{createForm.desc||"Descripción..."}</div>
@@ -379,7 +380,7 @@ export default function Clans() {
                 </div>
 
                 <div className="mt-4 p-3 rounded-xl bg-black/20 text-[10px] text-muted-foreground flex items-start gap-2">
-                  <span>💎</span>
+                  <img src={RESOURCE_ICONS.diamonds} alt="diamonds" className="w-4 h-4" />
                   <span>Costo de creación: <strong className="text-accent">500 Diamantes</strong></span>
                 </div>
 
@@ -392,7 +393,7 @@ export default function Clans() {
                       ? "bg-gradient-to-r from-secondary to-primary text-white shadow-[0_0_15px_rgba(0,212,255,0.3)]"
                       : "bg-white/5 text-white/30 cursor-not-allowed"
                   )}>
-                  Crear Clan — 💎500
+                  Crear Clan — <img src={RESOURCE_ICONS.diamonds} alt="diamonds" className="w-4 h-4 inline" />500
                 </button>
               </div>
             </div>

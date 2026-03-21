@@ -3,12 +3,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
 import { Sword, Shield, Heart, Zap, BatteryCharging, Play, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { RESOURCE_ICONS } from "@/lib/icons";
 
 const EQUIPMENT = {
   helmet: { name:"Mascara Tribal",      emoji:"🪖", rarity:"epic",      atk:0,   def:30,  hp:80  },
   weapon: { name:"Espada de Bronce",    emoji:"🗡️", rarity:"clear",     atk:120, def:0,   hp:0   },
   armor:  { name:"Tunica de Cuero",     emoji:"🛡️", rarity:"common",    atk:0,   def:30,  hp:0   },
-  gadget: { name:"Amuleto de la Suerte",emoji:"📿", rarity:"legendary", atk:0,   def:0,   hp:150 },
+  gadget: { name:"Amuleto de la Suerte",emoji:"🔮", rarity:"legendary", atk:0,   def:0,   hp:150 },
 };
 
 const BASE = { atk:35, def:20, hp:100 };
@@ -16,9 +17,9 @@ const totalEq = (key:"atk"|"def"|"hp") => Object.values(EQUIPMENT).reduce((a,e)=
 const STATS = { atk:BASE.atk+totalEq("atk"), def:BASE.def+totalEq("def"), hp:BASE.hp+totalEq("hp") };
 
 const ENEMIES = [
-  { name:"Bestia de la Cueva", emoji:"🦁", sprite:"🦁", hp:200, atk:20, def:5,  color:"#FF8A65", reward:"🪨x30 - XP+50"   },
-  { name:"Lobo Tribal",        emoji:"🐺", sprite:"🐺", hp:350, atk:35, def:12, color:"#78909C", reward:"🪵x25 - XP+90"   },
-  { name:"Guerrero de Bronce", emoji:"🛡️", sprite:"🛡️", hp:500, atk:50, def:20, color:"#CD7F32", reward:"🥉x15 - XP+150"  },
+  { name:"Bestia de la Cueva", emoji:"🦁", sprite:"🦁", hp:200, atk:20, def:5,  color:"#FF8A65", rewardIconSrc:RESOURCE_ICONS.stone, rewardText:"x30 - XP+50"   },
+  { name:"Lobo Tribal",        emoji:"🐺", sprite:"🐺", hp:350, atk:35, def:12, color:"#78909C", rewardIconSrc:RESOURCE_ICONS.wood, rewardText:"x25 - XP+90"   },
+  { name:"Guerrero de Bronce", emoji:"🛡️", sprite:"🛡️", hp:500, atk:50, def:20, color:"#CD7F32", rewardIconSrc:RESOURCE_ICONS.bronze, rewardText:"x15 - XP+150"  },
 ];
 
 const RARITY_COLOR: Record<string,string> = {
@@ -107,7 +108,7 @@ export default function Character() {
       if (eHp <= 0) {
         clearInterval(timerRef.current!); setFighting(false);
         setWins(w=>w+1);
-        newLog.push({ id:Date.now()+2, text:`Victoria! ${enemy.reward}`, type:"reward" });
+        newLog.push({ id:Date.now()+2, text:`Victoria! ${enemy.rewardText}`, type:"reward" });
       } else if (aHp <= 0) {
         clearInterval(timerRef.current!); setFighting(false);
         setTimeout(()=>setArisHP(Math.floor(STATS.hp*0.3)), 800);
@@ -132,7 +133,7 @@ export default function Character() {
         style={{ background: "linear-gradient(135deg, rgba(234,179,8,0.05), rgba(234,179,8,0.1))" }}>
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Zap className="w-4 h-4 text-yellow-400" />
+            <img src={RESOURCE_ICONS.energy} alt="energy" className="w-4 h-4" />
             <span className="font-display text-sm text-white">Energia: {energy}/{ENERGY_MAX}</span>
           </div>
           <span className="text-[9px] text-muted-foreground font-display">Costo por combate: {ENERGY_COST}</span>
@@ -157,7 +158,7 @@ export default function Character() {
         <div className="flex gap-2 mt-2">
           <button onClick={() => setEnergy(e => Math.min(ENERGY_MAX, e + ENERGY_MAX))}
             className="flex-1 py-2 rounded-xl font-display text-[10px] uppercase tracking-wide transition-all bg-gradient-to-r from-accent to-orange-500 text-black flex items-center justify-center gap-1 shadow-[0_0_10px_rgba(255,170,0,0.2)]">
-            <BatteryCharging className="w-3 h-3" /> Recargar — 10 💎
+            <BatteryCharging className="w-3 h-3" /> Recargar — 10 <img src={RESOURCE_ICONS.diamonds} alt="diamonds" className="w-3 h-3 inline" />
           </button>
           <button onClick={() => setEnergy(e => Math.min(ENERGY_MAX, e + 5))}
             className="flex-1 py-2 rounded-xl font-display text-[10px] uppercase tracking-wide transition-all bg-white/10 text-white border border-white/10 hover:bg-white/15 flex items-center justify-center gap-1">
@@ -265,7 +266,7 @@ export default function Character() {
                 animate={ fighting ? { scale:[1,1.2,1], rotate:[0,5,-5,0] } : {} }
                 transition={{ duration:0.9, repeat:Infinity }}
                 className="font-display text-xl text-red-400 text-glow">
-                {fighting ? "⚡" : "VS"}
+                {fighting ? <img src={RESOURCE_ICONS.energy} alt="" className="w-5 h-5 inline" /> : "VS"}
               </motion.div>
               <div className="text-[9px] text-muted-foreground font-display">Ronda {round}</div>
             </div>
@@ -341,7 +342,7 @@ export default function Character() {
               {fighting ? "⏸ Pausar" : !canFight ? `Energia insuficiente (${energy}/${ENERGY_COST})` : arisHP <= 0 ? "Reiniciar" : `Luchar — ${enemy.name}`}
             </motion.button>
             <div className="text-center text-[9px] text-muted-foreground mt-1">
-              Recompensa: <span className="text-accent font-bold">{enemy.reward}</span>
+              Recompensa: <span className="text-accent font-bold inline-flex items-center gap-0.5"><img src={enemy.rewardIconSrc} alt="" className="w-3 h-3 inline" />{enemy.rewardText}</span>
               {canFight && <span className="text-yellow-400 ml-2">(-{ENERGY_COST} energia)</span>}
             </div>
           </div>
@@ -359,7 +360,7 @@ export default function Character() {
                 className="glass-panel rounded-2xl p-4 text-center cursor-pointer transition-all hover:scale-105 border-2"
                 style={{ borderColor:`${col}55`, boxShadow:`inset 0 0 20px ${col}12` }}>
                 <div className="text-[9px] text-muted-foreground font-display uppercase mb-1">{slotLabel[slot]}</div>
-                <div className="text-4xl my-2">{item.emoji}</div>
+                <span className="text-4xl mx-auto my-2 block text-center">{item.emoji}</span>
                 <div className="font-display text-xs text-white leading-tight mb-0.5">{item.name}</div>
                 <div className="text-[9px] mb-1.5" style={{ color:col }}>{item.rarity}</div>
                 <div className="text-[9px] text-muted-foreground">

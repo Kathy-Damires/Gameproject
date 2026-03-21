@@ -4,6 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { GameButton } from "@/components/ui/game-button";
 import { Trophy, CheckCircle2, Crown, Medal, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { RESOURCE_ICONS, NAV_ICONS } from "@/lib/icons";
 
 const MOCK_ACHIEVEMENTS = [
   { id: 1, name: "Primeros Pasos", description: "Comienza tu viaje en Porera", category: "planet", isUnlocked: true, rewardType: "gems", rewardAmount: 50, iconEmoji: "🌍" },
@@ -14,7 +15,7 @@ const MOCK_ACHIEVEMENTS = [
   { id: 6, name: "Primera Sangre", description: "Gana tu primer combate", category: "combat", isUnlocked: true, rewardType: "coins", rewardAmount: 200, iconEmoji: "🗡️" },
   { id: 7, name: "Explorador de Eras", description: "Desbloquea 3 eras", category: "planet", isUnlocked: true, rewardType: "gems", rewardAmount: 150, iconEmoji: "🗺️" },
   { id: 8, name: "Alma Generosa", description: "Dona 10,000 recursos al clan", category: "clan", isUnlocked: false, rewardType: "coins", rewardAmount: 2000, iconEmoji: "🤝", progress: 4200, maxProgress: 10000 },
-  { id: 9, name: "Patrocinador", description: "Realiza tu primera compra", category: "purchase", isUnlocked: false, rewardType: "gems", rewardAmount: 200, iconEmoji: "💎", progress: 0, maxProgress: 1 },
+  { id: 9, name: "Patrocinador", description: "Realiza tu primera compra", category: "purchase", isUnlocked: false, rewardType: "gems", rewardAmount: 200, iconSrc: RESOURCE_ICONS.diamonds, iconEmoji: "💎", progress: 0, maxProgress: 1 },
   { id: 10, name: "Espectador", description: "Mira 5 anuncios", category: "ads", isUnlocked: true, rewardType: "coins", rewardAmount: 300, iconEmoji: "📺" },
 ];
 
@@ -61,7 +62,7 @@ export default function Achievements() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <div className="p-2.5 bg-amber-500/20 rounded-2xl">
-            <Trophy className="w-7 h-7 text-amber-400" />
+            <img src={NAV_ICONS.achievements} alt="achievements" className="w-7 h-7" />
           </div>
           <div>
             <h1 className="text-2xl font-display text-gradient">Logros</h1>
@@ -82,7 +83,7 @@ export default function Achievements() {
               ? "bg-amber-500/20 border border-amber-500/40 text-amber-400"
               : "bg-white/5 border border-white/10 text-muted-foreground hover:bg-white/10"
           )}>
-          <Trophy className="w-4 h-4 inline mr-1.5" />
+          <img src={NAV_ICONS.achievements} alt="" className="w-4 h-4 inline mr-1.5" />
           Logros
         </button>
         <button onClick={() => setTab("leaderboard")}
@@ -126,7 +127,7 @@ export default function Achievements() {
                   "w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 border-2",
                   ach.isUnlocked ? "bg-amber-500/20 border-amber-500/40" : "bg-black/50 border-white/10 grayscale"
                 )}>
-                  {ach.iconEmoji}
+                  {ach.iconSrc ? <img src={ach.iconSrc} alt={ach.name} className="w-6 h-6" /> : <span className="text-xl">{ach.iconEmoji}</span>}
                 </div>
 
                 <div className="flex-1 min-w-0">
@@ -160,7 +161,7 @@ export default function Achievements() {
                   ) : (
                     <div className="text-center bg-black/40 px-2 py-1 rounded-lg border border-white/5">
                       <span className="text-[8px] text-muted-foreground uppercase block">Premio</span>
-                      <span className="text-[10px] font-bold text-accent">{ach.rewardAmount} {ach.rewardType === 'gems' ? '💎' : '🪙'}</span>
+                      <span className="text-[10px] font-bold text-accent flex items-center gap-0.5">{ach.rewardAmount} <img src={ach.rewardType === 'gems' ? RESOURCE_ICONS.diamonds : RESOURCE_ICONS.bronze} alt={ach.rewardType} className="w-3 h-3 inline" /></span>
                     </div>
                   )}
                 </div>

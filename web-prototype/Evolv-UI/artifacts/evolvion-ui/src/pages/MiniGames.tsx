@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Sparkles, Zap } from "lucide-react";
+import { Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { RESOURCE_ICONS, NAV_ICONS } from "@/lib/icons";
 
 export default function Prestige() {
   const [isRunning, setIsRunning] = useState(false);
@@ -27,8 +28,8 @@ export default function Prestige() {
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <div className="p-3 bg-secondary/20 rounded-2xl text-secondary">
-          <Sparkles className="w-8 h-8" />
+        <div className="p-3 bg-secondary/20 rounded-2xl">
+          <img src={NAV_ICONS.prestige} alt="prestige" className="w-8 h-8" />
         </div>
         <div>
           <h1 className="text-2xl font-display text-gradient uppercase">Prestigio</h1>
@@ -56,11 +57,11 @@ export default function Prestige() {
             {[
               {label:"Acumulado",   val:Math.floor(accumulated), color:"text-white"},
               {label:"Producción",  val:`+${productionPerSec.toFixed(1)}/s`, color:"text-primary"},
-              {label:"Banco 💎",    val:bank, color:"text-accent"},
+              {label:"Banco", iconSrc:RESOURCE_ICONS.diamonds, val:bank, color:"text-accent"},
             ].map(s=>(
               <div key={s.label} className="bg-black/30 rounded-xl p-3">
                 <div className={cn("text-lg font-display",s.color)}>{s.val}</div>
-                <div className="text-[9px] text-muted-foreground">{s.label}</div>
+                <div className="text-[9px] text-muted-foreground flex items-center justify-center gap-0.5">{(s as any).iconSrc && <img src={(s as any).iconSrc} alt="" className="w-3 h-3 inline" />}{s.label}</div>
               </div>
             ))}
           </div>

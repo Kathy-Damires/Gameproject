@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { Hammer, ArrowUp, Lock } from "lucide-react";
+import { RESOURCE_ICONS, NAV_ICONS } from "@/lib/icons";
 
 interface Structure {
   id: string; name: string; icon: string;
@@ -13,15 +14,19 @@ interface Structure {
 }
 
 const STRUCTURES: Structure[] = [
-  { id:"quarry",    name:"Cantera",      icon:"⛏️", resource:"Piedra",    resourceIcon:"🪨", baseRate:2.5, level:3, maxLevel:10, isBuilt:true,  era:"Piedra",  eraIndex:0, color:"hsl(210 20% 60%)", buildCost:{ wood:20, food:10 } },
-  { id:"sawmill",   name:"Aserradero",   icon:"🪚", resource:"Madera",    resourceIcon:"🪵", baseRate:1.8, level:2, maxLevel:10, isBuilt:true,  era:"Piedra",  eraIndex:0, color:"hsl(100 60% 45%)", buildCost:{ stone:30, food:15 } },
-  { id:"farm",      name:"Granja",       icon:"🌾", resource:"Comida",    resourceIcon:"🍖", baseRate:1.2, level:2, maxLevel:10, isBuilt:true,  era:"Tribal",  eraIndex:1, color:"hsl(35 90% 55%)",  buildCost:{ stone:20, wood:20 } },
-  { id:"forge",     name:"Forja",        icon:"🔥", resource:"Bronce",    resourceIcon:"🥉", baseRate:0.4, level:1, maxLevel:10, isBuilt:true,  era:"Bronce",  eraIndex:2, color:"hsl(30 60% 45%)",  buildCost:{ stone:50, wood:30, food:20 } },
-  { id:"generator", name:"Generador",    icon:"⚡", resource:"Energía",   resourceIcon:"⚡", baseRate:0.8, level:0, maxLevel:10, isBuilt:false, era:"Bronce",  eraIndex:2, color:"hsl(55 100% 55%)", buildCost:{ stone:80, bronze:20 } },
-  { id:"mine",      name:"Mina de Gemas",icon:"💎", resource:"Diamantes", resourceIcon:"💎", baseRate:0.02,level:0, maxLevel:5,  isBuilt:false, era:"Clásica", eraIndex:3, color:"hsl(193 100% 50%)",buildCost:{ bronze:50, energy:10 } },
+  { id:"quarry",    name:"Cantera",          icon:"⛏️", resource:"Piedra",  resourceIcon:"stone",   baseRate:2.5,  level:3, maxLevel:10, isBuilt:true,  era:"Piedra",      eraIndex:0, color:"hsl(210 20% 60%)", buildCost:{ wood:20, food:10 } },
+  { id:"sawmill",   name:"Aserradero",       icon:"🪚", resource:"Madera",  resourceIcon:"wood",    baseRate:1.8,  level:2, maxLevel:10, isBuilt:true,  era:"Piedra",      eraIndex:0, color:"hsl(100 60% 45%)", buildCost:{ stone:30, food:15 } },
+  { id:"farm",      name:"Granja",           icon:"🌾", resource:"Comida",  resourceIcon:"food",    baseRate:1.2,  level:2, maxLevel:10, isBuilt:true,  era:"Tribal",      eraIndex:1, color:"hsl(35 90% 55%)",  buildCost:{ stone:20, wood:20 } },
+  { id:"forge",     name:"Forja de Bronce",  icon:"🔥", resource:"Bronce",  resourceIcon:"bronze",  baseRate:0.4,  level:1, maxLevel:10, isBuilt:true,  era:"Bronce",      eraIndex:2, color:"hsl(30 60% 45%)",  buildCost:{ stone:50, wood:30, food:20 } },
+  { id:"smithy",    name:"Herrería",         icon:"⚒️", resource:"Hierro",  resourceIcon:"iron",    baseRate:0.3,  level:1, maxLevel:10, isBuilt:true,  era:"Clásica",     eraIndex:3, color:"hsl(220 15% 55%)", buildCost:{ stone:80, bronze:30, food:40 } },
+  { id:"goldmine",  name:"Mina de Oro",      icon:"🪙", resource:"Oro",     resourceIcon:"gold",    baseRate:0.15, level:0, maxLevel:10, isBuilt:false, era:"Medieval",    eraIndex:4, color:"hsl(43 80% 50%)",  buildCost:{ iron:40, bronze:60, wood:50 } },
+  { id:"crystal",   name:"Extractor Cristal",icon:"💠", resource:"Cristal", resourceIcon:"crystal", baseRate:0.1,  level:0, maxLevel:10, isBuilt:false, era:"Industrial",  eraIndex:5, color:"hsl(180 80% 50%)", buildCost:{ iron:50, gold:20, bronze:30 } },
+  { id:"reactor",   name:"Reactor Plasma",   icon:"🔮", resource:"Plasma",  resourceIcon:"plasma",  baseRate:0.05, level:0, maxLevel:10, isBuilt:false, era:"Robótica",    eraIndex:6, color:"hsl(280 80% 55%)", buildCost:{ crystal:30, gold:40, iron:60 } },
+  { id:"nexus",     name:"Nexo Cuántico",    icon:"🌀", resource:"Antimateria", resourceIcon:"antimatter", baseRate:0.03, level:0, maxLevel:10, isBuilt:false, era:"Espacial",    eraIndex:7, color:"hsl(200 80% 55%)", buildCost:{ plasma:20, crystal:40, gold:50 } },
 ];
+// Energía: +2 por cada nivel de cualquier estructura. Diamantes: premium (compra, logros, cofres, pase de batalla).
 
-const AVAILABLE: Record<string,number> = { stone:150, wood:80, food:45, bronze:12, energy:30 };
+const AVAILABLE: Record<string,number> = { stone:150, wood:80, food:45, bronze:12, iron:5, gold:0, crystal:0, plasma:0 };
 
 function calcRate(s: Structure) {
   if (!s.isBuilt || s.level === 0) return 0;
@@ -51,7 +56,7 @@ export default function Structures() {
       <div className="glass-panel p-4 rounded-3xl flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-display uppercase flex items-center gap-2">
-            <Hammer className="w-6 h-6 text-primary" /> Estructuras
+            <img src={NAV_ICONS.structures} alt="structures" className="w-6 h-6" /> Estructuras
           </h1>
           <p className="text-xs text-muted-foreground mt-0.5">Porera — Era de Bronce</p>
         </div>
@@ -63,7 +68,7 @@ export default function Structures() {
 
       {/* Tools row */}
       <div>
-        <p className="text-[10px] text-muted-foreground font-display uppercase mb-2">🔧 Herramientas Asignadas</p>
+        <p className="text-[10px] text-muted-foreground font-display uppercase mb-2 flex items-center gap-1">🔧 Herramientas Asignadas</p>
         <div className="flex gap-2">
           {["🪓 Hacha Nv.2", "⛏️ Pico Nv.1", "🌿 Hoz Nv.3"].map(t => (
             <div key={t} className="glass-panel px-3 py-1.5 rounded-xl text-xs text-muted-foreground">{t}</div>
@@ -89,7 +94,7 @@ export default function Structures() {
                 {/* Icon */}
                 <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shrink-0 border border-white/10"
                   style={{ background: s.isBuilt ? `${s.color}22` : "rgba(0,0,0,0.3)" }}>
-                  {locked ? <Lock className="w-5 h-5 text-white/30" /> : s.isBuilt ? s.icon : "🔒"}
+                  {locked ? <Lock className="w-5 h-5 text-white/30" /> : s.isBuilt ? s.icon : <Lock className="w-4 h-4 text-white/30" />}
                 </div>
 
                 <div className="flex-1 min-w-0">
@@ -105,7 +110,7 @@ export default function Structures() {
 
                   {/* Resource + rate */}
                   <div className="flex items-center gap-1 text-xs mb-2">
-                    <span>{s.resourceIcon}</span>
+                    <img src={RESOURCE_ICONS[s.resourceIcon as keyof typeof RESOURCE_ICONS]} alt={s.resource} className="w-4 h-4" />
                     <span className="text-muted-foreground">{s.resource}</span>
                     {rate > 0 && <span className="ml-auto text-green-400 font-bold">+{rate.toFixed(2)}/s</span>}
                   </div>
@@ -122,12 +127,12 @@ export default function Structures() {
                   {/* Cost badges */}
                   <div className="flex gap-1 flex-wrap mb-2">
                     {Object.entries(cost).map(([res, amt]) => {
-                      const icons: Record<string,string> = { stone:"🪨",wood:"🪵",food:"🍖",bronze:"🥉",energy:"⚡" };
+                      const iconMap: Record<string,string> = { stone:"stone",wood:"wood",food:"food",bronze:"bronze",energy:"energy" };
                       const ok = (AVAILABLE[res] ?? 0) >= (amt as number);
                       return (
-                        <span key={res} className="text-[10px] px-1.5 py-0.5 rounded bg-black/30 border border-white/8"
+                        <span key={res} className="text-[10px] px-1.5 py-0.5 rounded bg-black/30 border border-white/8 flex items-center gap-0.5"
                           style={{ color: ok ? "hsl(0 0% 70%)" : "hsl(0 75% 55%)" }}>
-                          {icons[res]}{amt}
+                          <img src={RESOURCE_ICONS[iconMap[res] as keyof typeof RESOURCE_ICONS]} alt={res} className="w-3 h-3 inline" />{amt}
                         </span>
                       );
                     })}
@@ -150,7 +155,7 @@ export default function Structures() {
                         ? s.level >= s.maxLevel
                           ? "Nivel Máximo"
                           : <><ArrowUp className="w-3 h-3" /> Mejorar Nv.{s.level + 1}</>
-                        : <><Hammer className="w-3 h-3" /> Construir</>}
+                        : <>🔨 Construir</>}
                     </button>
                   )}
                 </div>

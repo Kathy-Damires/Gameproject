@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { Link } from "wouter";
-import { Settings as SettingsIcon, Volume2, VolumeX, Bell, BellOff, Globe, Trash2, LogOut, ChevronRight, Info, Shield, MessageSquare, Palette } from "lucide-react";
+import { Volume2, VolumeX, Bell, BellOff, Globe, Trash2, LogOut, ChevronRight, Info, Shield, MessageSquare, Palette } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { NAV_ICONS } from "@/lib/icons";
 
 export default function Settings() {
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -14,7 +15,7 @@ export default function Settings() {
     <div className="space-y-5">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <SettingsIcon className="w-6 h-6 text-muted-foreground" />
+        <img src={NAV_ICONS.settings} alt="settings" className="w-6 h-6" />
         <h1 className="text-xl font-display uppercase text-gradient-primary">Configuración</h1>
       </div>
 

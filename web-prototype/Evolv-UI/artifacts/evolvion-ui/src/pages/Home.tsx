@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { motion } from "framer-motion";
-import { Star, Activity, ShieldAlert, Globe, Zap, Swords, Building2, Check, X } from "lucide-react";
+import { Star, Activity, ShieldAlert, Globe, Zap, Check, X } from "lucide-react";
+import { NAV_ICONS, RESOURCE_ICONS } from "@/lib/icons";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 
@@ -38,9 +39,9 @@ const PLANETS = [
 ];
 
 const STRUCTURES_SUMMARY = [
-  { name: "Cantera", resourceIcon: "🪨", rate: 9.92, level: 5 },
-  { name: "Aserradero", resourceIcon: "🪵", rate: 4.14, level: 3 },
-  { name: "Granja", resourceIcon: "🍖", rate: 2.76, level: 2 },
+  { name: "Cantera", resourceIconSrc: RESOURCE_ICONS.stone, rate: 9.92, level: 5 },
+  { name: "Aserradero", resourceIconSrc: RESOURCE_ICONS.wood, rate: 4.14, level: 3 },
+  { name: "Granja", resourceIconSrc: RESOURCE_ICONS.food, rate: 2.76, level: 2 },
 ];
 
 /* Era advancement requirements per planet */
@@ -71,9 +72,9 @@ function getEraRequirements(planet: typeof PLANETS[number], structures: typeof S
   }
 
   // Resource requirements
-  const resourceReqs: Array<{ key: string; icon: string; name: string; amount: number }> = [
-    { key: "stone", icon: "🪨", name: "Piedra", amount: 500 },
-    { key: "wood", icon: "🪵", name: "Madera", amount: 300 },
+  const resourceReqs: Array<{ key: string; iconSrc: string; name: string; amount: number }> = [
+    { key: "stone", iconSrc: RESOURCE_ICONS.stone, name: "Piedra", amount: 500 },
+    { key: "wood", iconSrc: RESOURCE_ICONS.wood, name: "Madera", amount: 300 },
   ];
 
   for (const res of resourceReqs) {
@@ -133,12 +134,12 @@ export default function Home() {
           <motion.div whileTap={{ scale:0.96 }}
             className="glass-panel p-3 rounded-2xl flex items-center gap-2.5 border border-red-500/20 hover:border-red-500/40 transition-all cursor-pointer">
             <div className="w-10 h-10 rounded-xl bg-red-500/20 flex items-center justify-center shrink-0">
-              <Swords className="w-5 h-5 text-red-400" />
+              <img src={NAV_ICONS.combat} alt="combat" className="w-6 h-6" />
             </div>
             <div>
               <div className="text-xs font-display text-white">Combate</div>
               <div className="text-[10px] text-red-400 font-bold">3 enemigos</div>
-              <div className="text-[9px] text-muted-foreground">⚡28/30</div>
+              <div className="text-[9px] text-muted-foreground flex items-center gap-0.5"><img src={RESOURCE_ICONS.energy} alt="energy" className="w-3 h-3 inline" />28/30</div>
             </div>
           </motion.div>
         </Link>
@@ -146,7 +147,7 @@ export default function Home() {
           <motion.div whileTap={{ scale:0.96 }}
             className="glass-panel p-3 rounded-2xl flex items-center gap-2.5 border border-amber-500/20 hover:border-amber-500/40 transition-all cursor-pointer">
             <div className="w-10 h-10 rounded-xl bg-amber-500/20 flex items-center justify-center shrink-0">
-              <Building2 className="w-5 h-5 text-amber-400" />
+              <img src={NAV_ICONS.structures} alt="structures" className="w-6 h-6" />
             </div>
             <div>
               <div className="text-xs font-display text-white">Estructuras</div>
@@ -300,7 +301,7 @@ export default function Home() {
               {STRUCTURES_SUMMARY.map(s => (
                 <div key={s.name} className="flex items-center justify-between bg-black/20 rounded-xl px-3 py-2">
                   <div className="flex items-center gap-2">
-                    <span>{s.resourceIcon}</span>
+                    <img src={s.resourceIconSrc} alt={s.name} className="w-4 h-4" />
                     <span className="text-xs text-white font-bold">{s.name}</span>
                     <span className="text-[9px] px-1.5 rounded bg-white/10 text-white/50 font-display">Nv.{s.level}</span>
                   </div>

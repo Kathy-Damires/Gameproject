@@ -2,23 +2,24 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Gift, CalendarDays, Check, Lock, Flame } from "lucide-react";
+import { RESOURCE_ICONS, DAILY_ICONS, BADGE_ICONS } from "@/lib/icons";
 
 interface DayReward {
   day: number;
-  icon: string;
+  iconSrc: string;
   label: string;
   status: "claimed" | "today" | "locked";
   special?: boolean;
 }
 
 const REWARDS: DayReward[] = [
-  { day: 1, icon: "🪨", label: "100 Piedra", status: "claimed" },
-  { day: 2, icon: "🪵", label: "100 Madera", status: "claimed" },
-  { day: 3, icon: "🥉", label: "50 Bronce", status: "claimed" },
-  { day: 4, icon: "💎", label: "5 Diamantes", status: "today" },
-  { day: 5, icon: "⚡", label: "10 Energía", status: "locked" },
-  { day: 6, icon: "💎", label: "15 Diamantes", status: "locked" },
-  { day: 7, icon: "🎁", label: "Cofre Épico", status: "locked", special: true },
+  { day: 1, iconSrc: RESOURCE_ICONS.stone, label: "100 Piedra", status: "claimed" },
+  { day: 2, iconSrc: RESOURCE_ICONS.wood, label: "100 Madera", status: "claimed" },
+  { day: 3, iconSrc: RESOURCE_ICONS.bronze, label: "50 Bronce", status: "claimed" },
+  { day: 4, iconSrc: RESOURCE_ICONS.diamonds, label: "5 Diamantes", status: "today" },
+  { day: 5, iconSrc: RESOURCE_ICONS.energy, label: "10 Energía", status: "locked" },
+  { day: 6, iconSrc: RESOURCE_ICONS.diamonds, label: "15 Diamantes", status: "locked" },
+  { day: 7, iconSrc: DAILY_ICONS.box_epic, label: "Cofre Épico", status: "locked", special: true },
 ];
 
 export default function DailyRewards() {
@@ -59,7 +60,7 @@ export default function DailyRewards() {
           <span className="font-display text-lg text-white">
             Racha: {streak} días consecutivos
           </span>
-          <span className="text-lg">🔥</span>
+          <img src={BADGE_ICONS.event} alt="streak" className="w-5 h-5" />
         </div>
         <p className="text-[10px] text-orange-300/70 mt-1">
           ¡No pierdas tu racha! Vuelve mañana para mantenerla
@@ -132,9 +133,7 @@ export default function DailyRewards() {
                   Día {reward.day}
                 </span>
 
-                <span className={cn("text-3xl", isLocked && "grayscale")}>
-                  {reward.icon}
-                </span>
+                <img src={reward.iconSrc} alt={reward.label} className={cn("w-8 h-8", isLocked && "grayscale")} />
 
                 <span
                   className={cn(

@@ -2,13 +2,14 @@ import React, { useState } from "react";
 import { Search, Lock } from "lucide-react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { RESOURCE_ICONS } from "@/lib/icons";
 
 const ERA_TABS = ["Piedra","Tribal","Bronce","Clásica","Medieval","Industrial","Robótica","Espacial","Singularidad"];
 
-const CARDS_BY_ERA: Record<string, Array<{id:number;name:string;rarity:string;isOwned:boolean;emoji:string;bonus:string}>> = {
+const CARDS_BY_ERA: Record<string, Array<{id:number;name:string;rarity:string;isOwned:boolean;emoji?:string;iconSrc?:string;bonus:string}>> = {
   "Piedra": [
     {id:1, name:"Cazador Primitivo", rarity:"common",    isOwned:true,  emoji:"🏹", bonus:"ATK +5"},
-    {id:2, name:"Roca Sagrada",      rarity:"common",    isOwned:true,  emoji:"🪨", bonus:"DEF +8"},
+    {id:2, name:"Roca Sagrada",      rarity:"common",    isOwned:true,  iconSrc:RESOURCE_ICONS.stone, bonus:"DEF +8"},
     {id:3, name:"Cueva Ancestral",   rarity:"clear",     isOwned:true,  emoji:"🏔️", bonus:"HP +50"},
     {id:4, name:"Fuego Primordial",  rarity:"clear",     isOwned:false, emoji:"🔥", bonus:"ATK +15"},
     {id:5, name:"Mamut Salvaje",     rarity:"epic",      isOwned:true,  emoji:"🦣", bonus:"ATK+35, HP+80"},
@@ -20,7 +21,7 @@ const CARDS_BY_ERA: Record<string, Array<{id:number;name:string;rarity:string;is
   "Tribal": [
     {id:10,name:"Chamán",            rarity:"epic",      isOwned:false, emoji:"🧙", bonus:"XP +30%"},
     {id:11,name:"Guerrero Tribal",   rarity:"common",    isOwned:true,  emoji:"⚔️", bonus:"ATK +12"},
-    {id:12,name:"Tótem del Clan",    rarity:"clear",     isOwned:true,  emoji:"🪵", bonus:"DEF +20"},
+    {id:12,name:"Tótem del Clan",    rarity:"clear",     isOwned:true,  iconSrc:RESOURCE_ICONS.wood, bonus:"DEF +20"},
     {id:13,name:"Danza de Guerra",   rarity:"legendary", isOwned:false, emoji:"💃", bonus:"ATK+50,VEL+25%"},
     {id:14,name:"Arco Largo",        rarity:"common",    isOwned:true,  emoji:"🏹", bonus:"ATK +18"},
     {id:15,name:"Escudo de Cuero",   rarity:"common",    isOwned:false, emoji:"🛡️", bonus:"DEF +15"},
@@ -135,7 +136,7 @@ export default function Collection() {
                 {/* Art */}
                 <div className="flex-1 flex items-center justify-center">
                   {card.isOwned
-                    ? <span className="text-3xl drop-shadow-lg">{card.emoji}</span>
+                    ? (card.iconSrc ? <img src={card.iconSrc} alt={card.name} className="w-8 h-8 drop-shadow-lg" /> : <span className="text-3xl drop-shadow-lg">{card.emoji}</span>)
                     : <Lock className="w-5 h-5 text-white/20" />}
                 </div>
 

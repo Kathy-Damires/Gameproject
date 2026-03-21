@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" fill="none" viewBox="0 0 256 256">
+<!-- SVG created with Arrow, by QuiverAI (https://quiver.ai) -->
+  <path d="m213.2 62.95h-170.6c-14.86 0-27.66 13.19-27.66 27.81v75.61c0 14.32 12.37 26.24 26.9 26.24h171.3c14.99 0 27.75-12.65 27.75-26.79v-75.06c0-14.82-12.12-27.81-27.66-27.81z" fill="url(#paint0_linear_148_1186)"/>
+  <path d="m213.3 63.13h-170.7c-14.47 0-26.66 12.91-26.66 27v76.02c0 13.76 11.92 25.16 26.04 25.16h171.2c14.4 0 26.31-12.11 26.31-25.87v-75.01c0-14.2-11.65-27.3-26.14-27.3z" stroke="url(#paint1_angular_148_1186)" stroke-width="2.906"/>
+  <path d="m213.3 63.13h-170.7c-14.47 0-26.66 12.91-26.66 27v76.02c0 13.76 11.92 25.16 26.04 25.16h171.2c14.4 0 26.31-12.11 26.31-25.87v-75.01c0-14.2-11.65-27.3-26.14-27.3z" stroke="url(#paint2_angular_148_1186)" stroke-width="2.906"/>
+  <path d="m213.2 65.14h-170.6c-13.41 0-24.61 12.14-24.61 25.13v76.27c0 12.67 10.96 22.75 23.85 22.75h171.3c13.6 0 24.57-11.53 24.57-24.2v-75.01c0-13.2-10.84-24.94-24.52-24.94z" stroke="url(#paint3_angular_148_1186)" stroke-width="3.304"/>
+  <path d="m213.1 70.14h-170.3c-10.96 0-20.87 10.07-20.87 20.62v75.17c0 11.03 9.76 19.38 20.4 19.38h170.8c11.33 0 20.7-9.94 20.7-20.17v-74.52c0-11.05-9.25-20.48-20.69-20.48z" fill="url(#paint4_linear_148_1186)" stroke="url(#paint5_angular_148_1186)" stroke-width="1.707"/>
+  <defs>
+    <linearGradient id="paint0_linear_148_1186" x1="127.9" x2="127.9" y1="62.95" y2="192.6" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#C420E7" offset="0"/>
+      <stop stop-color="#00E5FF" offset=".5156"/>
+      <stop stop-color="#00E5FF" stop-opacity=".12" offset="1"/>
+    </linearGradient>
+    <radialGradient id="paint1_angular_148_1186" cx="0" cy="0" r="1" gradientTransform="translate(127.7 127.2) rotate(90) scale(65.43 127.1)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0075FF" stop-opacity=".69" offset="0"/>
+      <stop stop-color="#0075FF" stop-opacity="0" offset="1"/>
+    </radialGradient>
+    <radialGradient id="paint2_angular_148_1186" cx="0" cy="0" r="1" gradientTransform="translate(127.7 127.2) rotate(90) scale(65.43 127.1)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#FF00E5" stop-opacity=".69" offset="0"/>
+      <stop stop-color="#FF00E5" stop-opacity="0" offset="1"/>
+    </radialGradient>
+    <radialGradient id="paint3_angular_148_1186" cx="0" cy="0" r="1" gradientTransform="translate(127.8 127.2) rotate(90) scale(64.68 112.9)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#6222C3" offset="0"/>
+      <stop stop-color="#6222C3" stop-opacity="0" offset="1"/>
+    </radialGradient>
+    <linearGradient id="paint4_linear_148_1186" x1="127.8" x2="127.8" y1="70.14" y2="185.3" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#64F0F5" offset="0"/>
+      <stop stop-color="#00ACB6" offset="1"/>
+    </linearGradient>
+    <radialGradient id="paint5_angular_148_1186" cx="0" cy="0" r="1" gradientTransform="translate(127.8 127.7) rotate(90) scale(58.29 107.9)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0075FF" offset="0"/>
+      <stop stop-color="#0075FF" stop-opacity=".25" offset="1"/>
+    </radialGradient>
+  </defs>
+</svg>

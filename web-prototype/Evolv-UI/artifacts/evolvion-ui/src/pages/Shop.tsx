@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
-import { ShoppingBag, Clock, Lock, Gift, ChevronRight, Gem, Package, Scroll, Diamond, Star } from "lucide-react";
+import { Clock, Lock, Star } from "lucide-react";
 import { Link } from "wouter";
+import { RESOURCE_ICONS, NAV_ICONS, SHOP_ICONS } from "@/lib/icons";
 
 const TABS = ["Ofertas", "Cofres", "Pase de Batalla", "Recursos", "Diamantes"];
 
@@ -18,25 +19,25 @@ const RARITY_BORDER: Record<string, string> = {
 const OFFERS = [
   {
     id: 1, title: "Primera Compra x3", subtitle: "¡Triple valor en tu primera compra!",
-    icon: "🎁", original: 100, price: 100, currency: "💎", bonus: "x3", tag: "PRIMERA VEZ",
+    emoji: "🎁", original: 100, price: 100, currencySrc: RESOURCE_ICONS.diamonds, bonus: "x3", tag: "PRIMERA VEZ",
     tagColor: "bg-green-500/20 text-green-400", gradient: "from-green-900/60 to-emerald-950/60",
     borderColor: "border-green-500/40", timer: null,
   },
   {
     id: 2, title: "Pack Legendario", subtitle: "5 cartas con 1 legendaria garantizada",
-    icon: "🃏", original: 200, price: 100, currency: "💎", bonus: "-50%", tag: "TIEMPO LIMITADO",
+    emoji: "🃏", original: 200, price: 100, currencySrc: RESOURCE_ICONS.diamonds, bonus: "-50%", tag: "TIEMPO LIMITADO",
     tagColor: "bg-red-500/20 text-red-400", gradient: "from-purple-900/60 to-violet-950/60",
     borderColor: "border-purple-500/40", timer: 3 * 3600 + 47 * 60 + 22,
   },
   {
     id: 3, title: "Mega Pack Recursos", subtitle: "5000 de cada recurso básico",
-    icon: "💼", original: 80, price: 30, currency: "💎", bonus: "-62%", tag: "OFERTA FLASH",
+    emoji: "💼", original: 80, price: 30, currencySrc: RESOURCE_ICONS.diamonds, bonus: "-62%", tag: "OFERTA FLASH",
     tagColor: "bg-orange-500/20 text-orange-400", gradient: "from-orange-900/60 to-amber-950/60",
     borderColor: "border-orange-500/40", timer: 1 * 3600 + 15 * 60 + 8,
   },
   {
     id: 4, title: "Starter Bundle", subtitle: "Todo lo que necesitas para empezar fuerte",
-    icon: "🚀", original: 500, price: 199, currency: "💎", bonus: "-60%", tag: "MÁS POPULAR",
+    emoji: "🚀", original: 500, price: 199, currencySrc: RESOURCE_ICONS.diamonds, bonus: "-60%", tag: "MÁS POPULAR",
     tagColor: "bg-cyan-500/20 text-cyan-400", gradient: "from-cyan-900/60 to-teal-950/60",
     borderColor: "border-cyan-500/40", timer: 23 * 3600 + 59 * 60 + 59,
   },
@@ -45,7 +46,7 @@ const OFFERS = [
 /* ══════════════ COFRES DATA ══════════════ */
 const CHESTS = [
   {
-    id: "basic", name: "Cofre Básico", icon: "📦", price: 50, currency: "💎",
+    id: "basic", name: "Cofre Básico", emoji: "📦", price: 50, currencySrc: RESOURCE_ICONS.diamonds,
     items: "1-3 items", rarity: "common",
     drops: [
       { label: "Común", pct: 70, color: "text-slate-400" },
@@ -58,7 +59,7 @@ const CHESTS = [
     glow: "rgba(148,163,184,0.15)",
   },
   {
-    id: "epic", name: "Cofre Épico", icon: "🎁", price: 200, currency: "💎",
+    id: "epic", name: "Cofre Épico", emoji: "🎁", price: 200, currencySrc: RESOURCE_ICONS.diamonds,
     items: "3-5 items", rarity: "epic",
     drops: [
       { label: "Común", pct: 30, color: "text-slate-400" },
@@ -71,7 +72,7 @@ const CHESTS = [
     glow: "rgba(168,85,247,0.2)",
   },
   {
-    id: "legendary", name: "Cofre Legendario", icon: "👑", price: 500, currency: "💎",
+    id: "legendary", name: "Cofre Legendario", emoji: "👑", price: 500, currencySrc: RESOURCE_ICONS.diamonds,
     items: "5-7 items", rarity: "legendary",
     drops: [
       { label: "Común", pct: 10, color: "text-slate-400" },
@@ -93,40 +94,40 @@ const BP_PREMIUM = false;
 
 const BP_REWARDS: Array<{
   level: number;
-  free: { icon: string; label: string; claimed: boolean };
-  premium: { icon: string; label: string; claimed: boolean };
+  free: { iconSrc?: string; emoji?: string; label: string; claimed: boolean };
+  premium: { iconSrc?: string; emoji?: string; label: string; claimed: boolean };
 }> = [
-  { level: 1, free: { icon: "🪨", label: "500 Piedra", claimed: true }, premium: { icon: "💎", label: "50 Diamantes", claimed: true } },
-  { level: 2, free: { icon: "🪵", label: "500 Madera", claimed: true }, premium: { icon: "🃏", label: "Carta Épica", claimed: true } },
-  { level: 3, free: { icon: "🍖", label: "300 Comida", claimed: true }, premium: { icon: "🗡️", label: "Espada Clara", claimed: true } },
-  { level: 4, free: { icon: "🃏", label: "Carta Común x2", claimed: true }, premium: { icon: "💎", label: "100 Diamantes", claimed: true } },
-  { level: 5, free: { icon: "🪨", label: "1000 Piedra", claimed: true }, premium: { icon: "👤", label: "Skin: Guerrero", claimed: true } },
-  { level: 6, free: { icon: "⚡", label: "200 Energía", claimed: true }, premium: { icon: "🃏", label: "Carta Legendaria", claimed: true } },
-  { level: 7, free: { icon: "🪵", label: "1500 Madera", claimed: false }, premium: { icon: "💎", label: "200 Diamantes", claimed: false } },
-  { level: 8, free: { icon: "🃏", label: "Carta Común x3", claimed: false }, premium: { icon: "🛡️", label: "Armadura Épica", claimed: false } },
-  { level: 9, free: { icon: "🍖", label: "800 Comida", claimed: false }, premium: { icon: "👤", label: "Skin: Mago Estelar", claimed: false } },
-  { level: 10, free: { icon: "💎", label: "25 Diamantes", claimed: false }, premium: { icon: "📿", label: "Amuleto Legendario", claimed: false } },
+  { level: 1, free: { iconSrc: RESOURCE_ICONS.stone, label: "500 Piedra", claimed: true }, premium: { iconSrc: RESOURCE_ICONS.diamonds, label: "50 Diamantes", claimed: true } },
+  { level: 2, free: { iconSrc: RESOURCE_ICONS.wood, label: "500 Madera", claimed: true }, premium: { emoji: "🃏", label: "Carta Épica", claimed: true } },
+  { level: 3, free: { iconSrc: RESOURCE_ICONS.food, label: "300 Comida", claimed: true }, premium: { emoji: "🗡️", label: "Espada Clara", claimed: true } },
+  { level: 4, free: { emoji: "🃏", label: "Carta Común x2", claimed: true }, premium: { iconSrc: RESOURCE_ICONS.diamonds, label: "100 Diamantes", claimed: true } },
+  { level: 5, free: { iconSrc: RESOURCE_ICONS.stone, label: "1000 Piedra", claimed: true }, premium: { emoji: "🎨", label: "Skin: Guerrero", claimed: true } },
+  { level: 6, free: { iconSrc: RESOURCE_ICONS.energy, label: "200 Energía", claimed: true }, premium: { emoji: "🃏", label: "Carta Legendaria", claimed: true } },
+  { level: 7, free: { iconSrc: RESOURCE_ICONS.wood, label: "1500 Madera", claimed: false }, premium: { iconSrc: RESOURCE_ICONS.diamonds, label: "200 Diamantes", claimed: false } },
+  { level: 8, free: { emoji: "🃏", label: "Carta Común x3", claimed: false }, premium: { emoji: "🛡️", label: "Armadura Épica", claimed: false } },
+  { level: 9, free: { iconSrc: RESOURCE_ICONS.food, label: "800 Comida", claimed: false }, premium: { emoji: "🎨", label: "Skin: Mago Estelar", claimed: false } },
+  { level: 10, free: { iconSrc: RESOURCE_ICONS.diamonds, label: "25 Diamantes", claimed: false }, premium: { emoji: "🔮", label: "Amuleto Legendario", claimed: false } },
 ];
 
 /* ══════════════ RECURSOS DATA ══════════════ */
 const RESOURCE_PACKS = [
-  { id: 1, icon: "🪨", name: "Pack de Piedra", amount: "x2000", price: 10, rarity: "common" },
-  { id: 2, icon: "🪵", name: "Pack de Madera", amount: "x2000", price: 10, rarity: "common" },
-  { id: 3, icon: "🍖", name: "Pack de Comida", amount: "x1500", price: 10, rarity: "common" },
-  { id: 4, icon: "🥉", name: "Pack de Bronce", amount: "x500", price: 15, rarity: "clear" },
-  { id: 5, icon: "⚡", name: "Pack de Energía", amount: "x1000", price: 20, rarity: "clear" },
-  { id: 6, icon: "💼", name: "Mega Pack", amount: "x5000 de todo", price: 80, rarity: "epic" },
-  { id: 7, icon: "✨", name: "Pack Prestigio", amount: "x10000 de todo", price: 200, rarity: "legendary" },
+  { id: 1, iconSrc: RESOURCE_ICONS.stone, name: "Pack de Piedra", amount: "x2000", price: 10, rarity: "common" },
+  { id: 2, iconSrc: RESOURCE_ICONS.wood, name: "Pack de Madera", amount: "x2000", price: 10, rarity: "common" },
+  { id: 3, iconSrc: RESOURCE_ICONS.food, name: "Pack de Comida", amount: "x1500", price: 10, rarity: "common" },
+  { id: 4, iconSrc: RESOURCE_ICONS.bronze, name: "Pack de Bronce", amount: "x500", price: 15, rarity: "clear" },
+  { id: 5, iconSrc: RESOURCE_ICONS.energy, name: "Pack de Energía", amount: "x1000", price: 20, rarity: "clear" },
+  { id: 6, iconSrc: SHOP_ICONS.resources, name: "Mega Pack", amount: "x5000 de todo", price: 80, rarity: "epic" },
+  { id: 7, iconSrc: SHOP_ICONS.resources, name: "Pack Prestigio", amount: "x10000 de todo", price: 200, rarity: "legendary" },
 ];
 
 /* ══════════════ DIAMANTES DATA ══════════════ */
 const DIAMOND_PACKS = [
-  { id: 1, amount: 80, bonus: 0, price: "$0.99", icon: "💎", popular: false },
-  { id: 2, amount: 500, bonus: 50, price: "$4.99", icon: "💎💎", popular: false },
-  { id: 3, amount: 1200, bonus: 200, price: "$9.99", icon: "💎💎💎", popular: true },
-  { id: 4, amount: 2500, bonus: 500, price: "$19.99", icon: "💰", popular: false },
-  { id: 5, amount: 6500, bonus: 1500, price: "$49.99", icon: "💰💰", popular: false },
-  { id: 6, amount: 14000, bonus: 4000, price: "$99.99", icon: "👑", popular: false },
+  { id: 1, amount: 80, bonus: 0, price: "$0.99", iconSrc: SHOP_ICONS.diamonds_small, popular: false },
+  { id: 2, amount: 500, bonus: 50, price: "$4.99", iconSrc: SHOP_ICONS.diamonds_small, popular: false },
+  { id: 3, amount: 1200, bonus: 200, price: "$9.99", iconSrc: SHOP_ICONS.diamonds_medium, popular: true },
+  { id: 4, amount: 2500, bonus: 500, price: "$19.99", iconSrc: SHOP_ICONS.diamonds_medium, popular: false },
+  { id: 5, amount: 6500, bonus: 1500, price: "$49.99", iconSrc: SHOP_ICONS.diamonds_large, popular: false },
+  { id: 6, amount: 14000, bonus: 4000, price: "$99.99", iconSrc: SHOP_ICONS.diamonds_large, popular: false },
 ];
 
 /* ══════════════ TIMER HOOK ══════════════ */
@@ -163,12 +164,12 @@ export default function Shop() {
       <div className="glass-panel p-4 rounded-3xl flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-display uppercase flex items-center gap-2">
-            <ShoppingBag className="w-6 h-6 text-primary" /> Tienda
+            <img src={NAV_ICONS.shop} alt="shop" className="w-6 h-6" /> Tienda
           </h1>
           <p className="text-xs text-muted-foreground mt-0.5">Mejora tu progreso con items exclusivos</p>
         </div>
         <div className="flex items-center gap-1.5 glass-panel px-3 py-1.5 rounded-xl">
-          <span>💎</span>
+          <img src={RESOURCE_ICONS.diamonds} alt="diamonds" className="w-4 h-4 inline" />
           <span className="font-display text-sm text-accent">{diamonds}</span>
         </div>
       </div>
@@ -218,7 +219,7 @@ function OfertasTab({ diamonds }: { diamonds: number }) {
           <div className="relative z-10">
             <div className="flex items-start justify-between mb-2">
               <div className="flex items-center gap-2">
-                <span className="text-3xl">{offer.icon}</span>
+                <span className="text-3xl">{offer.emoji}</span>
                 <div>
                   <div className="font-display text-sm text-white">{offer.title}</div>
                   <div className="text-[10px] text-muted-foreground">{offer.subtitle}</div>
@@ -232,9 +233,9 @@ function OfertasTab({ diamonds }: { diamonds: number }) {
             <div className="flex items-center justify-between mt-3">
               <div className="flex items-center gap-2">
                 {offer.original !== offer.price && (
-                  <span className="text-xs line-through text-muted-foreground">{offer.currency} {offer.original}</span>
+                  <span className="text-xs line-through text-muted-foreground flex items-center gap-0.5"><img src={offer.currencySrc} alt="" className="w-3 h-3 inline" /> {offer.original}</span>
                 )}
-                <span className="text-sm font-display text-accent">{offer.currency} {offer.price}</span>
+                <span className="text-sm font-display text-accent flex items-center gap-0.5"><img src={offer.currencySrc} alt="" className="w-4 h-4 inline" /> {offer.price}</span>
                 <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 font-display">{offer.bonus}</span>
               </div>
               <div className="flex items-center gap-3">
@@ -270,14 +271,14 @@ function CofresTab({ diamonds }: { diamonds: number }) {
           <div className={cn("p-5 bg-gradient-to-br", chest.gradient)}>
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-3">
-                <span className="text-5xl">{chest.icon}</span>
+                <span className="text-4xl">{chest.emoji}</span>
                 <div>
                   <div className="font-display text-lg text-white">{chest.name}</div>
                   <div className="text-[10px] text-muted-foreground">Contiene {chest.items}</div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-display text-lg text-accent">{chest.currency} {chest.price}</div>
+                <div className="font-display text-lg text-accent flex items-center gap-1"><img src={chest.currencySrc} alt="" className="w-5 h-5 inline" /> {chest.price}</div>
               </div>
             </div>
 
@@ -300,7 +301,7 @@ function CofresTab({ diamonds }: { diamonds: number }) {
                     : "bg-white/5 text-white/30 cursor-not-allowed"
                 )}
                 style={diamonds >= chest.price ? { background: `linear-gradient(135deg, ${chest.borderColor}, ${chest.borderColor}aa)` } : undefined}>
-                Abrir — {chest.currency} {chest.price}
+                Abrir — <img src={chest.currencySrc} alt="" className="w-4 h-4 inline mx-0.5" />{chest.price}
               </motion.button>
             </Link>
           </div>
@@ -330,7 +331,7 @@ function BattlePassTab() {
         style={{ background: "linear-gradient(135deg, rgba(255,170,0,0.1), rgba(123,47,252,0.1))" }}>
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <Scroll className="w-5 h-5 text-accent" />
+            <span className="text-lg">🎖️</span>
             <span className="font-display text-lg text-white">Pase de Batalla</span>
           </div>
           <span className="font-display text-sm px-3 py-1 rounded-lg bg-accent/20 text-accent border border-accent/30">
@@ -361,7 +362,7 @@ function BattlePassTab() {
             <div className="text-[10px] text-muted-foreground">Accede a recompensas exclusivas</div>
           </div>
           <button className="px-4 py-2 rounded-xl font-display text-[10px] uppercase bg-gradient-to-r from-secondary to-purple-500 text-white shadow-[0_0_15px_rgba(255,0,200,0.3)]">
-            💎 999 — Comprar Premium
+            <img src={RESOURCE_ICONS.diamonds} alt="diamonds" className="w-4 h-4 inline" /> 999 — Comprar Premium
           </button>
         </div>
       )}
@@ -406,7 +407,7 @@ function BattlePassTab() {
 
               {/* Free reward */}
               <div className="flex items-center gap-2 py-2.5 px-2">
-                <span className="text-lg">{row.free.icon}</span>
+                {row.free.iconSrc ? <img src={row.free.iconSrc} alt="" className="w-5 h-5" /> : row.free.emoji ? <span className="text-lg">{row.free.emoji}</span> : <span className="text-lg">?</span>}
                 <span className={cn("text-[10px] flex-1", isReached ? "text-white" : "text-white/40")}>{row.free.label}</span>
                 {isReached && isFreeClaimed ? (
                   <span className="text-green-400 text-xs">✓</span>
@@ -422,7 +423,7 @@ function BattlePassTab() {
 
               {/* Premium reward */}
               <div className="flex items-center gap-2 py-2.5 px-2 border-l border-white/5">
-                <span className={cn("text-lg", !BP_PREMIUM && "opacity-50")}>{row.premium.icon}</span>
+                {row.premium.iconSrc ? <img src={row.premium.iconSrc} alt="" className={cn("w-5 h-5", !BP_PREMIUM && "opacity-50")} /> : row.premium.emoji ? <span className={cn("text-lg", !BP_PREMIUM && "opacity-50")}>{row.premium.emoji}</span> : <span className={cn("text-lg", !BP_PREMIUM && "opacity-50")}>?</span>}
                 <span className={cn("text-[10px] flex-1", !BP_PREMIUM ? "text-white/30" : isReached ? "text-white" : "text-white/40")}>
                   {row.premium.label}
                 </span>
@@ -459,7 +460,7 @@ function RecursosTab({ diamonds }: { diamonds: number }) {
             transition={{ delay: i * 0.05 }}
             className="glass-panel rounded-2xl p-4 flex flex-col border-2"
             style={{ borderColor: `${borderColor}55` }}>
-            <span className="text-3xl mb-2">{pack.icon}</span>
+            <img src={pack.iconSrc} alt={pack.name} className="w-8 h-8 mb-2" />
             <div className="font-display text-xs text-white mb-0.5">{pack.name}</div>
             <div className="text-[10px] text-muted-foreground mb-3 flex-1">{pack.amount}</div>
             <button className={cn(
@@ -469,7 +470,7 @@ function RecursosTab({ diamonds }: { diamonds: number }) {
                 : "bg-white/5 text-white/30 cursor-not-allowed"
             )}
               style={canBuy ? { background: `linear-gradient(135deg, ${borderColor}, ${borderColor}aa)` } : undefined}>
-              💎 {pack.price}
+              <img src={RESOURCE_ICONS.diamonds} alt="diamonds" className="w-3 h-3 inline" /> {pack.price}
             </button>
           </motion.div>
         );
@@ -484,7 +485,7 @@ function DiamantesTab() {
     <div className="space-y-3">
       <div className="glass-panel rounded-2xl p-3 border border-accent/20 text-center"
         style={{ background: "linear-gradient(135deg, rgba(255,170,0,0.05), rgba(255,170,0,0.1))" }}>
-        <Diamond className="w-6 h-6 text-accent mx-auto mb-1" />
+        <img src={RESOURCE_ICONS.diamonds} alt="diamonds" className="w-6 h-6 mx-auto mb-1" />
         <div className="font-display text-sm text-white">Comprar Diamantes</div>
         <div className="text-[10px] text-muted-foreground">Los precios son simulados</div>
       </div>
@@ -500,10 +501,10 @@ function DiamantesTab() {
               : "border-white/10"
           )}>
           <div className="flex items-center gap-3">
-            <span className="text-2xl">{pack.icon}</span>
+            <img src={pack.iconSrc} alt="diamonds" className="w-8 h-8" />
             <div>
               <div className="flex items-center gap-2">
-                <span className="font-display text-sm text-white">💎 {pack.amount.toLocaleString()}</span>
+                <span className="font-display text-sm text-white flex items-center gap-1"><img src={RESOURCE_ICONS.diamonds} alt="diamonds" className="w-4 h-4 inline" /> {pack.amount.toLocaleString()}</span>
                 {pack.bonus > 0 && (
                   <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-green-500/20 text-green-400 font-display">
                     +{pack.bonus} BONUS
